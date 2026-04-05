@@ -1,0 +1,13 @@
+node_modules/
+*.log
+cert.pem
+key.pem
+.env
+*.bak.*
+deploy.cache.json
+chat-history/
+.claude/cache/
+.claude/sessions/
+.claude/projects/
+.claude/statsig/
+.claude/telemetry/
