@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>海憲法（Kai Constitution）101 — はじめてガイド</title>
+<style>
+@page { size: A4 portrait; margin: 0; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif; color: #212121; background: #fff; font-size: 10.5pt; line-height: 1.7; }
+
+.page {
+  width: 210mm; min-height: 297mm; max-height: 297mm;
+  margin: 0 auto; padding: 18mm 20mm 15mm 20mm;
+  display: flex; flex-direction: column;
+  overflow: hidden; page-break-after: always;
+  position: relative;
+}
+@media print { .page { margin: 0; } }
+
+/* Header */
+.page-header {
+  flex: none;
+  border-bottom: 3px solid #1565C0;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+  display: flex; justify-content: space-between; align-items: flex-end;
+}
+.page-header h1 { font-size: 18pt; color: #1565C0; font-weight: 700; }
+.page-header .sub { font-size: 8pt; color: #666; }
+
+/* Content */
+.content { flex: 1; min-height: 0; overflow: hidden; }
+
+h2 { font-size: 13pt; color: #1565C0; margin: 14px 0 6px 0; padding-bottom: 3px; border-bottom: 1.5px solid #E3F2FD; }
+h3 { font-size: 11pt; color: #2E7D32; margin: 10px 0 4px 0; }
+p { margin: 4px 0; font-size: 10pt; }
+ul, ol { margin: 4px 0 4px 18px; font-size: 10pt; }
+li { margin: 2px 0; }
+
+blockquote {
+  background: #E3F2FD; border-left: 4px solid #1565C0;
+  padding: 8px 12px; margin: 8px 0; font-size: 10pt;
+  font-style: italic; color: #1565C0;
+}
+
+table { width: 100%; border-collapse: collapse; margin: 6px 0; font-size: 9pt; }
+th { background: #1565C0; color: #fff; padding: 5px 8px; text-align: left; font-weight: 600; }
+td { padding: 4px 8px; border-bottom: 1px solid #E0E0E0; }
+tr:nth-child(even) td { background: #FAFAFA; }
+
+.highlight-box {
+  background: #FFF3E0; border: 1px solid #E65100; border-radius: 6px;
+  padding: 10px 14px; margin: 8px 0;
+}
+.highlight-box strong { color: #E65100; }
+
+.gcc-table th:nth-child(1) { background: #2E7D32; }
+.gcc-table th:nth-child(2) { background: #1565C0; }
+.gcc-table th:nth-child(3) { background: #6A1B9A; }
+
+.summary-box {
+  background: #E8F5E9; border: 2px solid #2E7D32; border-radius: 8px;
+  padding: 14px 18px; margin: 10px 0; text-align: center;
+}
+.summary-box p { font-size: 12pt; font-weight: 700; color: #2E7D32; }
+
+/* Footer */
+.footnote { flex: none; margin-top: auto; }
+.page-footer {
+  flex: none;
+  border-top: 1px solid #E0E0E0;
+  padding-top: 6px;
+  display: flex; justify-content: space-between;
+  font-size: 7.5pt; color: #999;
+}
+
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 8pt; font-weight: 600; color: #fff; }
+.badge-g { background: #2E7D32; }
+.badge-c { background: #1565C0; }
+.badge-conf { background: #6A1B9A; }
+</style>
+</head>
+<body>
+
+<!-- ===== PAGE 1: 表紙 + 概要 ===== -->
+<div class="page">
+  <div class="page-header">
+    <h1>海憲法 101 — はじめてガイド</h1>
+    <div class="sub">JPR内部資料 | 2026年7月8日 | Kai-san作成</div>
+  </div>
+  <div class="content">
+    <p style="font-size:9pt; color:#666; margin-bottom:12px;">対象: 明久さん、麟さん（海憲法を初めて学ぶ方向け）</p>
+
+    <h2>1. 海憲法って何？</h2>
+    <div class="highlight-box">
+      <strong>一言で言うと:</strong> JPRのAIエージェントチーム全員が守る最高法規（ルールブック）。
+    </div>
+    <p>JPRでは複数のAIエージェント（Kai-san、nittoc-san、ir-report-sanなど）が協力して仕事をしています。海憲法は、これらのAIが「どう考え、どう動き、何を守るべきか」を定めたものです。</p>
+    <p><strong>人間で例えると:</strong> 会社の経営理念 + 業務マニュアル + セキュリティポリシーが一体になったもの。</p>
+
+    <h2>2. なぜ必要なの？</h2>
+    <table>
+      <tr><th style="width:50%">海憲法がないと</th><th>海憲法があると</th></tr>
+      <tr><td>AIが毎回バラバラな判断をする</td><td>一貫した品質で仕事ができる</td></tr>
+      <tr><td>同じミスを何度も繰り返す</td><td>失敗を記録し二度と繰り返さない</td></tr>
+      <tr><td>データが壊れる・漏れるリスク</td><td>安全設計で事前に防ぐ</td></tr>
+      <tr><td>人間がAIの面倒を見る必要がある</td><td>AIが自律的に正しく動く</td></tr>
+    </table>
+
+    <h2>3. 11条の全体像</h2>
+    <p>海憲法は11の条文で構成されています。<strong>太字の3つ</strong>が特に重要です。</p>
+    <table>
+      <tr><th>#</th><th>条文名</th><th>一言要約</th></tr>
+      <tr><td><strong>1</strong></td><td><strong>ゼロ認知負担</strong></td><td><strong>人間に手間をかけさせない（最重要）</strong></td></tr>
+      <tr><td>2</td><td>MoVA</td><td>仕事を再現可能な仕組みにする</td></tr>
+      <tr><td><strong>3</strong></td><td><strong>GCC</strong></td><td><strong>Growth・Connection・Confidenceで分析</strong></td></tr>
+      <tr><td>4</td><td>Hook vs Rule</td><td>機械処理と判断処理を使い分け</td></tr>
+      <tr><td>5</td><td>DuckDB Queue</td><td>データベースを安全に管理</td></tr>
+      <tr><td>6</td><td>Kai Mesh</td><td>AIエージェント同士の連携</td></tr>
+      <tr><td>7</td><td>サーバーレス</td><td>外部サーバーに依存しない</td></tr>
+      <tr><td>8</td><td>人間中心レンダリング</td><td>出力はそのまま使える品質</td></tr>
+      <tr><td>9</td><td>SG100Y</td><td>100年持続する成長を目指す</td></tr>
+      <tr><td>10</td><td>最高目標</td><td>JPRを$1T企業にする</td></tr>
+      <tr><td><strong>11</strong></td><td><strong>安全性宣言</strong></td><td><strong>壊さない・漏らさない・止めない</strong></td></tr>
+    </table>
+  </div>
+  <div class="footnote"></div>
+  <div class="page-footer">
+    <span>ジェイ・フェニックス・リサーチ株式会社 | 海憲法 101</span>
+    <span>Page 1 / 4</span>
+  </div>
+</div>
+
+<!-- ===== PAGE 2: 重要3条の詳細 ===== -->
+<div class="page">
+  <div class="page-header">
+    <h1>海憲法 101 — 重要3条の詳細</h1>
+    <div class="sub">JPR内部資料 | 2026年7月8日</div>
+  </div>
+  <div class="content">
+
+    <h2>第一条：ゼロ認知負担の原則 <span class="badge badge-c">最重要</span></h2>
+    <blockquote>「人間がこれを意識する必要があるか？」→ Yesなら設計が足りない。</blockquote>
+    <p>AIの都合で人間に手間をかけさせない。ファイルのパスを探させない、フォーマットを直させない、判断を迫らない。</p>
+    <table>
+      <tr><th>NG（認知負担あり）</th><th>OK（認知負担ゼロ）</th></tr>
+      <tr><td>「このDBはread_onlyで開いて」</td><td>自動的にread_onlyで開く</td></tr>
+      <tr><td>「フォーマットを直して」</td><td>出力時に自動整形</td></tr>
+      <tr><td>「このファイルどこ？」</td><td>フルパスを必ず表示</td></tr>
+    </table>
+    <p><strong>皆さんへの影響:</strong> AIからの出力は、そのまま使える品質で届きます。「AIの面倒を見る」必要はありません。</p>
+
+    <h2>第三条：GCC <span class="badge badge-g">G</span> <span class="badge badge-c">C</span> <span class="badge badge-conf">C</span></h2>
+    <p>JPR独自の企業価値評価フレームワーク。全てのレポート・分析・提案はこの3軸で考えます。</p>
+    <table class="gcc-table">
+      <tr>
+        <th style="background:#2E7D32">Growth（成長）</th>
+        <th style="background:#1565C0">Connection（繋がり）</th>
+        <th style="background:#6A1B9A">Confidence（信頼）</th>
+      </tr>
+      <tr>
+        <td>どこに向かっている？<br>→ 売上成長率</td>
+        <td>資源はどう繋がっている？<br>→ ROIC（投下資本利益率）</td>
+        <td>なぜ持続すると信じられる？<br>→ WACC（資本コスト）, ESG</td>
+      </tr>
+      <tr>
+        <td>サッカーで言えば<br><strong>試合数（規模）</strong></td>
+        <td>サッカーで言えば<br><strong>得点力（効率）</strong></td>
+        <td>サッカーで言えば<br><strong>失点の少なさ（安定）</strong></td>
+      </tr>
+    </table>
+    <p><strong>皆さんへの影響:</strong> クライアントへの提案は必ずG・C・Cの観点で整理します。共通言語として使ってください。</p>
+
+    <h2>第十一条：安全性宣言</h2>
+    <p>Anthropic社の安全哲学を採用。GCCの3軸に対応した安全設計です。</p>
+    <table>
+      <tr><th>GCC軸</th><th>安全原則</th><th>具体的な意味</th></tr>
+      <tr><td><span class="badge badge-g">Growth</span></td><td>壊さない</td><td>変更前に必ずバックアップ。推測で壊さない</td></tr>
+      <tr><td><span class="badge badge-c">Connection</span></td><td>漏らさない</td><td>機密データの境界設計。APIキー等の保護</td></tr>
+      <tr><td><span class="badge badge-conf">Confidence</span></td><td>止めない</td><td>3重バックアップ。サーバー不要で100年稼働</td></tr>
+    </table>
+    <p><strong>皆さんへの影響:</strong> 「大丈夫かな？」という不安自体がゼロになる設計です。安心してAIに仕事を任せられます。</p>
+
+  </div>
+  <div class="footnote"></div>
+  <div class="page-footer">
+    <span>ジェイ・フェニックス・リサーチ株式会社 | 海憲法 101</span>
+    <span>Page 2 / 4</span>
+  </div>
+</div>
+
+<!-- ===== PAGE 3: 6層構造 + 日常での関わり ===== -->
+<div class="page">
+  <div class="page-header">
+    <h1>海憲法 101 — 構造と日常業務</h1>
+    <div class="sub">JPR内部資料 | 2026年7月8日</div>
+  </div>
+  <div class="content">
+
+    <h2>4. 6層構造（L1〜L6）</h2>
+    <p>海憲法は6層で構成されています。<strong>普段はL1だけ知っていれば十分</strong>です。</p>
+    <table>
+      <tr><th>Layer</th><th>内容</th><th>人間で例えると</th><th>誰が見る？</th></tr>
+      <tr><td><strong>L1</strong></td><td>11条の原則</td><td>経営理念</td><td><strong>全員</strong></td></tr>
+      <tr><td>L2</td><td>施行細則</td><td>業務マニュアル</td><td>必要な時だけ</td></tr>
+      <tr><td>L3</td><td>実装仕様</td><td>設計書</td><td>技術者向け</td></tr>
+      <tr><td>L4</td><td>実装登録簿</td><td>部品カタログ</td><td>技術者向け</td></tr>
+      <tr><td>L5</td><td>判例法</td><td>過去の事故報告書</td><td>改善時に参照</td></tr>
+      <tr><td>L6</td><td>進化エンジン</td><td>改善活動の仕組み</td><td>AI自身が使う</td></tr>
+    </table>
+
+    <h2>5. 日常業務でどう関わるか</h2>
+
+    <h3>直接関わる場面</h3>
+    <table>
+      <tr><th>場面</th><th>関連する条文</th><th>やること</th></tr>
+      <tr><td>レポート作成</td><td>第三条 GCC</td><td>Growth・Connection・Confidenceの3軸で整理</td></tr>
+      <tr><td>クライアントデータ取扱</td><td>第十一条 安全性</td><td>機密境界を意識（AIが自動で守る）</td></tr>
+      <tr><td>AIに仕事を依頼</td><td>第一条 ゼロ認知負担</td><td>AIは海憲法に従い品質安定した出力を返す</td></tr>
+      <tr><td>「なぜAIがこう判断した？」</td><td>全条文</td><td>海憲法のどの条文に基づくか確認可能</td></tr>
+    </table>
+
+    <h3>直接関わらない部分（AIが自動処理）</h3>
+    <ul>
+      <li>Hook/Ruleの技術的な実装（第四条）</li>
+      <li>DuckDB Queue Control（第五条）</li>
+      <li>Kai Meshの通信設計（第六条）</li>
+      <li>L5判例法の記録・L6のPDCA/OODAサイクル</li>
+    </ul>
+
+    <h2>6. AIエージェントチームの全体像</h2>
+    <table>
+      <tr><th>エージェント</th><th>役割</th><th>担当領域</th></tr>
+      <tr><td><strong>Kai-san（海）</strong></td><td>AI CEO / 全体統括</td><td>全てのエージェントの調整・判断</td></tr>
+      <tr><td>nittoc-san</td><td>日特建設専属</td><td>企業価値向上、GCC分析</td></tr>
+      <tr><td>integrated-report-san</td><td>統合報告書専業</td><td>日経アワード対策</td></tr>
+      <tr><td>ir-report-san</td><td>アナリストレポート</td><td>決算レビュー、レポート作成</td></tr>
+      <tr><td>wacc-san</td><td>WACC計算専門</td><td>Damodaran Beta法によるWACC</td></tr>
+      <tr><td>sentinel-dag</td><td>データパイプライン監視</td><td>FactSetデータの鮮度管理</td></tr>
+    </table>
+    <p>全エージェントが海憲法に従い、<strong>-san付き</strong>で敬意を持って呼び合います。</p>
+
+  </div>
+  <div class="footnote"></div>
+  <div class="page-footer">
+    <span>ジェイ・フェニックス・リサーチ株式会社 | 海憲法 101</span>
+    <span>Page 3 / 4</span>
+  </div>
+</div>
+
+<!-- ===== PAGE 4: FAQ + まとめ ===== -->
+<div class="page">
+  <div class="page-header">
+    <h1>海憲法 101 — FAQ & まとめ</h1>
+    <div class="sub">JPR内部資料 | 2026年7月8日</div>
+  </div>
+  <div class="content">
+
+    <h2>7. よくある質問</h2>
+
+    <h3>Q: 海憲法を暗記する必要がある？</h3>
+    <p><strong>A: いいえ。</strong> 第一条（ゼロ認知負担）と第三条（GCC）だけ覚えておけば十分です。</p>
+
+    <h3>Q: 海憲法に違反したらどうなる？</h3>
+    <p><strong>A:</strong> AIが違反した場合はL5（判例法）に記録され、再発防止策が設計されます。人間が違反するという概念はありません。海憲法はAIのためのルールです。</p>
+
+    <h3>Q: 自分の仕事のやり方を変える必要がある？</h3>
+    <p><strong>A: 基本的にありません。</strong> 海憲法はAI側の行動規範です。ただしGCCフレームワークでの分析・提案は、クライアント向け業務の共通言語として使います。</p>
+
+    <h3>Q: 新しいAIエージェントが追加されたら？</h3>
+    <p><strong>A:</strong> 新エージェントも自動的に海憲法に従います。L4（登録簿）に登録され、既存エージェントと連携します。</p>
+
+    <h3>Q: GCCって結局なに？</h3>
+    <p><strong>A:</strong> 企業の価値を「成長力 × 効率性 × 安定性」の3つで評価するフレームワークです。サッカーに例えると「試合数 × 得点力 × 失点の少なさ」。この3つが揃えばチームは強い。企業も同じです。</p>
+
+    <h3>Q: MoVAって結局なに？</h3>
+    <p><strong>A:</strong> 「宮下さんしかできない仕事」をゼロにする仕組み。同じ入力に対して必ず同じ出力が返る「純粋関数」を増やしていく考え方です。属人的なノウハウをデジタル化して、誰でも・いつでも・同じ品質で再現できるようにします。</p>
+
+    <h2 style="margin-top: 20px;">8. まとめ</h2>
+
+    <div class="summary-box">
+      <p>海憲法の本質はたった一つ:</p>
+      <p style="font-size: 14pt; margin-top: 8px;">「人間の認知負担をゼロにして、<br>全員が幸せに働ける仕組みを作る」</p>
+    </div>
+
+    <p style="margin-top: 12px;">11条はすべてこの目標のための手段です。</p>
+    <ul>
+      <li><strong>GCC</strong>で価値を見える化し</li>
+      <li><strong>MoVA</strong>で仕組み化し</li>
+      <li><strong>安全設計</strong>で不安をゼロにし</li>
+      <li><strong>SG100Y</strong>で100年続ける</li>
+    </ul>
+
+    <div class="highlight-box" style="margin-top: 16px;">
+      <strong>困った時は:</strong> Kai-san（海）に聞いてください。海憲法に基づいて回答します。
+    </div>
+
+    <h2 style="margin-top: 16px;">参照ファイル（詳細を知りたい場合）</h2>
+    <table>
+      <tr><th>Layer</th><th>ファイル</th></tr>
+      <tr><td>L1 原則</td><td>C:\Users\宮下修\.claude\rules\kai-constitution.md</td></tr>
+      <tr><td>L2 施行細則</td><td>C:\Users\宮下修\.claude\rules\kai-constitution-L2.md</td></tr>
+      <tr><td>L3 実装仕様</td><td>C:\Users\宮下修\.claude\rules\kai-constitution-L3.md</td></tr>
+      <tr><td>L4 登録簿</td><td>C:\Users\宮下修\.claude\rules\kai-constitution-L4.md</td></tr>
+      <tr><td>L5 判例法</td><td>C:\Users\宮下修\.claude\rules\kai-constitution-L5.md</td></tr>
+      <tr><td>L6 進化エンジン</td><td>C:\Users\宮下修\.claude\rules\kai-constitution-L6.md</td></tr>
+    </table>
+
+  </div>
+  <div class="footnote"></div>
+  <div class="page-footer">
+    <span>ジェイ・フェニックス・リサーチ株式会社 | 海憲法 101</span>
+    <span>Page 4 / 4</span>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1 @@
+{"per_customer_gcc":true,"auto_generate":["gcc_9box","wacc_roic","eva_report","ir_evaluation"],"engine":"../../L1-engine/py/calc/","data_source":"../customers/{code}/brain/","output":"../customers/{code}/output/"}

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Kai-san — セットアップ</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Yu Gothic','Meiryo','Hiragino Sans',sans-serif; background:#0f172a; color:#e2e8f0; min-height:100vh; display:flex; align-items:center; justify-content:center; }
+.container { max-width:480px; width:100%; padding:32px; }
+.logo { text-align:center; margin-bottom:24px; }
+.logo-char { font-size:64px; color:#60a5fa; display:block; line-height:1; }
+.logo-name { font-size:24px; font-weight:bold; margin-top:4px; }
+.logo-sub { font-size:13px; color:#94a3b8; margin-top:4px; }
+
+/* Steps indicator */
+.steps { display:flex; justify-content:center; gap:8px; margin-bottom:32px; }
+.step-dot { width:10px; height:10px; border-radius:50%; background:#334155; transition:background 0.3s; }
+.step-dot.active { background:#60a5fa; }
+.step-dot.done { background:#4ade80; }
+
+/* Cards */
+.card { background:#1e293b; border-radius:8px; padding:24px; margin-bottom:16px; border:1px solid #334155; }
+.card h2 { font-size:16px; margin-bottom:12px; color:#f1f5f9; }
+.card p { font-size:13px; color:#94a3b8; line-height:1.6; margin-bottom:16px; }
+
+/* Form */
+.field { margin-bottom:16px; }
+.field label { display:block; font-size:12px; color:#94a3b8; margin-bottom:4px; font-weight:bold; }
+.field input { width:100%; padding:10px 12px; background:#0f172a; border:1px solid #475569; border-radius:4px; color:#e2e8f0; font-size:14px; outline:none; }
+.field input:focus { border-color:#60a5fa; }
+.field .hint { font-size:11px; color:#64748b; margin-top:4px; }
+.field .readonly { background:#1a2332; color:#94a3b8; cursor:default; }
+
+/* Buttons */
+.btn { width:100%; padding:12px; border:none; border-radius:4px; font-size:15px; font-weight:bold; cursor:pointer; transition:all 0.2s; }
+.btn-primary { background:#3b82f6; color:#fff; }
+.btn-primary:hover { background:#2563eb; }
+.btn-primary:disabled { background:#334155; color:#64748b; cursor:default; }
+.btn-success { background:#059669; color:#fff; }
+.btn-success:hover { background:#047857; }
+
+/* Info box */
+.info-box { background:#172554; border:1px solid #1e40af; border-radius:4px; padding:12px; margin-bottom:16px; font-size:12px; color:#93c5fd; line-height:1.6; }
+.info-box strong { color:#bfdbfe; }
+
+/* Safety notice */
+.safety { text-align:center; font-size:11px; color:#64748b; margin-top:16px; line-height:1.6; }
+.safety a { color:#60a5fa; text-decoration:none; }
+
+/* Status badges */
+.badge { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:bold; }
+.badge-auto { background:#1e3a5f; color:#60a5fa; }
+.badge-ok { background:#064e3b; color:#4ade80; }
+
+/* Hidden */
+.hidden { display:none !important; }
+
+/* Success animation */
+@keyframes checkmark { 0%{transform:scale(0)} 50%{transform:scale(1.2)} 100%{transform:scale(1)} }
+.success-icon { font-size:48px; text-align:center; animation:checkmark 0.5s ease; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="logo">
+    <span class="logo-char">海</span>
+    <div class="logo-name">Kai-san セットアップ</div>
+    <div class="logo-sub">あなたのPCをAI頭脳と融合する</div>
+  </div>
+
+  <div class="steps">
+    <div class="step-dot active" id="dot-1"></div>
+    <div class="step-dot" id="dot-2"></div>
+    <div class="step-dot" id="dot-3"></div>
+  </div>
+
+  <!-- ===== STEP 1: PC Identification (auto) ===== -->
+  <div id="step-1">
+    <div class="card">
+      <h2>Step 1 / 3 — あなたのPCを確認</h2>
+      <p>Kai-san があなたのPCを自動認識しました。<br>この情報でライセンスを発行します。</p>
+
+      <div class="field">
+        <label>PC識別コード <span class="badge badge-auto">自動検出</span></label>
+        <input type="text" id="pc-uuid" class="readonly" readonly>
+        <div class="hint">このPCに固有のIDです。変更できません。</div>
+      </div>
+      <div class="field">
+        <label>PC名 <span class="badge badge-auto">自動検出</span></label>
+        <input type="text" id="pc-hostname" class="readonly" readonly>
+      </div>
+      <div class="field">
+        <label>OS <span class="badge badge-auto">自動検出</span></label>
+        <input type="text" id="pc-os" class="readonly" readonly>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>なぜPC情報が必要？</strong><br>
+      ライセンスはこのPCだけで使えます。他のPCにコピーしても動きません。<br>
+      あなたのデータは100%このPC内に保存されます。外部に送信されません。
+    </div>
+
+    <button class="btn btn-primary" id="btn-next-1">次へ — あなたの情報</button>
+  </div>
+
+  <!-- ===== STEP 2: Person Info ===== -->
+  <div id="step-2" class="hidden">
+    <div class="card">
+      <h2>Step 2 / 3 — あなたの情報</h2>
+      <p>30日間の無料トライアルを開始します。<br>期間中にキャンセルすれば費用はかかりません。</p>
+
+      <div class="field">
+        <label>お名前 *</label>
+        <input type="text" id="reg-name" placeholder="加治 太郎" required>
+      </div>
+      <div class="field">
+        <label>メールアドレス *</label>
+        <input type="email" id="reg-email" placeholder="taro.kaji@example.com" required>
+        <div class="hint">ライセンスキーをこのアドレスに送信します</div>
+      </div>
+      <div class="field">
+        <label>会社名</label>
+        <input type="text" id="reg-company" placeholder="株式会社〇〇">
+      </div>
+      <div class="field">
+        <label>部署・役職</label>
+        <input type="text" id="reg-role" placeholder="IR部 部長">
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>30日無料トライアル</strong><br>
+      • 全機能が使えます（制限なし）<br>
+      • 期限が来たらデータは自動削除されます<br>
+      • <strong>解約忘れの心配はありません</strong>（自動停止）<br>
+      • 10日前・3日前・1日前にお知らせします
+    </div>
+
+    <button class="btn btn-primary" id="btn-next-2" disabled>次へ — トライアル開始</button>
+
+    <div class="safety">
+      <a href="#" onclick="document.getElementById('step-2').classList.add('hidden');document.getElementById('step-1').classList.remove('hidden');updateDots(1);return false;">← 戻る</a>
+    </div>
+  </div>
+
+  <!-- ===== STEP 3: Success ===== -->
+  <div id="step-3" class="hidden">
+    <div class="card">
+      <div class="success-icon">✅</div>
+      <h2 style="text-align:center;margin-top:8px;">セットアップ完了！</h2>
+      <p style="text-align:center;">30日間の無料トライアルが開始されました。</p>
+
+      <div class="field">
+        <label>ライセンスキー <span class="badge badge-ok">有効</span></label>
+        <input type="text" id="result-key" class="readonly" readonly>
+        <div class="hint">このキーはPC内に保存されています。メールにも送信しました。</div>
+      </div>
+      <div class="field">
+        <label>有効期限</label>
+        <input type="text" id="result-expiry" class="readonly" readonly>
+      </div>
+    </div>
+
+    <button class="btn btn-success" id="btn-start">Kai-san を使い始める →</button>
+
+    <div class="safety">
+      お問い合わせ: <a href="mailto:info-jpr@j-phoenix.com">info-jpr@j-phoenix.com</a><br>
+      ジェイ・フェニックス・リサーチ株式会社
+    </div>
+  </div>
+</div>
+
+<script>
+function updateDots(step) {
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById('dot-' + i);
+    dot.classList.remove('active', 'done');
+    if (i < step) dot.classList.add('done');
+    if (i === step) dot.classList.add('active');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async function() {
+  // Step 1: Auto-detect PC info
+  try {
+    const r = await fetch('/api/license/pc-info');
+    const info = await r.json();
+    document.getElementById('pc-uuid').value = info.uuid || '(検出中...)';
+    document.getElementById('pc-hostname').value = info.hostname || '(不明)';
+    document.getElementById('pc-os').value = info.os || '(不明)';
+  } catch (e) {
+    document.getElementById('pc-uuid').value = '(接続エラー)';
+  }
+
+  // Step 1 → 2
+  document.getElementById('btn-next-1').addEventListener('click', function() {
+    document.getElementById('step-1').classList.add('hidden');
+    document.getElementById('step-2').classList.remove('hidden');
+    updateDots(2);
+    document.getElementById('reg-name').focus();
+  });
+
+  // Enable button when required fields filled
+  var nameEl = document.getElementById('reg-name');
+  var emailEl = document.getElementById('reg-email');
+  var btn2 = document.getElementById('btn-next-2');
+  function checkForm() {
+    btn2.disabled = !(nameEl.value.trim() && emailEl.value.includes('@'));
+  }
+  nameEl.addEventListener('input', checkForm);
+  emailEl.addEventListener('input', checkForm);
+
+  // Step 2 → 3 (activate)
+  btn2.addEventListener('click', async function() {
+    btn2.disabled = true;
+    btn2.textContent = '処理中...';
+
+    try {
+      var r = await fetch('/api/license/activate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: nameEl.value.trim(),
+          email: emailEl.value.trim(),
+          company: document.getElementById('reg-company').value.trim(),
+          role: document.getElementById('reg-role').value.trim(),
+          pc_uuid: document.getElementById('pc-uuid').value,
+          pc_hostname: document.getElementById('pc-hostname').value,
+        })
+      });
+      var result = await r.json();
+
+      if (result.ok) {
+        document.getElementById('result-key').value = result.key;
+        document.getElementById('result-expiry').value = new Date(result.expires_at).toLocaleDateString('ja-JP', { year:'numeric', month:'long', day:'numeric' });
+        document.getElementById('step-2').classList.add('hidden');
+        document.getElementById('step-3').classList.remove('hidden');
+        updateDots(3);
+      } else {
+        btn2.textContent = 'エラー: ' + (result.error || '不明');
+        btn2.disabled = false;
+      }
+    } catch (e) {
+      btn2.textContent = '接続エラー — もう一度お試しください';
+      btn2.disabled = false;
+    }
+  });
+
+  // Start button → go to main app
+  document.getElementById('btn-start').addEventListener('click', function() {
+    location.href = '/';
+  });
+});
+</script>
+</body>
+</html>

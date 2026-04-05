@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JPR AI Agent Dashboard — SG100Y</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans JP','Hiragino Sans',Arial,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh;}
+.header{background:linear-gradient(135deg,#1e293b,#0f172a);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #2EA7E0;}
+.header h1{font-size:20pt;color:#2EA7E0;letter-spacing:0.05em;}
+.header .mova{font-size:11pt;color:#94a3b8;}
+.header .mova strong{color:#34d399;font-size:14pt;}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:16px 24px;}
+.card{background:#1e293b;border-radius:8px;border:1px solid #334155;padding:12px;display:flex;flex-direction:column;}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.card-icon{font-size:24pt;}
+.card-name{font-size:12pt;font-weight:700;color:#f1f5f9;}
+.card-role{font-size:8pt;color:#94a3b8;margin-bottom:8px;}
+.card-status{display:inline-block;padding:2px 8px;border-radius:12px;font-size:8pt;font-weight:600;}
+.status-active{background:#064e3b;color:#34d399;}
+.status-setup{background:#713f12;color:#fbbf24;}
+.status-planned{background:#1e293b;color:#64748b;border:1px solid #475569;}
+.sub-agents{margin-top:8px;border-top:1px solid #334155;padding-top:8px;}
+.sub-agent{display:flex;justify-content:space-between;align-items:center;padding:3px 0;font-size:7.5pt;color:#94a3b8;}
+.sub-agent .name{color:#cbd5e1;}
+.sub-dot{width:6px;height:6px;border-radius:50%;display:inline-block;}
+.dot-green{background:#34d399;}
+.dot-yellow{background:#fbbf24;}
+.dot-gray{background:#64748b;}
+.section{padding:12px 24px;}
+.section h2{font-size:13pt;color:#2EA7E0;margin-bottom:8px;border-bottom:1px solid #334155;padding-bottom:4px;}
+.activity{display:flex;flex-direction:column;gap:4px;}
+.activity-row{display:flex;gap:12px;font-size:8.5pt;padding:4px 8px;background:#1e293b;border-radius:4px;}
+.activity-time{color:#64748b;min-width:40px;}
+.activity-agent{color:#2EA7E0;min-width:100px;}
+.activity-msg{color:#cbd5e1;flex:1;}
+.metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:12px;}
+.metric{background:#1e293b;border-radius:6px;padding:10px;text-align:center;border:1px solid #334155;}
+.metric-label{font-size:7.5pt;color:#64748b;margin-bottom:4px;}
+.metric-value{font-size:16pt;font-weight:700;}
+.metric-value.green{color:#34d399;}
+.metric-value.blue{color:#2EA7E0;}
+.metric-value.yellow{color:#fbbf24;}
+.metric-value.red{color:#ef4444;}
+.roadmap{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.roadmap-card{background:#1e293b;border-radius:8px;padding:12px;border:1px solid #334155;}
+.roadmap-year{font-size:11pt;font-weight:700;color:#2EA7E0;margin-bottom:4px;}
+.roadmap-target{font-size:9pt;color:#fbbf24;margin-bottom:6px;}
+.roadmap-items{font-size:8pt;color:#94a3b8;line-height:1.6;}
+.comms{background:#1e293b;border-radius:8px;padding:12px;border:1px solid #334155;margin-top:12px;}
+.comms-title{font-size:10pt;font-weight:700;color:#f1f5f9;margin-bottom:6px;}
+.comms-diagram{font-family:monospace;font-size:8pt;color:#2EA7E0;line-height:1.4;padding:8px;background:#0f172a;border-radius:4px;}
+.memory-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px;}
+.memory-tier{background:#0f172a;border-radius:6px;padding:8px;border:1px solid #334155;text-align:center;}
+.memory-tier-name{font-size:9pt;font-weight:700;margin-bottom:2px;}
+.memory-tier-desc{font-size:7pt;color:#64748b;}
+.footer{padding:12px 24px;text-align:center;font-size:8pt;color:#475569;border-top:1px solid #1e293b;}
+@media print{body{background:#fff;color:#333;}.card{border:1px solid #ccc;background:#f9f9f9;}}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <h1>🌊 JPR AI Agent Dashboard — SG100Y</h1>
+  <div class="mova">
+    MoVA: <strong>¥2.8M/mo</strong> → Target: ¥100M/mo → ¥1T MV
+    &nbsp;|&nbsp; Agents: <strong>25</strong> &nbsp;|&nbsp; Updated: 2026-03-16 11:30 JST
+  </div>
+</div>
+
+<!-- Key Metrics -->
+<div class="section">
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-label">Monthly Sales</div>
+      <div class="metric-value blue">¥2.8M</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Pipeline</div>
+      <div class="metric-value green">¥18M</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Clients</div>
+      <div class="metric-value blue">10</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Agents (Human+AI)</div>
+      <div class="metric-value green">66</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Alerts</div>
+      <div class="metric-value green">0</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">SG100Y Score</div>
+      <div class="metric-value yellow">B+</div>
+    </div>
+  </div>
+</div>
+
+<!-- 5 Division Cards -->
+<div class="section">
+  <h2>🔬 Research / R&D / Marketing Divisions</h2>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px;">
+    <div class="card" style="border-top:3px solid #8b5cf6;">
+      <div class="card-header"><span class="card-icon">🔭</span><span class="card-status status-setup">SETUP</span></div>
+      <div class="card-name">SCOUT (探) — Research</div>
+      <div class="card-role">Trend Intelligence: AI, GitHub, ESG, Regulation</div>
+      <div class="sub-agents">
+        <div class="sub-agent"><span class="name">Scout-AI (AI trends)</span><span class="sub-dot dot-yellow"></span></div>
+        <div class="sub-agent"><span class="name">Scout-GitHub (OSS trends)</span><span class="sub-dot dot-yellow"></span></div>
+        <div class="sub-agent"><span class="name">Scout-ESG (ISSB/CSRD/TNFD)</span><span class="sub-dot dot-gray"></span></div>
+        <div class="sub-agent"><span class="name">Scout-Regulation (TSE/CG Code)</span><span class="sub-dot dot-gray"></span></div>
+        <div class="sub-agent"><span class="name">Scout-Academic (papers)</span><span class="sub-dot dot-gray"></span></div>
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid #ec4899;">
+      <div class="card-header"><span class="card-icon">🧪</span><span class="card-status status-setup">SETUP</span></div>
+      <div class="card-name">LAB (研) — R&D</div>
+      <div class="card-role">Product Dev: SaaS, AI有報, Agent Platform</div>
+      <div class="sub-agents">
+        <div class="sub-agent"><span class="name">Lab-Prototype</span><span class="sub-dot dot-yellow"></span></div>
+        <div class="sub-agent"><span class="name">Lab-Experiment</span><span class="sub-dot dot-gray"></span></div>
+        <div class="sub-agent"><span class="name">Lab-Patent (IP protection)</span><span class="sub-dot dot-gray"></span></div>
+        <div class="sub-agent" style="color:#34d399;font-weight:600;"><span class="name">✓ Auto-IR HTML v1.0 SHIPPED</span><span class="sub-dot dot-green"></span></div>
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid #f97316;">
+      <div class="card-header"><span class="card-icon">🧭</span><span class="card-status status-setup">SETUP</span></div>
+      <div class="card-name">COMPASS (羅針盤) — Marketing</div>
+      <div class="card-role">Demand Gen: Content, SEO, Seminars, Cases</div>
+      <div class="sub-agents">
+        <div class="sub-agent"><span class="name">Compass-Content</span><span class="sub-dot dot-yellow"></span></div>
+        <div class="sub-agent"><span class="name">Compass-SEO</span><span class="sub-dot dot-gray"></span></div>
+        <div class="sub-agent"><span class="name">Compass-Seminar (LSS/DP)</span><span class="sub-dot dot-gray"></span></div>
+        <div class="sub-agent"><span class="name">Compass-CaseStudy</span><span class="sub-dot dot-gray"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section"><h2>⛓ GCC Value Chain Agents</h2></div>
+<div class="grid">
+
+  <!-- EAGLE - Sales -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">🦅</span>
+      <span class="card-status status-active">ACTIVE</span>
+    </div>
+    <div class="card-name">EAGLE — Sales</div>
+    <div class="card-role">Sales↑ Pipeline→Contract</div>
+    <div class="sub-agents">
+      <div class="sub-agent"><span class="name">Gmail-Watcher</span><span class="sub-dot dot-green"></span></div>
+      <div class="sub-agent"><span class="name">Gmail-Classifier</span><span class="sub-dot dot-green"></span></div>
+      <div class="sub-agent"><span class="name">Gmail-Briefer</span><span class="sub-dot dot-green"></span></div>
+      <div class="sub-agent"><span class="name">CRM-Tracker</span><span class="sub-dot dot-yellow"></span></div>
+      <div class="sub-agent"><span class="name">CRM-Scorer</span><span class="sub-dot dot-yellow"></span></div>
+      <div class="sub-agent"><span class="name">Outreach-Drafter</span><span class="sub-dot dot-yellow"></span></div>
+      <div class="sub-agent"><span class="name">Outreach-Scheduler</span><span class="sub-dot dot-gray"></span></div>
+      <div class="sub-agent"><span class="name">Eagle-Pricing</span><span class="sub-dot dot-green"></span></div>
+    </div>
+  </div>
+
+  <!-- OWL - Research -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">🦉</span>
+      <span class="card-status status-active">ACTIVE</span>
+    </div>
+    <div class="card-name">OWL — Research</div>
+    <div class="card-role">NOPATM↑ Faster Research</div>
+    <div class="sub-agents">
+      <div class="sub-agent"><span class="name">ROIC-Calculator</span><span class="sub-dot dot-green"></span></div>
+      <div class="sub-agent"><span class="name">ROIC-Comparator</span><span class="sub-dot dot-green"></span></div>
+      <div class="sub-agent"><span class="name">HTML-Generator</span><span class="sub-dot dot-green"></span></div>
+      <div class="sub-agent"><span class="name">HTML-Masker</span><span class="sub-dot dot-green"></span></div>
+      <div class="sub-agent"><span class="name">HTML-Publisher</span><span class="sub-dot dot-green"></span></div>
+      <div class="sub-agent"><span class="name">Owl-Writer</span><span class="sub-dot dot-yellow"></span></div>
+      <div class="sub-agent"><span class="name">Owl-Data</span><span class="sub-dot dot-green"></span></div>
+    </div>
+  </div>
+
+  <!-- FALCON - M&A -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">🦅</span>
+      <span class="card-status status-setup">SETUP</span>
+    </div>
+    <div class="card-name">FALCON — M&A</div>
+    <div class="card-role">Sales↑ Advisory Channel</div>
+    <div class="sub-agents">
+      <div class="sub-agent"><span class="name">Deal-Tracker</span><span class="sub-dot dot-yellow"></span></div>
+      <div class="sub-agent"><span class="name">Deal-Valuer</span><span class="sub-dot dot-gray"></span></div>
+      <div class="sub-agent"><span class="name">Falcon-Match</span><span class="sub-dot dot-gray"></span></div>
+      <div class="sub-agent"><span class="name">Falcon-India</span><span class="sub-dot dot-gray"></span></div>
+    </div>
+  </div>
+
+  <!-- PHOENIX - Brand -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">🔥</span>
+      <span class="card-status status-setup">SETUP</span>
+    </div>
+    <div class="card-name">PHOENIX — Brand</div>
+    <div class="card-role">WACC↓ Brand→Inbound</div>
+    <div class="sub-agents">
+      <div class="sub-agent"><span class="name">X-Drafter</span><span class="sub-dot dot-yellow"></span></div>
+      <div class="sub-agent"><span class="name">X-Scheduler</span><span class="sub-dot dot-gray"></span></div>
+      <div class="sub-agent"><span class="name">Phoenix-Web</span><span class="sub-dot dot-gray"></span></div>
+      <div class="sub-agent"><span class="name">Phoenix-Seminar</span><span class="sub-dot dot-gray"></span></div>
+      <div class="sub-agent"><span class="name">Phoenix-AlphaSense</span><span class="sub-dot dot-yellow"></span></div>
+    </div>
+  </div>
+
+  <!-- SENTINEL - Monitor -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">🛡</span>
+      <span class="card-status status-active">ACTIVE</span>
+    </div>
+    <div class="card-name">SENTINEL — Monitor</div>
+    <div class="card-role">Confidence↑ Zero Surprises</div>
+    <div class="sub-agents">
+      <div class="sub-agent"><span class="name">Sentinel-TDNET</span><span class="sub-dot dot-green"></span></div>
+      <div class="sub-agent"><span class="name">Sentinel-Price</span><span class="sub-dot dot-green"></span></div>
+      <div class="sub-agent"><span class="name">Sentinel-IR</span><span class="sub-dot dot-yellow"></span></div>
+      <div class="sub-agent"><span class="name">Sentinel-News</span><span class="sub-dot dot-yellow"></span></div>
+      <div class="sub-agent"><span class="name">Sentinel-Compliance</span><span class="sub-dot dot-yellow"></span></div>
+      <div class="sub-agent"><span class="name">Sentinel-System</span><span class="sub-dot dot-green"></span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOND - Client Relationship Agents -->
+<div class="section">
+  <h2>🤝 BOND (絆) — Client Relationship Division <span style="font-size:8pt;color:#ef4444;font-weight:400;">JPR Whole SG100Y FIRST → then Client SG100Y</span></h2>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">
+    <div class="card" style="border-left:3px solid #ef4444;padding:8px;">
+      <div style="font-size:9pt;font-weight:700;color:#f1f5f9;">🏗 日特建設</div>
+      <div style="font-size:7pt;color:#94a3b8;">1929 | ¥1.1M/mo</div>
+      <div style="font-size:7pt;color:#ef4444;font-weight:600;">⚠ 39% concentration</div>
+      <div style="font-size:7pt;color:#64748b;margin-top:2px;">Cross-sell M&A advisory</div>
+    </div>
+    <div class="card" style="border-left:3px solid #2EA7E0;padding:8px;">
+      <div style="font-size:9pt;font-weight:700;color:#f1f5f9;">🚚 ラストワンマイル</div>
+      <div style="font-size:7pt;color:#94a3b8;">9252 | IR HTML</div>
+      <div style="font-size:7pt;color:#34d399;">✓ 12-point coverage</div>
+      <div style="font-size:7pt;color:#64748b;margin-top:2px;">Quarterly auto-update</div>
+    </div>
+    <div class="card" style="border-left:3px solid #34d399;padding:8px;">
+      <div style="font-size:9pt;font-weight:700;color:#f1f5f9;">📰 地域新聞社</div>
+      <div style="font-size:7pt;color:#94a3b8;">2164 | Advisory Board</div>
+      <div style="font-size:7pt;color:#fbbf24;">鈴木様 deal ¥9M</div>
+      <div style="font-size:7pt;color:#64748b;margin-top:2px;">TSE維持 Aug 2026</div>
+    </div>
+    <div class="card" style="border-left:3px solid #fbbf24;padding:8px;">
+      <div style="font-size:9pt;font-weight:700;color:#f1f5f9;">🇮🇳 Capwise</div>
+      <div style="font-size:7pt;color:#94a3b8;">India corridor</div>
+      <div style="font-size:7pt;color:#fbbf24;">EU pharma mandate</div>
+      <div style="font-size:7pt;color:#64748b;margin-top:2px;">+ MACP collaboration</div>
+    </div>
+    <div class="card" style="border-left:3px solid #a78bfa;padding:8px;">
+      <div style="font-size:9pt;font-weight:700;color:#f1f5f9;">📦 Channels</div>
+      <div style="font-size:7pt;color:#94a3b8;">LSS + 宝印刷 + AlphaSense</div>
+      <div style="font-size:7pt;color:#34d399;">70% deal close via channel</div>
+      <div style="font-size:7pt;color:#64748b;margin-top:2px;">HnD, ExUrban, Z-works</div>
+    </div>
+  </div>
+</div>
+
+<!-- Human Agents -->
+<div class="section">
+  <h2>👤 Human Agents — The Most Important Tier</h2>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+    <div class="card" style="border-left:3px solid #2EA7E0;">
+      <div class="card-header"><span style="font-size:20pt;">👨‍💼</span><span class="card-status status-active">ACTIVE</span></div>
+      <div class="card-name">OSAMU-san (修)</div>
+      <div class="card-role">CEO / 0→3 Creator — Vision, Deals, Trust</div>
+      <div class="sub-agents">
+        <div class="sub-agent"><span class="name">Current: 鈴木様 deal (3% = ¥9M)</span><span class="sub-dot dot-green"></span></div>
+        <div class="sub-agent"><span class="name">Advisory: 地域新聞社 (2164)</span><span class="sub-dot dot-green"></span></div>
+        <div class="sub-agent"><span class="name">AI Support: Kai + Eagle + Falcon</span><span class="sub-dot dot-green"></span></div>
+      </div>
+    </div>
+    <div class="card" style="border-left:3px solid #fbbf24;">
+      <div class="card-header"><span style="font-size:20pt;">👨‍💻</span><span class="card-status status-active">ACTIVE</span></div>
+      <div class="card-name">AKIHISA (明久)</div>
+      <div class="card-role">COO / 3→100 Executor — Process, Quality, Delivery</div>
+      <div class="sub-agents">
+        <div class="sub-agent"><span class="name">Report QA & delivery</span><span class="sub-dot dot-green"></span></div>
+        <div class="sub-agent"><span class="name">Process optimization</span><span class="sub-dot dot-yellow"></span></div>
+        <div class="sub-agent"><span class="name">AI Support: Owl + CRAFT + ARD</span><span class="sub-dot dot-green"></span></div>
+      </div>
+    </div>
+    <div class="card" style="border-left:3px solid #a78bfa;">
+      <div class="card-header"><span style="font-size:20pt;">👩‍💼</span><span class="card-status status-active">ACTIVE</span></div>
+      <div class="card-name">RIN (凛)</div>
+      <div class="card-role">Operations / Support — Admin, Docs, Client Comms</div>
+      <div class="sub-agents">
+        <div class="sub-agent"><span class="name">Daily operations</span><span class="sub-dot dot-green"></span></div>
+        <div class="sub-agent"><span class="name">Client scheduling</span><span class="sub-dot dot-green"></span></div>
+        <div class="sub-agent"><span class="name">AI Support: NEXUS + Eagle-Gmail</span><span class="sub-dot dot-green"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="section">
+  <h2>📋 Recent Activity</h2>
+  <div class="activity">
+    <div class="activity-row">
+      <span class="activity-time">11:30</span>
+      <span class="activity-agent">Kai</span>
+      <span class="activity-msg">SG100Y evaluation: 鈴木様 3% consulting fee = ¥9M. 100Y NPV ≈ ¥101M-¥370M. APPROVED ✓</span>
+    </div>
+    <div class="activity-row">
+      <span class="activity-time">11:25</span>
+      <span class="activity-agent">Eagle-Gmail</span>
+      <span class="activity-msg">Draft created: お礼メール to 細谷様+鈴木様 → Osamu-san sent ✓</span>
+    </div>
+    <div class="activity-row">
+      <span class="activity-time">09:00</span>
+      <span class="activity-agent">Eagle-Gmail</span>
+      <span class="activity-msg">Meeting: 細谷(地域新聞社)+鈴木(Z-works) at JPR office — completed</span>
+    </div>
+    <div class="activity-row">
+      <span class="activity-time">07:30</span>
+      <span class="activity-agent">Kai</span>
+      <span class="activity-msg">Morning briefing delivered. Gmail drafts reviewed (5 items).</span>
+    </div>
+    <div class="activity-row">
+      <span class="activity-time">03:00</span>
+      <span class="activity-agent">Owl-HTML</span>
+      <span class="activity-msg">Marketing HTML masking: 19 files, 195 rules, 0 leaks. PDF generated (5.5MB, 18pp).</span>
+    </div>
+  </div>
+</div>
+
+<!-- Communication & Memory System -->
+<div class="section">
+  <h2>🔌 Communication & Memory Architecture</h2>
+  <div class="comms">
+    <div class="comms-title">Agent Bus — DuckDB Message Protocol</div>
+    <div class="comms-diagram">
+Eagle ──→ ┌────────────────────┐ ←── Kai (orchestrator)
+Owl ────→ │  agent_bus.duckdb  │ ←── Dashboard (Sentinel-System)
+Falcon ─→ │  messages table    │ ←── Any future agent
+Phoenix → │  JSON payloads     │
+Sentinel→ └────────────────────┘
+    Topic: {domain}.{action}  |  Consumed-flag protocol  |  Immutable history
+    </div>
+    <div class="memory-grid">
+      <div class="memory-tier">
+        <div class="memory-tier-name" style="color:#ef4444;">⚡ Short-Term</div>
+        <div class="memory-tier-desc">Current session<br>agent_bus messages<br>Auto-expires</div>
+      </div>
+      <div class="memory-tier">
+        <div class="memory-tier-name" style="color:#fbbf24;">📋 Mid-Term</div>
+        <div class="memory-tier-desc">30 days<br>JSONL files<br>Weekly review</div>
+      </div>
+      <div class="memory-tier">
+        <div class="memory-tier-name" style="color:#34d399;">🧠 Long-Term</div>
+        <div class="memory-tier-desc">Permanent<br>.md files<br>Principles & profiles</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3-Year Roadmap -->
+<div class="section">
+  <h2>🚀 3-Year Roadmap → ¥1T</h2>
+  <div class="roadmap">
+    <div class="roadmap-card" style="border-left:3px solid #2EA7E0;">
+      <div class="roadmap-year">Year 1 — Foundation</div>
+      <div class="roadmap-target">¥2.8M → ¥8M/mo | 15 agents</div>
+      <div class="roadmap-items">
+        ✓ Eagle (Sales) fully deployed<br>
+        ✓ Owl (Research) automated reports<br>
+        ✓ Sentinel (Monitor) all clients<br>
+        → HTML IR product → 10+ clients
+      </div>
+    </div>
+    <div class="roadmap-card" style="border-left:3px solid #fbbf24;">
+      <div class="roadmap-year">Year 2 — Scale</div>
+      <div class="roadmap-target">¥8M → ¥30M/mo | 25 agents</div>
+      <div class="roadmap-items">
+        → Falcon (M&A) ¥50M/yr advisory<br>
+        → Phoenix (Brand) inbound leads<br>
+        → 5x report throughput<br>
+        → India corridor live
+      </div>
+    </div>
+    <div class="roadmap-card" style="border-left:3px solid #34d399;">
+      <div class="roadmap-year">Year 3 — ¥1T Path</div>
+      <div class="roadmap-target">¥30M → ¥100M/mo | 30+ agents</div>
+      <div class="roadmap-items">
+        → License agent system to others<br>
+        → SaaS platform (×100 firms)<br>
+        → Autonomous lead generation<br>
+        → Platform economics → ¥1T MV
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  JPR AI Agent System v1.0 | SG100Y Framework | Built by Kai 🌊 for Osamu-san<br>
+  Multi-LLM: Claude + Gemini + Codex | DuckDB Agent Bus | 3-Tier Memory
+</div>
+
+</body>
+</html>

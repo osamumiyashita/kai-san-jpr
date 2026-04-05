@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Folder Search: 3823 WHDC | memory-search-san</title>
+<style>
+  @page { size: A4 landscape; margin: 12mm; }
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .no-print { display: none; }
+    .page-break { page-break-before: always; }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', 'Noto Sans JP', -apple-system, sans-serif;
+    background: #f8f9fa;
+    color: #1a1a2e;
+    line-height: 1.5;
+    font-size: 11px;
+  }
+
+  .page {
+    width: 277mm;
+    min-height: 190mm;
+    margin: 10mm auto;
+    background: white;
+    padding: 14mm 16mm;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    position: relative;
+  }
+
+  @media print { .page { margin: 0; box-shadow: none; width: 100%; } }
+
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 3px solid #1a1a2e;
+    padding-bottom: 8px;
+    margin-bottom: 14px;
+  }
+
+  .header-left h1 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a2e;
+    letter-spacing: -0.5px;
+  }
+
+  .header-left .subtitle {
+    font-size: 11px;
+    color: #666;
+    margin-top: 2px;
+  }
+
+  .header-right {
+    text-align: right;
+    font-size: 10px;
+    color: #666;
+  }
+
+  .header-right .date {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a2e;
+  }
+
+  /* Query Box */
+  .query-box {
+    background: #f0f4ff;
+    border: 1px solid #c5d5f5;
+    border-radius: 6px;
+    padding: 8px 14px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .query-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #4a6fa5;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .query-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a2e;
+  }
+
+  .query-meta {
+    margin-left: auto;
+    font-size: 10px;
+    color: #666;
+  }
+
+  /* Results Grid */
+  .results {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .result-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 10px 12px;
+    background: white;
+    position: relative;
+    transition: all 0.15s;
+  }
+
+  .result-card:hover {
+    border-color: #4a6fa5;
+    box-shadow: 0 2px 6px rgba(74, 111, 165, 0.15);
+  }
+
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .result-rank {
+    font-size: 16px;
+    font-weight: 800;
+    color: #4a6fa5;
+    width: 24px;
+  }
+
+  .result-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1a1a2e;
+    flex: 1;
+  }
+
+  .result-score {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 10px;
+    background: #e8f0fe;
+    color: #4a6fa5;
+  }
+
+  .result-score.high { background: #dcf5e7; color: #1a7a3a; }
+  .result-score.medium { background: #fff3cd; color: #856404; }
+
+  .source-badge {
+    font-size: 9px;
+    font-weight: 600;
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin-left: 6px;
+    text-transform: uppercase;
+  }
+
+  .source-badge.onedrive { background: #e3f2fd; color: #1565c0; }
+  .source-badge.dropbox { background: #fce4ec; color: #c62828; }
+
+  .result-path {
+    font-size: 9px;
+    color: #888;
+    margin-bottom: 4px;
+    font-family: 'Consolas', 'SF Mono', monospace;
+    word-break: break-all;
+  }
+
+  .result-files {
+    font-size: 10px;
+    color: #444;
+    margin-bottom: 4px;
+  }
+
+  .result-files strong { color: #1a1a2e; }
+
+  .result-content {
+    font-size: 10px;
+    color: #555;
+    line-height: 1.4;
+  }
+
+  .result-action {
+    margin-top: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #c62828;
+    background: #fff5f5;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  /* Actions Section */
+  .actions {
+    background: #1a1a2e;
+    color: white;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-top: 12px;
+  }
+
+  .actions h2 {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #f0c040;
+  }
+
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  .action-item {
+    background: rgba(255,255,255,0.08);
+    border-radius: 5px;
+    padding: 8px 10px;
+    border-left: 3px solid;
+  }
+
+  .action-item.urgent { border-left-color: #ef4444; }
+  .action-item.important { border-left-color: #f59e0b; }
+  .action-item.check { border-left-color: #3b82f6; }
+
+  .action-item .action-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 3px;
+  }
+
+  .action-item .action-detail {
+    font-size: 9px;
+    color: #aaa;
+    line-height: 1.4;
+  }
+
+  /* Footer */
+  .footer {
+    position: absolute;
+    bottom: 10mm;
+    left: 16mm;
+    right: 16mm;
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: #999;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 6px;
+  }
+
+  .footer strong { color: #4a6fa5; }
+
+  /* Print button */
+  .print-btn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: #1a1a2e;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 100;
+  }
+
+  .print-btn:hover { background: #2a2a4e; }
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">Print / PDF</button>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <h1>Folder Search Report: 3823 THE WHY HOW DO COMPANY</h1>
+      <div class="subtitle">memory-search-san (Kai) | 34,592 folders searched across OneDrive + Dropbox</div>
+    </div>
+    <div class="header-right">
+      <div class="date">2026-03-22</div>
+      <div>J-Phoenix Research Inc.</div>
+      <div>SG100Y Folder Engine v2</div>
+    </div>
+  </div>
+
+  <!-- Query -->
+  <div class="query-box">
+    <span class="query-label">Search Query</span>
+    <span class="query-text">3823 ワイハウ M&A レポート 決算 ファイナンス</span>
+    <span class="query-meta">10 results | milliseconds | Janome + TF-IDF + Cosine</span>
+  </div>
+
+  <!-- Results -->
+  <div class="results">
+
+    <div class="result-card">
+      <div class="result-header">
+        <span class="result-rank">#1</span>
+        <span class="result-name">ファイナンス関連資料</span>
+        <span class="source-badge dropbox">Dropbox</span>
+        <span class="result-score high">0.76</span>
+      </div>
+      <div class="result-path">JPR_共有作業 > 3823_WHDC_sharedwithclients > ファイナンス関連資料</div>
+      <div class="result-files"><strong>2 files</strong> | 4.8MB | .zip, .docx</div>
+      <div class="result-content">手取金の使途資料, 有価証券届出書 WHDC (関東財コメント 3/12版)</div>
+      <div class="result-action">3/27開示前に最終確認必要</div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-header">
+        <span class="result-rank">#2</span>
+        <span class="result-name">9000_fromClients</span>
+        <span class="source-badge onedrive">OneDrive</span>
+        <span class="result-score high">0.66</span>
+      </div>
+      <div class="result-path">1000_company_report_consulting > 3823_WHDC > 9000_fromClients</div>
+      <div class="result-files"><strong>5 files</strong> | MD summaries</div>
+      <div class="result-content">コーウェル(LED), 飯山土建, 有価証券届出書, 適時開示, 手取金 — クライアント提供資料のサマリー</div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-header">
+        <span class="result-rank">#3</span>
+        <span class="result-name">契約書 3823_WHDC</span>
+        <span class="source-badge onedrive">OneDrive</span>
+        <span class="result-score medium">0.65</span>
+      </div>
+      <div class="result-path">9900_情報管理 > 法務 > 契約書 > 3823_WHDC</div>
+      <div class="result-files"><strong>3 files</strong> | docx, pdf, md</div>
+      <div class="result-content">IR支援業務委託契約書 (3/9作成, 3/12 PDF化)</div>
+      <div class="result-action">契約締結状況の確認</div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-header">
+        <span class="result-rank">#4</span>
+        <span class="result-name">M&A関連資料</span>
+        <span class="source-badge dropbox">Dropbox</span>
+        <span class="result-score medium">0.63</span>
+      </div>
+      <div class="result-path">JPR_共有作業 > 3823_WHDC_sharedwithclients > M&A関連資料</div>
+      <div class="result-files"><strong>2 PDFs</strong> | 19MB</div>
+      <div class="result-content">コーウェル(LED照明 EBITDA 325M), 飯山土建(土木 NC~7億 OPM17%)</div>
+      <div class="result-action">Lean ROIC再確認 (10.2% vs 34.7%)</div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-header">
+        <span class="result-rank">#5</span>
+        <span class="result-name">1100_Excel</span>
+        <span class="source-badge onedrive">OneDrive</span>
+        <span class="result-score medium">0.62</span>
+      </div>
+      <div class="result-path">1000_company_report_consulting > 3823_WHDC > 1100_Excel</div>
+      <div class="result-files"><strong>22 files</strong> | 67MB | xlsm, md, py, pdf</div>
+      <div class="result-content">Analyst Report 全バージョン (a~g), GCC予測モデル, 自動化スクリプト</div>
+      <div class="result-action">g版=最新 → 3/27レポートの原本</div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-header">
+        <span class="result-rank">#6</span>
+        <span class="result-name">3823_WHDC Root</span>
+        <span class="source-badge onedrive">OneDrive</span>
+        <span class="result-score medium">0.62</span>
+      </div>
+      <div class="result-path">1000_company_report_consulting > 3823_THE WHY HOW DO COMPANY</div>
+      <div class="result-files"><strong>3 files</strong> | md, svg, md</div>
+      <div class="result-content">12年予測MD, TOPIX比較チャートSVG, 明久さん向けKaiメッセージ</div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-header">
+        <span class="result-rank">#7</span>
+        <span class="result-name">1200_Word</span>
+        <span class="source-badge onedrive">OneDrive</span>
+        <span class="result-score medium">0.66</span>
+      </div>
+      <div class="result-path">1000_company_report_consulting > 3823_WHDC > 1200_Word</div>
+      <div class="result-files"><strong>2 files</strong> | 6.3MB | docx</div>
+      <div class="result-content">企業発信レポートテンプレート, 関係性分析テンプレート</div>
+    </div>
+
+    <div class="result-card">
+      <div class="result-header">
+        <span class="result-rank">#8</span>
+        <span class="result-name">RAG/chroma_db</span>
+        <span class="source-badge onedrive">OneDrive</span>
+        <span class="result-score medium">0.63</span>
+      </div>
+      <div class="result-path">1000_company_report_consulting > 3823_WHDC > RAG > chroma_db</div>
+      <div class="result-files"><strong>1 file</strong> | 0.6MB | sqlite3</div>
+      <div class="result-content">ChromaDB vector store — RAG検索用。全開示資料をベクトル化済み</div>
+    </div>
+
+  </div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <h2>Next Actions (3/27開示まで6日)</h2>
+    <div class="actions-grid">
+      <div class="action-item urgent">
+        <div class="action-title">1. Excel g版 最終チェック</div>
+        <div class="action-detail">1100_Excel/ の最新g版。GCC9BOX整合性、匂わせニュアンス確認。3/27 17時までに完成</div>
+      </div>
+      <div class="action-item urgent">
+        <div class="action-title">2. ファイナンス資料 確認</div>
+        <div class="action-detail">Dropbox共有の有価証券届出書。希薄化22%の説明準備。関東財コメント反映済み確認</div>
+      </div>
+      <div class="action-item important">
+        <div class="action-title">3. M&A Pipeline 整理</div>
+        <div class="action-detail">コーウェル(ROIC 10.2%) vs 飯山土建(ROIC 34.7%)。4月中旬開示に向けてナラティブ準備</div>
+      </div>
+      <div class="action-item check">
+        <div class="action-title">4. 契約書 締結確認</div>
+        <div class="action-detail">法務フォルダの契約書。PDF化済み(3/12)だが署名済みか要確認</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span>Generated by <strong>memory-search-san (Kai)</strong> | SG100Y Folder Engine v2 | 34,592 folders indexed</span>
+    <span>J-Phoenix Research Inc. | 認知負担ゼロ | Print: Ctrl+P → A4 Landscape</span>
+  </div>
+
+</div>
+
+</body>
+</html>

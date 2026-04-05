@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-03-30T07:16:19.124068",
+  "elapsed_seconds": 616.7,
+  "disk_folders": 49217,
+  "db_folders": 34596,
+  "new": 14709,
+  "changed": 97,
+  "deleted": 88,
+  "change_pct": 43.05,
+  "session_hot_folders": 22,
+  "ripple_neurons": 0,
+  "ripple_details": []
+}

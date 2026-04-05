@@ -1,0 +1,14 @@
+node_modules/
+chat-history/
+deploy.cache.json
+kai-chat.log
+key.pem
+cert.pem
+cert.pfx
+deploy.json
+overlays/jpr/
+overlays/client-analysis/
+overlays/client-dispatch/brain/
+overlays/client-dispatch/personas/
+overlays/client-dispatch/input/
+overlays/client-dispatch/output/

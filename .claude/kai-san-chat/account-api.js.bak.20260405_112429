@@ -1,0 +1,328 @@
+/**
+ * account-api.js — GO-only Account Management API
+ * §17-7: Separate file. server.js routes /api/account/* here.
+ *
+ * Only accessible when deploy layer = 'dev' or 'jpr' (GO environment).
+ * HU (client dispatch) cannot access this.
+ */
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+
+let duckdb;
+try { duckdb = require('duckdb'); } catch { duckdb = null; }
+
+const DB_PATH = path.join(__dirname, 'accounts', 'accounts.duckdb');
+const ACCOUNTS_DIR = path.join(__dirname, 'accounts');
+
+// Ensure directory
+if (!fs.existsSync(ACCOUNTS_DIR)) fs.mkdirSync(ACCOUNTS_DIR, { recursive: true });
+
+let db = null;
+let con = null;
+
+function initDb() {
+  if (!duckdb || db) return;
+  try {
+    db = new duckdb.Database(DB_PATH);
+    con = db.connect();
+    con.run(`
+      CREATE TABLE IF NOT EXISTS accounts (
+        id VARCHAR PRIMARY KEY,
+        name VARCHAR NOT NULL,
+        family_name VARCHAR,
+        given_name VARCHAR,
+        middle_name VARCHAR,
+        name_en VARCHAR,
+        name_ja VARCHAR,
+        email VARCHAR NOT NULL,
+        company VARCHAR,
+        company_en VARCHAR,
+        company_ja VARCHAR,
+        department VARCHAR,
+        tier VARCHAR NOT NULL DEFAULT 'trial',
+        license_key VARCHAR,
+        status VARCHAR NOT NULL DEFAULT 'pending',
+        created_at TIMESTAMP DEFAULT now(),
+        activated_at TIMESTAMP,
+        expires_at TIMESTAMP,
+        last_login TIMESTAMP,
+        notes VARCHAR,
+        phone VARCHAR,
+        stock_code VARCHAR,
+        industry VARCHAR,
+        layer_access VARCHAR DEFAULT 'A,C'
+      );
+      CREATE TABLE IF NOT EXISTS account_activity (
+        id VARCHAR DEFAULT gen_random_uuid()::VARCHAR,
+        account_id VARCHAR NOT NULL,
+        action VARCHAR NOT NULL,
+        detail VARCHAR,
+        ts TIMESTAMP DEFAULT now()
+      );
+    `, (err) => { if (err) console.error('account-api initDb:', err.message); });
+    console.log('account-api: DuckDB ready at', DB_PATH);
+  } catch (e) { console.error('account-api DB error:', e.message); }
+}
+
+initDb();
+
+// ── Helpers ──────────────────────────────────────────────────
+
+function generateKey() {
+  return 'KAI-' + crypto.randomBytes(12).toString('hex').toUpperCase();
+}
+
+function readBody(req) {
+  return new Promise((resolve, reject) => {
+    let body = '';
+    req.on('data', c => { body += c; if (body.length > 1e6) { req.destroy(); reject(new Error('Too large')); } });
+    req.on('end', () => { try { resolve(JSON.parse(body)); } catch { reject(new Error('Invalid JSON')); } });
+  });
+}
+
+function json(res, data, status = 200) {
+  res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8' });
+  res.end(JSON.stringify(data));
+}
+
+function query(sql, params = []) {
+  return new Promise((resolve, reject) => {
+    if (!con) return reject(new Error('DB not ready'));
+    con.all(sql, ...params, (err, rows) => {
+      if (err) reject(err); else resolve(rows || []);
+    });
+  });
+}
+
+function run(sql, params = []) {
+  return new Promise((resolve, reject) => {
+    if (!con) return reject(new Error('DB not ready'));
+    con.run(sql, ...params, (err) => {
+      if (err) reject(err); else resolve();
+    });
+  });
+}
+
+// ── GO-only gate ─────────────────────────────────────────────
+
+function isGO() {
+  try {
+    const deploy = require('./deploy');
+    const cfg = deploy.getConfig();
+    return cfg.layer === 'dev' || cfg.layer === 'jpr';
+  } catch { return false; }
+}
+
+// ── API Handler ──────────────────────────────────────────────
+
+function handleAccountAPI(req, res, url) {
+  // Block non-GO access
+  if (!isGO()) {
+    json(res, { error: 'Account management is GO-only' }, 403);
+    return true;
+  }
+
+  const method = req.method;
+
+  // GET /api/account/list — all accounts
+  if (url === '/api/account/list' && method === 'GET') {
+    query('SELECT * FROM accounts ORDER BY created_at DESC')
+      .then(rows => json(res, { accounts: rows }))
+      .catch(e => json(res, { error: e.message }, 500));
+    return true;
+  }
+
+  // GET /api/account/stats — dashboard stats
+  if (url === '/api/account/stats' && method === 'GET') {
+    Promise.all([
+      query("SELECT COUNT(*) as total FROM accounts"),
+      query("SELECT COUNT(*) as active FROM accounts WHERE status='active'"),
+      query("SELECT COUNT(*) as trial FROM accounts WHERE tier='trial'"),
+      query("SELECT COUNT(*) as expired FROM accounts WHERE status='expired'"),
+      query("SELECT tier, COUNT(*) as cnt FROM accounts GROUP BY tier ORDER BY cnt DESC"),
+    ]).then(([total, active, trial, expired, byTier]) => {
+      json(res, {
+        total: total[0]?.total || 0,
+        active: active[0]?.active || 0,
+        trial: trial[0]?.trial || 0,
+        expired: expired[0]?.expired || 0,
+        byTier
+      });
+    }).catch(e => json(res, { error: e.message }, 500));
+    return true;
+  }
+
+  // GET /api/account/:id — single account detail
+  const detailMatch = url.match(/^\/api\/account\/detail\/(.+)$/);
+  if (detailMatch && method === 'GET') {
+    const id = decodeURIComponent(detailMatch[1]);
+    Promise.all([
+      query("SELECT * FROM accounts WHERE id = ?", [id]),
+      query("SELECT * FROM account_activity WHERE account_id = ? ORDER BY ts DESC LIMIT 50", [id])
+    ]).then(([rows, activity]) => {
+      if (!rows.length) return json(res, { error: 'Not found' }, 404);
+      json(res, { account: rows[0], activity });
+    }).catch(e => json(res, { error: e.message }, 500));
+    return true;
+  }
+
+  // POST /api/account/create — new account
+  if (url === '/api/account/create' && method === 'POST') {
+    readBody(req).then(async (body) => {
+      const id = crypto.randomUUID();
+      const key = generateKey();
+      const now = new Date();
+      const trialDays = body.tier === 'employee' || body.tier === 'invited' ? 36500 : 30;
+      const expires = new Date(now.getTime() + trialDays * 86400000);
+
+      const displayName = [body.family_name, body.middle_name, body.given_name].filter(Boolean).join(' ') || body.name || '';
+      await run(`INSERT INTO accounts (id, name, family_name, given_name, middle_name, name_en, name_ja, email, company, company_en, company_ja, department, tier, license_key, status, created_at, expires_at, phone, stock_code, industry, notes, layer_access)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
+        id, displayName, body.family_name || '', body.given_name || '', body.middle_name || '',
+        body.name_en || '', body.name_ja || '',
+        body.email, body.company || '', body.company_en || '', body.company_ja || '', body.department || '',
+        body.tier || 'trial', key, body.tier === 'employee' || body.tier === 'invited' ? 'active' : 'pending',
+        now.toISOString(), expires.toISOString(),
+        body.phone || '', body.stock_code || '', body.industry || '', body.notes || '',
+        body.layer_access || (body.tier === 'employee' ? 'A,B,C,D' : 'A,C')
+      ]);
+
+      await run("INSERT INTO account_activity (account_id, action, detail) VALUES (?, 'created', ?)",
+        [id, `Tier: ${body.tier}, Key: ${key}`]);
+
+      json(res, { ok: true, id, license_key: key, expires_at: expires.toISOString() });
+    }).catch(e => json(res, { error: e.message }, 400));
+    return true;
+  }
+
+  // POST /api/account/update/:id — update account
+  const updateMatch = url.match(/^\/api\/account\/update\/(.+)$/);
+  if (updateMatch && method === 'POST') {
+    const id = decodeURIComponent(updateMatch[1]);
+    readBody(req).then(async (body) => {
+      const fields = [];
+      const vals = [];
+      for (const [k, v] of Object.entries(body)) {
+        if (['name','family_name','given_name','middle_name','name_en','name_ja','email','company','company_en','company_ja','department','tier','status','notes','phone','stock_code','industry','layer_access'].includes(k)) {
+          fields.push(`${k} = ?`);
+          vals.push(v);
+        }
+      }
+      if (!fields.length) return json(res, { error: 'No fields' }, 400);
+      vals.push(id);
+      await run(`UPDATE accounts SET ${fields.join(', ')} WHERE id = ?`, vals);
+      await run("INSERT INTO account_activity (account_id, action, detail) VALUES (?, 'updated', ?)",
+        [id, JSON.stringify(body)]);
+      json(res, { ok: true });
+    }).catch(e => json(res, { error: e.message }, 400));
+    return true;
+  }
+
+  // POST /api/account/activate/:id — activate + set expiry
+  const activateMatch = url.match(/^\/api\/account\/activate\/(.+)$/);
+  if (activateMatch && method === 'POST') {
+    const id = decodeURIComponent(activateMatch[1]);
+    readBody(req).then(async (body) => {
+      const days = body.days || 30;
+      const now = new Date();
+      const expires = new Date(now.getTime() + days * 86400000);
+      await run("UPDATE accounts SET status='active', activated_at=?, expires_at=? WHERE id=?",
+        [now.toISOString(), expires.toISOString(), id]);
+      await run("INSERT INTO account_activity (account_id, action, detail) VALUES (?, 'activated', ?)",
+        [id, `${days} days`]);
+      json(res, { ok: true, expires_at: expires.toISOString() });
+    }).catch(e => json(res, { error: e.message }, 400));
+    return true;
+  }
+
+  // POST /api/account/suspend/:id
+  const suspendMatch = url.match(/^\/api\/account\/suspend\/(.+)$/);
+  if (suspendMatch && method === 'POST') {
+    const id = decodeURIComponent(suspendMatch[1]);
+    run("UPDATE accounts SET status='suspended' WHERE id=?", [id])
+      .then(() => run("INSERT INTO account_activity (account_id, action, detail) VALUES (?, 'suspended', 'Manual suspension')", [id]))
+      .then(() => json(res, { ok: true }))
+      .catch(e => json(res, { error: e.message }, 500));
+    return true;
+  }
+
+  // POST /api/account/renew/:id — extend expiry
+  const renewMatch = url.match(/^\/api\/account\/renew\/(.+)$/);
+  if (renewMatch && method === 'POST') {
+    const id = decodeURIComponent(renewMatch[1]);
+    readBody(req).then(async (body) => {
+      const days = body.days || 30;
+      await run("UPDATE accounts SET expires_at = expires_at + INTERVAL ? DAY, status='active' WHERE id=?", [days, id]);
+      await run("INSERT INTO account_activity (account_id, action, detail) VALUES (?, 'renewed', ?)",
+        [id, `+${days} days`]);
+      json(res, { ok: true });
+    }).catch(e => json(res, { error: e.message }, 400));
+    return true;
+  }
+
+  // DELETE /api/account/:id
+  const deleteMatch = url.match(/^\/api\/account\/delete\/(.+)$/);
+  if (deleteMatch && method === 'POST') {
+    const id = decodeURIComponent(deleteMatch[1]);
+    run("DELETE FROM account_activity WHERE account_id=?", [id])
+      .then(() => run("DELETE FROM accounts WHERE id=?", [id]))
+      .then(() => json(res, { ok: true }))
+      .catch(e => json(res, { error: e.message }, 500));
+    return true;
+  }
+
+  // GET /api/account/lookup-company?code=XXXX — stock code → company name
+  if (url.startsWith('/api/account/lookup-company') && method === 'GET') {
+    const params = new URL('http://x' + url).searchParams;
+    const code = params.get('code') || '';
+    if (!code) return json(res, { error: 'code required' }, 400), true;
+
+    // Search EDINET corpus DuckDB for company info
+    const corpusPaths = [
+      path.join(__dirname, 'corpus', 'edinet_corpus.duckdb'),
+      'C:\\Users\\宮下修\\.claude\\kai-san-chat\\corpus\\edinet_corpus.duckdb',
+    ];
+    let corpusDb = null;
+    for (const p of corpusPaths) {
+      if (fs.existsSync(p)) {
+        try {
+          corpusDb = new duckdb.Database(p, { access_mode: 'READ_ONLY' });
+          break;
+        } catch { /* try next */ }
+      }
+    }
+    if (!corpusDb) {
+      // Fallback: try accounts DB for cached lookups, or return empty
+      json(res, { found: false, code, name_en: '', name_ja: '', industry: '' });
+      return true;
+    }
+
+    const corpusCon = corpusDb.connect();
+    corpusCon.all(
+      `SELECT company_name, company_name_en, industry FROM companies WHERE tse_code LIKE ? LIMIT 1`,
+      code + '%',
+      (err, rows) => {
+        corpusDb.close();
+        if (err || !rows || rows.length === 0) {
+          json(res, { found: false, code, name_en: '', name_ja: '', industry: '' });
+        } else {
+          const r = rows[0];
+          json(res, {
+            found: true, code,
+            name_ja: r.company_name || '',
+            name_en: r.company_name_en || '',
+            industry: r.industry || ''
+          });
+        }
+      }
+    );
+    return true;
+  }
+
+  return false;
+}
+
+module.exports = { handleAccountAPI };

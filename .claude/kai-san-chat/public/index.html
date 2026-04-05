@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>kai-san-chat</title>
+<link rel="stylesheet" href="/xterm/css/xterm.css">
+<link rel="stylesheet" href="/style.css?v=20260405a">
+<link rel="stylesheet" href="/navigator/x-worklog.css">
+<link rel="stylesheet" href="/chat-history.css">
+<link rel="stylesheet" href="/docs-toolbar.css">
+<link rel="stylesheet" href="/rpa.css">
+<link rel="stylesheet" href="/sidebyside.css">
+</head>
+<body>
+
+<div id="left-panel">
+  <div id="left-header">
+    <div class="logo" title="海 (kai) = ocean — boundless, connects everything">海</div>
+    <h1>Kai-san</h1>
+    <div class="subtitle">Serverless AI Assistant — Your PC fused with AI</div>
+  </div>
+
+  <div id="toolbar">
+    <button class="tool-btn active" data-tab="chat" title="チャット — AIと対話">Chat</button>
+    <button class="tool-btn" data-tab="navigator" title="ナビゲーター — 能力・データ・指示・成果物の選択">Navigator</button>
+    <button class="tool-btn" data-tab="explorer" title="エクスプローラー — PCのフォルダを閲覧">Explorer</button>
+    <button class="tool-btn" data-tab="graphs" title="グラフ — データの可視化">Graph</button>
+    <button class="tool-btn" data-tab="docs" title="ドキュメント — マニュアルと資料">Docs</button>
+    <button class="tool-btn" data-tab="guide" title="使い方 — はじめての方へ">Guide</button>
+    <button class="tool-btn" data-tab="rpa" title="自動操作 — ブラウザ操作の記録と再生">RPA</button>
+    <button class="tool-btn danger" id="btn-clear-chat" title="チャット画面をクリアして新しい会話を始めます">Clear</button>
+    <span style="flex:1"></span>
+    <button class="tool-btn go-only-btn" data-tab="account" title="アカウント管理 — ライセンス・ユーザー管理（GO環境専用）">Accounts</button>
+    <button class="tool-btn danger" id="btn-restart" title="サーバー再起動">Restart</button>
+  </div>
+
+  <!-- ===== Chat Tab ===== -->
+  <div id="tab-chat" class="tab-content active">
+    <div id="cat-nav">
+      <div id="cat-breadcrumb"><span class="crumb active" data-level="root">💬 Chat</span></div>
+      <button id="btn-toggle-cat">History ▶</button>
+    </div>
+    <div id="cat-tree" style="display:none;"></div>
+    <div id="suggestions" style="display:none;"></div>
+    <div id="empty-state">Type your question below</div>
+  </div>
+
+  <!-- ===== Navigator Tab (FC / X / FP / Y) ===== -->
+  <div id="tab-navigator" class="tab-content">
+
+    <!-- 4 sub-tabs: FC, X, FP, Y -->
+    <div id="nav-subtabs">
+      <button class="nav-subtab active" data-navtab="fc" title="能力 — ルール・コマンド・スキル・エージェント">FC</button>
+      <button class="nav-subtab" data-navtab="x" title="データ — 分析に使うファイルとDB">Data</button>
+      <button class="nav-subtab" data-navtab="fp" title="指示 — AIへのプロンプト">Prompt</button>
+      <button class="nav-subtab" data-navtab="y" title="成果物 — Formatと保存先">Output</button>
+    </div>
+
+    <!-- FC: 能力（.claude から） -->
+    <div id="navtab-fc" class="nav-panel active">
+      <div class="nav-panel-hint" title="Kai-sanができること。クリックで選択。マウスオーバーで説明。">What Kai-san can do. Click to select. Hover for details.</div>
+      <div class="nav-category" data-cat="rules">
+        <div class="nav-cat-header">
+          <span class="nav-cat-icon">📋</span>
+          <span class="nav-cat-name">Rules</span>
+          <span class="nav-cat-desc">When and what to apply</span>
+          <span class="nav-cat-count" id="fc-rules-count">0</span>
+        </div>
+        <div class="nav-cat-items" id="fc-rules-items" style="display:none;"></div>
+      </div>
+      <div class="nav-category" data-cat="commands">
+        <div class="nav-cat-header">
+          <span class="nav-cat-icon">⚡</span>
+          <span class="nav-cat-name">Commands</span>
+          <span class="nav-cat-desc">One-click actions</span>
+          <span class="nav-cat-count" id="fc-commands-count">0</span>
+        </div>
+        <div class="nav-cat-items" id="fc-commands-items" style="display:none;"></div>
+      </div>
+      <div class="nav-category" data-cat="skills">
+        <div class="nav-cat-header">
+          <span class="nav-cat-icon">🧠</span>
+          <span class="nav-cat-name">Skills</span>
+          <span class="nav-cat-desc">Analysis, evaluation, generation</span>
+          <span class="nav-cat-count" id="fc-skills-count">0</span>
+        </div>
+        <div class="nav-cat-items" id="fc-skills-items" style="display:none;"></div>
+      </div>
+      <div class="nav-category" data-cat="agents">
+        <div class="nav-cat-header">
+          <span class="nav-cat-icon">🤖</span>
+          <span class="nav-cat-name">Agents</span>
+          <span class="nav-cat-desc">AI specialists for specific domains</span>
+          <span class="nav-cat-count" id="fc-agents-count">0</span>
+        </div>
+        <div class="nav-cat-items" id="fc-agents-items" style="display:none;"></div>
+      </div>
+      <div class="nav-category" data-cat="pf">
+        <div class="nav-cat-header">
+          <span class="nav-cat-icon">📦</span>
+          <span class="nav-cat-name">Pure Functions</span>
+          <span class="nav-cat-desc">Deterministic compute, transform, validate</span>
+          <span class="nav-cat-count" id="fc-pf-count">0</span>
+        </div>
+        <div class="nav-cat-items" id="fc-pf-items" style="display:none;"></div>
+      </div>
+      <div class="nav-category" data-cat="memory">
+        <div class="nav-cat-header">
+          <span class="nav-cat-icon">💾</span>
+          <span class="nav-cat-name">Memory</span>
+          <span class="nav-cat-desc">Past decisions, learning, client context</span>
+          <span class="nav-cat-count" id="fc-memory-count">0</span>
+        </div>
+        <div class="nav-cat-items" id="fc-memory-items" style="display:none;"></div>
+      </div>
+      <div class="nav-category" data-cat="macro">
+        <div class="nav-cat-header">
+          <span class="nav-cat-icon">🔁</span>
+          <span class="nav-cat-name" title="マクロ">Macros</span>
+          <span class="nav-cat-desc" title="保存済みの作業セット（ワンクリック実行）">Saved action sets (one-click)</span>
+          <span class="nav-cat-count" id="fc-macro-count">0</span>
+        </div>
+        <div class="nav-cat-items" id="fc-macro-items" style="display:none;"></div>
+      </div>
+    </div>
+
+    <!-- X: データ（G: drive から） -->
+    <div id="navtab-x" class="nav-panel">
+      <div class="nav-panel-hint" title="分析に使うデータ。クリックで選択。マウスオーバーでフォルダの説明。">Data for analysis. Click to select. Hover for folder details.</div>
+      <div class="nav-category" data-cat="clients">
+        <div class="nav-cat-header">
+          <span class="nav-cat-icon">🏢</span>
+          <span class="nav-cat-name" title="クライアント">Clients</span>
+          <span class="nav-cat-desc" title="企業別のデータフォルダ">Company data folders</span>
+          <span class="nav-cat-count" id="x-clients-count">0</span>
+        </div>
+        <div class="nav-cat-items" id="x-clients-items" style="display:none;"></div>
+      </div>
+      <div class="nav-category" data-cat="financial">
+        <div class="nav-cat-header">
+          <span class="nav-cat-icon">📊</span>
+          <span class="nav-cat-name" title="財務データ">Financial</span>
+          <span class="nav-cat-desc" title="EDINET・FactSet・決算データ">EDINET, FactSet, earnings data</span>
+          <span class="nav-cat-count" id="x-financial-count">0</span>
+        </div>
+        <div class="nav-cat-items" id="x-financial-items" style="display:none;"></div>
+      </div>
+      <div class="nav-category" data-cat="documents">
+        <div class="nav-cat-header">
+          <span class="nav-cat-icon">📝</span>
+          <span class="nav-cat-name" title="文書">Documents</span>
+          <span class="nav-cat-desc" title="レポート・提案書・議事録">Reports, proposals, minutes</span>
+          <span class="nav-cat-count" id="x-documents-count">0</span>
+        </div>
+        <div class="nav-cat-items" id="x-documents-items" style="display:none;"></div>
+      </div>
+      <div class="nav-category" data-cat="databases">
+        <div class="nav-cat-header">
+          <span class="nav-cat-icon">🗃️</span>
+          <span class="nav-cat-name" title="データベース">Database</span>
+          <span class="nav-cat-desc" title="DuckDB・分析用データベース">DuckDB, analytics databases</span>
+          <span class="nav-cat-count" id="x-databases-count">0</span>
+        </div>
+        <div class="nav-cat-items" id="x-databases-items" style="display:none;"></div>
+      </div>
+      <div class="nav-category" data-cat="knowledge">
+        <div class="nav-cat-header">
+          <span class="nav-cat-icon">📚</span>
+          <span class="nav-cat-name" title="知識ベース">Knowledge</span>
+          <span class="nav-cat-desc" title="研究資料・参考文献・学習記録">Research, references, learning</span>
+          <span class="nav-cat-count" id="x-knowledge-count">0</span>
+        </div>
+        <div class="nav-cat-items" id="x-knowledge-items" style="display:none;"></div>
+      </div>
+      <div class="nav-category" data-cat="mail">
+        <div class="nav-cat-header">
+          <span class="nav-cat-icon">📧</span>
+          <span class="nav-cat-name" title="メール">Email</span>
+          <span class="nav-cat-desc" title="Gmail・ステークホルダーとのやり取り">Gmail, stakeholder communications</span>
+          <span class="nav-cat-count" id="x-mail-count">0</span>
+        </div>
+        <div class="nav-cat-items" id="x-mail-items" style="display:none;"></div>
+      </div>
+      <div class="nav-category" data-cat="recent">
+        <div class="nav-cat-header">
+          <span class="nav-cat-icon">🕐</span>
+          <span class="nav-cat-name" title="最近使ったもの">Recent</span>
+          <span class="nav-cat-desc" title="7日以内にアクセスしたフォルダ">Folders accessed within 7 days</span>
+          <span class="nav-cat-count" id="x-recent-count">0</span>
+        </div>
+        <div class="nav-cat-items" id="x-recent-items" style="display:none;"></div>
+      </div>
+      <div style="padding:8px 12px;">
+        <button class="nav-setup-btn" id="btn-x-onboard" title="フォルダの初期設定">📁 Setup Folders</button>
+      </div>
+    </div>
+
+    <!-- FP: 指示（Human + AI） -->
+    <div id="navtab-fp" class="nav-panel">
+      <div class="nav-panel-hint" title="あなたの指示→Kai-sanが最適なプロンプトを作成→確認して実行">Your instruction → Kai-san builds the optimal prompt → Review and execute.</div>
+
+      <!-- FPH: Human intent -->
+      <div class="fp-section">
+        <div class="fp-label" title="あなたの指示">👤 Your Instruction (FPH)</div>
+        <textarea id="fph-input" class="fp-textarea" rows="2" placeholder="e.g. Analyze GS Yuasa ROIC" title="例: GSユアサのROICを分析して"></textarea>
+      </div>
+
+      <!-- FPA: AI-composed prompt -->
+      <div class="fp-section" id="fpa-section" style="display:none;">
+        <div class="fp-label" title="Kai-sanが作成した実行計画">🤖 Kai-san Execution Plan (FPA)</div>
+        <div id="fpa-content" class="fp-content"></div>
+        <div class="fp-actions">
+          <button class="fp-btn fp-btn-execute" id="btn-fpa-execute" title="実行">▶ Execute</button>
+          <button class="fp-btn fp-btn-edit" id="btn-fpa-edit" title="修正を追加">✏️ Revise</button>
+        </div>
+      </div>
+
+      <!-- Worklog: AI作業経過（FPAとYの間） -->
+      <div id="nav-worklog-area"></div>
+
+      <!-- FPH/FPA History -->
+      <div id="fp-history">
+        <div class="fp-label" style="margin-top:12px;" title="指示の履歴">📜 Prompt History</div>
+        <div id="fp-history-list"></div>
+      </div>
+    </div>
+
+    <!-- Y: 成果物 -->
+    <div id="navtab-y" class="nav-panel">
+      <div class="nav-panel-hint" title="作成された成果物。クリックで開きます。">Generated outputs. Click to open.</div>
+
+      <!-- Output format selection -->
+      <div class="y-format-section">
+        <div class="y-format-label">Format</div>
+        <div class="y-format-options">
+          <label class="y-fmt"><input type="checkbox" value="md" checked> MD</label>
+          <span class="y-fmt-arrow">→</span>
+          <label class="y-fmt"><input type="checkbox" value="html"> HTML</label>
+          <span class="y-fmt-arrow">→</span>
+          <label class="y-fmt"><input type="checkbox" value="pdf"> PDF</label>
+          <span class="y-fmt-arrow">→</span>
+          <label class="y-fmt"><input type="checkbox" value="pptx"> PPTX</label>
+          <label class="y-fmt"><input type="checkbox" value="word"> Word</label>
+        </div>
+        <div class="y-format-options" style="margin-top:4px;">
+          <label class="y-fmt"><input type="checkbox" value="csv"> CSV</label>
+          <span class="y-fmt-arrow">→</span>
+          <label class="y-fmt"><input type="checkbox" value="excel"> Excel</label>
+        </div>
+      </div>
+
+      <!-- Save location -->
+      <div class="y-save-section">
+        <div class="y-format-label" title="保存先">Save Location</div>
+        <div class="y-save-row">
+          <button class="nav-setup-btn" id="btn-y-browse" title="フォルダを選ぶ">📁 Browse</button>
+          <span id="y-save-display" class="y-save-path">Not selected</span>
+        </div>
+      </div>
+
+      <!-- Output files list -->
+      <div class="y-files-section">
+        <div class="y-format-label" title="作成済みの成果物">Generated Files</div>
+        <div id="y-files-list"></div>
+      </div>
+
+      <!-- Macro save -->
+      <div class="y-macro-section">
+        <div class="y-format-label" title="マクロとして保存">Save as Macro</div>
+        <div class="y-macro-row">
+          <input type="text" id="y-macro-name" class="y-macro-input" placeholder="Macro name (e.g. Monthly ROIC Report)" title="マクロ名（例: 月次ROIC報告）">
+          <button class="fp-btn fp-btn-execute" id="btn-y-save-macro" title="保存">Save</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab-navigator -->
+
+  <!-- ===== Explorer Tab ===== -->
+  <div id="tab-explorer" class="tab-content">
+    <div id="explorer-drives"></div>
+    <div id="explorer-path-bar">
+      <button id="explorer-up" title="Up (Alt+Up)">↑</button>
+      <input id="explorer-path" type="text" spellcheck="false" placeholder="C:\Users\...">
+      <button id="explorer-go" title="Go (Enter)">→</button>
+      <button id="explorer-bookmark" title="Bookmark this folder">☆</button>
+    </div>
+    <div id="explorer-completions"></div>
+    <div id="explorer-bookmarks"></div>
+    <div id="explorer-list"></div>
+    <div id="explorer-status">Ctrl+Alt+C: copy path</div>
+  </div>
+
+  <!-- ===== Graph Tab ===== -->
+  <div id="tab-graphs" class="tab-content">
+    <div id="graph-empty" style="padding:20px;color:#888;text-align:center;">
+      Graphs auto-display when included in responses
+    </div>
+    <div id="graph-list" style="overflow-y:auto;height:calc(100% - 10px);padding:8px;"></div>
+  </div>
+
+  <!-- ===== Docs Tab ===== -->
+  <div id="tab-docs" class="tab-content">
+    <div id="docs-toolbar">
+      <button id="btn-docs-external" title="別ウィンドウで開く">↗ 別ウィンドウ</button>
+    </div>
+    <iframe id="docs-frame" style="width:100%;height:100%;border:none;"></iframe>
+  </div>
+
+  <!-- ===== Guide Tab ===== -->
+  <div id="tab-guide" class="tab-content">
+    <h3>Guide</h3>
+    <div class="card">
+      <strong>1.</strong> Type your question in the input field below<br>
+      <strong>2.</strong> Press "Send" or hit Enter<br>
+      <strong>3.</strong> Response appears in the right terminal<br>
+      <strong>4.</strong> Summary is also recorded on the left
+    </div>
+
+    <h3 title="企業価値を上げる3つの軸">3 Axes of Corporate Value (GCC)</h3>
+    <div class="card">
+      <dl>
+        <dt class="term" data-term="growth" title="成長">Growth</dt>
+        <dd title="売上を伸ばす。新しい市場に挑戦する。">Grow revenue. Enter new markets.</dd>
+        <dt class="term" data-term="connection" title="つながり">Connection</dt>
+        <dd title="使ったお金でどれだけ稼げるか（ROIC）を高める。">Maximize return on invested capital (<span class="term" data-term="roic">ROIC</span>).</dd>
+        <dt class="term" data-term="confidence" title="信頼">Confidence</dt>
+        <dd title="投資家・社員・顧客の信頼で資本コスト（WACC）を下げる。">Lower cost of capital (<span class="term" data-term="wacc">WACC</span>) through stakeholder trust.</dd>
+      </dl>
+    </div>
+
+    <div class="formula">
+      <span class="term" data-term="yvc" title="企業価値">Value</span> = IC x (<span class="term" data-term="roic">ROIC</span> - <span class="term" data-term="wacc">WACC</span>)
+    </div>
+
+    <div class="card">
+      When <span class="term" data-term="roic">ROIC</span> exceeds <span class="term" data-term="wacc">WACC</span>, the company creates value.<br>
+      Sustain this for 100 years = <strong class="term" data-term="sg100y">SG100Y</strong>
+    </div>
+
+    <h3 title="質問の例">Example Questions</h3>
+    <div class="card">
+      "Summarize the earnings report highlights"<br>
+      "How can we improve <span class="term" data-term="roic">ROIC</span>?"<br>
+      "What are our strengths vs competitors?"<br>
+      "Generate expected questions for IR meetings"
+    </div>
+  </div>
+
+  <!-- ===== RPA Tab ===== -->
+  <div id="tab-rpa" class="tab-content"></div>
+
+  <!-- ===== Account Tab (GO only) ===== -->
+  <div id="tab-account" class="tab-content"></div>
+
+  <div id="input-bar">
+    <textarea id="chat-input" rows="1" placeholder="Ask anything..." title="質問を入力してください"></textarea>
+    <button id="btn-send" title="送信（Enterでも可）">Send</button>
+  </div>
+</div>
+
+<div id="divider"></div>
+
+<div id="right-panel">
+  <div id="header">
+    <span class="title" title="kai (海) = ocean, boundless connection &#10;-san = mutual respect between all agents, human and AI &#10;-chat = a conversation with a respectful partner">海 kai-san-chat</span>
+    <span id="deploy-badge" style="font-size:11px;padding:2px 8px;border-radius:4px;color:#fff;"></span>
+    <span class="status" id="status">Connecting...</span>
+  </div>
+  <div id="terminal-container"></div>
+  <div id="ime-overlay" style="display:none;position:fixed;background:#3b4252;color:#eceff4;padding:4px 12px;border-radius:4px;font-size:16px;font-family:'Yu Gothic','Meiryo',sans-serif;z-index:1000;border:2px solid #88c0d0;box-shadow:0 4px 12px rgba(0,0,0,0.5);pointer-events:none;"></div>
+</div>
+
+<!-- 101 Tooltip popup -->
+<div id="tooltip-101" class="tooltip" style="display:none;">
+  <div class="tooltip-title"></div>
+  <div class="tooltip-body"></div>
+  <a class="tooltip-link" href="#" target="_blank" title="詳しく見る">Learn more →</a>
+</div>
+
+<script src="/xterm/lib/xterm.js"></script>
+<script src="/xterm-addon-fit/lib/addon-fit.js"></script>
+<script src="/xterm-addon-unicode11/lib/addon-unicode11.js"></script>
+<script src="/xterm-addon-webgl/lib/addon-webgl.js"></script>
+<script src="/navigator/x-glossary.js"></script>
+<script src="/navigator/x-worklog.js"></script>
+<script src="/navigator/x-navigator.js"></script>
+<script src="/display-mode.js?v=20260405c"></script>
+<script src="/terminal-extract.js?v=20260405c"></script>
+<script src="/graph-detect.js?v=20260405c"></script>
+<script src="/category-tree.js?v=20260405c"></script>
+<script src="/app.js?v=20260405c"></script>
+<script src="/explorer.js"></script>
+<script src="/chat-history.js"></script>
+<script src="/docs-toolbar.js"></script>
+<script src="/rpa.js"></script>
+<script src="/sidebyside.js"></script>
+<link rel="stylesheet" href="/account/account.css">
+<script src="/account/account.js"></script>
+</body>
+</html>

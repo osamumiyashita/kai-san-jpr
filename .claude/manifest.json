@@ -1,0 +1,14 @@
+{
+  "target": "jpr",
+  "company": "jpr",
+  "person": "akihisa",
+  "layer": "jpr",
+  "synced_at": "2026-04-05T13:35:49.586407",
+  "stats": {
+    "encrypted": 27,
+    "plain": 24,
+    "skipped": 0,
+    "dirs": 1
+  },
+  "github": "osamumiyashita/kai-san-jpr"
+}

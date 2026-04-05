@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>チャット機能マニュアル — kai-san-chat</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0f172a; color: #e2e8f0;
+  font-family: 'Segoe UI', 'Yu Gothic UI', 'Meiryo', sans-serif;
+  line-height: 1.8; padding: 24px 32px; max-width: 800px;
+}
+h1 {
+  font-size: 22px; color: #4ade80; margin-bottom: 8px;
+  border-bottom: 2px solid #1e293b; padding-bottom: 8px;
+}
+h1 .logo { font-size: 28px; margin-right: 8px; }
+h2 {
+  font-size: 16px; color: #4ade80; margin: 28px 0 10px;
+  padding-left: 12px; border-left: 3px solid #4ade80;
+}
+h3 { font-size: 14px; color: #94a3b8; margin: 18px 0 6px; }
+p, li { font-size: 13px; color: #cbd5e1; margin-bottom: 6px; }
+ul, ol { padding-left: 20px; }
+li { margin-bottom: 4px; }
+
+.card {
+  background: #1e293b; border: 1px solid #334155; border-radius: 6px;
+  padding: 14px 18px; margin: 10px 0;
+}
+.card-title {
+  font-size: 13px; font-weight: 700; color: #4ade80; margin-bottom: 6px;
+}
+
+.screenshot {
+  background: #1a1a2e; border: 1px solid #334155; border-radius: 6px;
+  padding: 16px; margin: 12px 0; font-family: monospace; font-size: 12px;
+  color: #94a3b8; line-height: 1.6;
+}
+.screenshot .highlight { color: #4ade80; font-weight: 700; }
+.screenshot .star { color: #facc15; }
+.screenshot .dim { color: #475569; }
+.screenshot .btn {
+  display: inline-block; padding: 2px 10px; border: 1px solid #334155;
+  border-radius: 3px; font-size: 11px; margin: 0 2px;
+}
+.screenshot .btn.active { border-color: #4ade80; color: #4ade80; }
+
+.feature-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0;
+}
+@media (max-width: 600px) { .feature-grid { grid-template-columns: 1fr; } }
+.feature-item {
+  background: #1e293b; border: 1px solid #334155; border-radius: 6px;
+  padding: 12px 14px;
+}
+.feature-item .icon { font-size: 20px; margin-bottom: 4px; }
+.feature-item .name { font-size: 13px; font-weight: 700; color: #e2e8f0; }
+.feature-item .desc { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+
+.tip {
+  background: #0c2d48; border-left: 3px solid #0ea5e9;
+  padding: 10px 14px; margin: 10px 0; border-radius: 0 6px 6px 0;
+  font-size: 12px; color: #7dd3fc;
+}
+.tip strong { color: #38bdf8; }
+
+.warning {
+  background: #422006; border-left: 3px solid #f59e0b;
+  padding: 10px 14px; margin: 10px 0; border-radius: 0 6px 6px 0;
+  font-size: 12px; color: #fde68a;
+}
+
+table {
+  width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12px;
+}
+th {
+  background: #1e293b; color: #4ade80; text-align: left;
+  padding: 8px 12px; border-bottom: 1px solid #334155; font-weight: 600;
+}
+td {
+  padding: 6px 12px; border-bottom: 1px solid #1e293b; color: #cbd5e1;
+}
+tr:hover td { background: #1e293b; }
+
+.kbd {
+  display: inline-block; padding: 1px 6px; font-size: 11px;
+  background: #334155; color: #e2e8f0; border: 1px solid #475569;
+  border-radius: 3px; font-family: monospace;
+}
+
+.footer {
+  margin-top: 32px; padding-top: 16px; border-top: 1px solid #1e293b;
+  font-size: 11px; color: #475569; text-align: center;
+}
+</style>
+</head>
+<body>
+
+<h1><span class="logo">海</span>チャット機能マニュアル</h1>
+<p style="color:#64748b;font-size:12px;margin-bottom:20px;">kai-san-chat v2.0 — チャット履歴管理・重要マーク・検索</p>
+
+<!-- ===== Overview ===== -->
+<h2>1. 概要</h2>
+<p>チャットタブでは、Kai-sanとの全ての会話が<strong>DuckDB</strong>に永続保存されます。過去の会話を期間で絞り込んだり、重要なメッセージに★マークを付けて常に表示させたり、キーワードで検索できます。</p>
+
+<div class="feature-grid">
+  <div class="feature-item">
+    <div class="icon">📅</div>
+    <div class="name">期間フィルター</div>
+    <div class="desc">1日・3日・1週・1月・全て から選択</div>
+  </div>
+  <div class="feature-item">
+    <div class="icon">⭐</div>
+    <div class="name">重要マーク</div>
+    <div class="desc">★を付けた会話は常に表示</div>
+  </div>
+  <div class="feature-item">
+    <div class="icon">🔍</div>
+    <div class="name">全文検索</div>
+    <div class="desc">過去の全チャットからキーワード検索</div>
+  </div>
+  <div class="feature-item">
+    <div class="icon">🗄️</div>
+    <div class="name">永続保存</div>
+    <div class="desc">DuckDBで永久保存。MVC活動記録</div>
+  </div>
+</div>
+
+<!-- ===== Screen Layout ===== -->
+<h2>2. 画面構成</h2>
+
+<div class="screenshot">
+<span class="dim">┌─────────────────────────────────────────┐</span>
+<span class="dim">│</span> <span class="highlight">表示期間:</span> <span class="btn active">1日</span> <span class="btn">3日</span> <span class="btn">1週</span> <span class="btn">1月</span> <span class="btn">全て</span>  <span class="btn">🔍</span> <span class="dim">│</span>  <span class="dim">← 期間フィルター</span>
+<span class="dim">├─────────────────────────────────────────┤</span>
+<span class="dim">│</span> <span class="highlight">● チャット</span>               <span class="btn">チャット履歴 ▶</span> <span class="dim">│</span>  <span class="dim">← カテゴリナビ</span>
+<span class="dim">├─────────────────────────────────────────┤</span>
+<span class="dim">│</span>                                         <span class="dim">│</span>
+<span class="dim">│</span>   ┌──────────────────────────┐  <span class="dim">あなた</span>  <span class="dim">│</span>
+<span class="dim">│</span>   │ WACCを計算して         │  12:03  <span class="dim">│</span>
+<span class="dim">│</span>   └──────────────────────────┘  <span class="star">☆</span>      <span class="dim">│</span>  <span class="dim">← ☆クリックで★に</span>
+<span class="dim">│</span>                                         <span class="dim">│</span>
+<span class="dim">│</span>  <span class="highlight">Kai(海)</span>                                <span class="dim">│</span>
+<span class="dim">│</span>  ┌──────────────────────────────┐        <span class="dim">│</span>
+<span class="dim">│</span>  │ WACC = 7.7% です。        │        <span class="dim">│</span>
+<span class="dim">│</span>  │ Bottom-Up Beta法で計算... │        <span class="dim">│</span>
+<span class="dim">│</span>  └──────────────────────────────┘        <span class="dim">│</span>
+<span class="dim">│</span>  2026-04-05 12:04               <span class="star">★</span>      <span class="dim">│</span>  <span class="dim">← ★重要マーク済み</span>
+<span class="dim">│</span>                                         <span class="dim">│</span>
+<span class="dim">│</span>  <span class="dim">3件 (★ 1件)</span>                           <span class="dim">│</span>  <span class="dim">← 統計行</span>
+<span class="dim">├─────────────────────────────────────────┤</span>
+<span class="dim">│</span> <span class="dim">[日本語で質問してください...        ]</span> <span class="highlight">[送信]</span> <span class="dim">│</span>
+<span class="dim">└─────────────────────────────────────────┘</span>
+</div>
+
+<!-- ===== Period Filter ===== -->
+<h2>3. 期間フィルター</h2>
+
+<p>チャットタブの最上部にある5つのボタンで、表示する期間を切り替えます。</p>
+
+<table>
+  <tr><th>ボタン</th><th>表示範囲</th><th>用途</th></tr>
+  <tr><td><strong>1日</strong></td><td>直近24時間</td><td>今日のやり取りだけ見たい時（デフォルト）</td></tr>
+  <tr><td><strong>3日</strong></td><td>直近3日間</td><td>昨日・一昨日の会話も確認したい時</td></tr>
+  <tr><td><strong>1週</strong></td><td>直近7日間</td><td>今週の作業を振り返りたい時</td></tr>
+  <tr><td><strong>1月</strong></td><td>直近30日間</td><td>月次レビュー・長期タスクの確認</td></tr>
+  <tr><td><strong>全て</strong></td><td>全期間</td><td>過去の全チャットを確認したい時</td></tr>
+</table>
+
+<div class="tip">
+  <strong>ポイント:</strong> ★重要マークが付いたメッセージは、どの期間を選んでも<strong>常に表示</strong>されます。1日前の会話でも、★が付いていれば「1日」フィルターで表示されます。
+</div>
+
+<!-- ===== Importance ===== -->
+<h2>4. 重要マーク（★）</h2>
+
+<h3>マークの付け方</h3>
+<ol>
+  <li>チャットの各メッセージの右下に <strong>☆</strong>（白星）があります</li>
+  <li>クリックすると <strong style="color:#facc15;">★</strong>（金星）に変わります</li>
+  <li>もう一度クリックすると☆に戻ります（トグル）</li>
+</ol>
+
+<h3>★マークの効果</h3>
+<div class="card">
+  <div class="card-title">常時表示保証</div>
+  <p>★マークを付けたメッセージは、期間フィルターに<strong>関係なく常に表示</strong>されます。</p>
+  <p>例: 1ヶ月前の重要な分析結果に★を付けておけば、「1日」表示でも見えます。</p>
+</div>
+
+<div class="card">
+  <div class="card-title">永続保存</div>
+  <p>★マークの状態はDuckDBに保存されます。ブラウザを閉じても、PCを再起動しても、★は維持されます。</p>
+</div>
+
+<div class="tip">
+  <strong>活用例:</strong>
+  <ul style="margin-top:4px;">
+    <li>WACC計算結果など、繰り返し参照する数値に★</li>
+    <li>クライアントからの重要な指示に★</li>
+    <li>Kai-sanの分析で特に良かった回答に★</li>
+    <li>GCC評価のポイントに★</li>
+  </ul>
+</div>
+
+<!-- ===== Search ===== -->
+<h2>5. 検索機能</h2>
+
+<h3>検索の使い方</h3>
+<ol>
+  <li>期間フィルターの右端にある <strong>🔍</strong> ボタンをクリック</li>
+  <li>検索バーが表示されます</li>
+  <li>キーワードを入力すると、<strong>0.3秒後に自動検索</strong>が始まります</li>
+  <li>該当箇所が<span style="background:rgba(250,204,21,0.3);padding:0 4px;border-radius:2px;">ハイライト</span>表示されます</li>
+  <li>🔍ボタンを再度クリックすると検索を閉じ、通常表示に戻ります</li>
+</ol>
+
+<h3>検索のコツ</h3>
+<table>
+  <tr><th>検索ワード</th><th>見つかるもの</th></tr>
+  <tr><td>WACC</td><td>WACC計算に関する全ての会話</td></tr>
+  <tr><td>日特建設</td><td>日特建設に関する分析・議論</td></tr>
+  <tr><td>setup.bat</td><td>セットアップに関する技術的な会話</td></tr>
+  <tr><td>認知負担</td><td>認知負担ゼロに関する議論</td></tr>
+</table>
+
+<div class="tip">
+  <strong>ポイント:</strong> 検索は全期間が対象です。「1日」フィルター中でも、検索は全チャット履歴から探します。
+</div>
+
+<!-- ===== Category Tree ===== -->
+<h2>6. チャット履歴カテゴリ</h2>
+
+<p>「<strong>チャット履歴 ▶</strong>」ボタンをクリックすると、過去の質問が自動的にカテゴリ分類されて表示されます。</p>
+
+<table>
+  <tr><th>カテゴリ</th><th>アイコン</th><th>内容</th></tr>
+  <tr><td>財務分析</td><td>📊</td><td>WACC, ROIC, EVA, 決算関連</td></tr>
+  <tr><td>GCC</td><td>🎯</td><td>Growth, Connection, Confidence, MVC</td></tr>
+  <tr><td>IR・開示</td><td>📋</td><td>IR評価, 統合報告書, アナリスト</td></tr>
+  <tr><td>技術</td><td>⚙️</td><td>開発, システム設定, kai-san-chat</td></tr>
+  <tr><td>データ</td><td>🗄️</td><td>EDINET, FactSet, DuckDB, 検索</td></tr>
+  <tr><td>クライアント</td><td>🏢</td><td>日特建設, GSユアサ等の企業分析</td></tr>
+  <tr><td>戦略</td><td>🧭</td><td>計画, ロードマップ, What Next</td></tr>
+</table>
+
+<p>カテゴリ内の質問をクリックすると、チャット入力欄にその質問が入り、再度質問できます。</p>
+
+<!-- ===== DuckDB ===== -->
+<h2>7. データ保存（DuckDB）</h2>
+
+<div class="card">
+  <div class="card-title">保存場所</div>
+  <p style="font-family:monospace;font-size:11px;color:#64748b;">
+    C:\Users\宮下修\.claude\kai-san-chat\chat-history\chat.duckdb
+  </p>
+</div>
+
+<h3>保存される情報</h3>
+<table>
+  <tr><th>項目</th><th>内容</th></tr>
+  <tr><td>メッセージID</td><td>各メッセージの一意な識別子（UUID）</td></tr>
+  <tr><td>日時</td><td>送信/受信の正確なタイムスタンプ</td></tr>
+  <tr><td>種類</td><td>「あなた」の質問 or 「Kai(海)」の回答</td></tr>
+  <tr><td>テキスト</td><td>メッセージの全文</td></tr>
+  <tr><td>重要フラグ</td><td>★マークの有無</td></tr>
+  <tr><td>カテゴリ</td><td>自動分類されたカテゴリ</td></tr>
+</table>
+
+<div class="warning">
+  <strong>注意:</strong> チャット履歴はこのPC上のMVC活動記録として<strong>永久保存</strong>されます。意図的に削除する機能はありません（データの安全性のため）。
+</div>
+
+<!-- ===== FAQ ===== -->
+<h2>8. よくある質問</h2>
+
+<div class="card">
+  <div class="card-title">Q: 以前のチャットが表示されません</div>
+  <p>A: 期間フィルターを「全て」に切り替えてください。デフォルトは「1日」（直近24時間）です。</p>
+</div>
+
+<div class="card">
+  <div class="card-title">Q: ★マークを付けたのに消えました</div>
+  <p>A: ★マークはサーバー（DuckDB）に保存されます。kscサーバーが起動していれば保持されます。ブラウザのリロードでは消えません。</p>
+</div>
+
+<div class="card">
+  <div class="card-title">Q: 古いチャット履歴が見つかりません</div>
+  <p>A: 初回起動時に旧形式（JSONL）からDuckDBへ自動移行されます。移行されなかった場合、ブラウザのコンソールで以下を実行してください:</p>
+  <p style="font-family:monospace;font-size:11px;color:#4ade80;">fetch('/api/chat/migrate', {method:'POST'}).then(r=>r.json()).then(console.log)</p>
+</div>
+
+<div class="card">
+  <div class="card-title">Q: チャットの表示をリセット（クリア）したいだけです</div>
+  <p>A: 期間フィルターの「1日」ボタンをクリックしてください。表示がリフレッシュされます。データは削除されません。</p>
+</div>
+
+<div class="card">
+  <div class="card-title">Q: 検索が遅いです</div>
+  <p>A: DuckDBの全文検索を使用しています。通常は数万件でも1秒以内です。入力後0.3秒の待機時間があります。</p>
+</div>
+
+<!-- ===== Keyboard ===== -->
+<h2>9. キーボード操作</h2>
+
+<table>
+  <tr><th>操作</th><th>キー</th></tr>
+  <tr><td>メッセージ送信</td><td><span class="kbd">Enter</span></td></tr>
+  <tr><td>改行（送信せず）</td><td><span class="kbd">Shift</span> + <span class="kbd">Enter</span></td></tr>
+  <tr><td>検索バーを開く</td><td>🔍ボタンをクリック</td></tr>
+</table>
+
+<!-- ===== Footer ===== -->
+<div class="footer">
+  kai-san-chat v2.0 — チャット履歴管理マニュアル<br>
+  DuckDB永続保存 + 期間フィルター + 重要マーク + 全文検索<br>
+  2026-04-05 | ジェイ・フェニックス・リサーチ株式会社
+</div>
+
+</body>
+</html>

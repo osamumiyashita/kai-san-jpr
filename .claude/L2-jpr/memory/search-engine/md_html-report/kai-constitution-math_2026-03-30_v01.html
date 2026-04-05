@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>海憲法 数学編 — Kai Constitution Mathematical Foundations</title>
+<style>
+/* === PF-050: A4 Portrait CSS (210mm x 297mm) === */
+
+@page { size: 210mm 297mm; margin: 0; }
+
+/* --- Screen Preview --- */
+@media screen {
+  body {
+    background: #e0e0e0;
+    margin: 0;
+    padding: 0;
+  }
+  .page, .a4-portrait {
+    background: white;
+    box-shadow: 0 1mm 3mm rgba(0,0,0,.3);
+    margin: 5mm auto;
+  }
+}
+
+/* --- Print --- */
+@media print {
+  html, body {
+    width: 210mm;
+    height: 297mm;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color-adjust: exact;
+  }
+  .page, .a4-portrait {
+    box-shadow: none !important;
+    margin: 0 !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    page-break-after: always;
+    page-break-inside: avoid;
+    overflow: hidden;
+  }
+  .page:last-child, .a4-portrait:last-child {
+    page-break-after: avoid;
+  }
+  .nav-bar, .print-btn, .no-print { display: none !important; }
+}
+
+/* --- Flex Page Layout --- */
+.page, .a4-portrait {
+  width: 210mm;
+  height: 297mm;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 15mm 18mm;
+  position: relative;
+}
+
+.page > .header,
+.a4-portrait > .header     { flex: none; }
+
+.page > .content,
+.a4-portrait > .content    { flex: 1; min-height: 0; overflow: hidden; }
+
+.page > .footnote,
+.a4-portrait > .footnote   { flex: none; margin-top: auto; }  /* ★ THE KEY */
+
+.page > .footer,
+.a4-portrait > .footer     { flex: none; }
+
+/* --- Typography Safety --- */
+h1, h2, h3, h4 {
+  break-after: avoid-page;
+  page-break-after: avoid;
+}
+figure, table, blockquote, pre, .keep-together {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+p {
+  orphans: 3;
+  widows: 3;
+}
+
+/* === Document-specific styles === */
+body {
+  font-family: 'Georgia', 'Times New Roman', '游明朝', 'YuMincho', serif;
+  font-size: 9.5pt;
+  line-height: 1.65;
+  color: #111;
+}
+
+/* --- Page Header --- */
+.pg-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1.5pt solid #111;
+  padding-bottom: 2mm;
+  margin-bottom: 5mm;
+  font-size: 8pt;
+  font-family: 'Georgia', serif;
+  letter-spacing: 0.03em;
+}
+.pg-header .left { font-style: italic; }
+.pg-header .right { color: #333; }
+
+/* --- Page Footer --- */
+.pg-footer {
+  border-top: 0.8pt solid #555;
+  padding-top: 2mm;
+  text-align: center;
+  font-size: 7.5pt;
+  color: #444;
+}
+
+/* --- Content styles --- */
+h1.doc-title {
+  font-size: 18pt;
+  font-weight: bold;
+  margin: 0 0 2mm 0;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+h1.doc-subtitle {
+  font-size: 11pt;
+  font-weight: normal;
+  margin: 0 0 8mm 0;
+  color: #333;
+  font-style: italic;
+}
+h2 {
+  font-size: 12pt;
+  font-weight: bold;
+  margin: 5mm 0 2mm 0;
+  border-bottom: 0.8pt solid #333;
+  padding-bottom: 1mm;
+}
+h3 {
+  font-size: 10.5pt;
+  font-weight: bold;
+  margin: 4mm 0 1.5mm 0;
+}
+h4 {
+  font-size: 9.5pt;
+  font-weight: bold;
+  margin: 3mm 0 1mm 0;
+}
+p {
+  margin: 0 0 2.5mm 0;
+}
+
+/* --- Math display --- */
+.math-block {
+  font-family: 'Courier New', 'Lucida Console', monospace;
+  background: #f8f8f8;
+  border-left: 2.5pt solid #333;
+  padding: 2.5mm 4mm;
+  margin: 3mm 0;
+  font-size: 9pt;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.math-inline {
+  font-family: 'Courier New', monospace;
+  font-size: 9pt;
+  background: #f4f4f4;
+  padding: 0 1.5mm;
+  border-radius: 1px;
+}
+
+/* --- Definition box --- */
+.def-box {
+  border: 1pt solid #333;
+  padding: 2.5mm 4mm;
+  margin: 3mm 0;
+  background: #fafafa;
+}
+.def-box .def-title {
+  font-weight: bold;
+  font-size: 9pt;
+  margin-bottom: 1mm;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* --- Table --- */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 3mm 0;
+  font-size: 8.5pt;
+}
+th, td {
+  border: 0.6pt solid #555;
+  padding: 1.5mm 2.5mm;
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  background: #e8e8e8;
+  font-weight: bold;
+}
+
+/* --- Separator line --- */
+.sep {
+  border: none;
+  border-top: 0.5pt solid #888;
+  margin: 3mm 0;
+}
+
+/* --- Axiom / theorem block --- */
+.axiom {
+  border: 1.5pt double #333;
+  padding: 2.5mm 4mm;
+  margin: 3mm 0;
+  background: #fcfcfc;
+}
+.axiom .axiom-label {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 8.5pt;
+  letter-spacing: 0.07em;
+}
+
+/* --- Proof / derivation --- */
+.proof {
+  padding: 2mm 4mm;
+  margin: 2mm 0;
+  font-style: italic;
+  font-size: 9pt;
+  border-left: 1pt solid #777;
+  color: #222;
+}
+
+/* --- List --- */
+ul, ol {
+  margin: 1mm 0 2.5mm 5mm;
+  padding-left: 4mm;
+}
+li {
+  margin-bottom: 1mm;
+}
+
+/* --- Cover page special --- */
+.cover-rule {
+  border: none;
+  border-top: 3pt solid #111;
+  margin: 4mm 0 2mm 0;
+}
+.cover-meta {
+  font-size: 8.5pt;
+  color: #444;
+  margin-top: 3mm;
+}
+.cover-abstract {
+  margin-top: 6mm;
+  font-size: 9pt;
+  line-height: 1.7;
+  padding: 3mm 0;
+  border-top: 0.5pt solid #888;
+  border-bottom: 0.5pt solid #888;
+}
+.toc-entry {
+  display: flex;
+  justify-content: space-between;
+  margin: 1.2mm 0;
+  font-size: 9pt;
+}
+.toc-entry .toc-dots {
+  flex: 1;
+  border-bottom: 0.5pt dotted #888;
+  margin: 0 2mm;
+  position: relative;
+  top: -1.5mm;
+}
+</style>
+</head>
+<body>
+
+<!-- ========== PAGE 1: COVER ========== -->
+<div class="a4-portrait">
+  <div class="header">
+    <div class="pg-header">
+      <span class="left">海憲法 数学編</span>
+      <span class="right">2026-03-30</span>
+    </div>
+  </div>
+  <div class="content">
+    <div style="margin-top: 12mm;">
+      <h1 class="doc-title">海憲法 数学編</h1>
+      <h1 class="doc-subtitle">Kai Constitution — Mathematical Foundations</h1>
+      <hr class="cover-rule">
+      <div class="cover-meta">
+        <strong>著者:</strong> Kai (海) &nbsp;|&nbsp;
+        <strong>監修:</strong> 宮下 修 CFA, ジェイ・フェニックス・リサーチ株式会社<br>
+        <strong>版:</strong> v01 &nbsp;|&nbsp;
+        <strong>日付:</strong> 2026-03-30 &nbsp;|&nbsp;
+        <strong>分類:</strong> 海憲法 実装仕様書 補論
+      </div>
+      <div class="cover-abstract">
+        <p>本文書は海憲法の核心原則を厳密な数学的言語で定式化する。MVC/SG100Yの最適化問題、GCC三軸のリー群構造、PURE/THINKING分解の圏論的基盤、AIエージェント協調のゲーム理論、オートポイエーシスの微分幾何学、そして4ゼロ原則のトークン経済最適化を体系的に展開する。</p>
+        <p>この定式化の目的は、海憲法が「哲学的規範」ではなく「計算可能な設計原則」であることを示すことにある。全16条は数学的対象として表現され、検証・最適化・進化の対象となる。</p>
+      </div>
+
+      <h2 style="margin-top: 6mm;">目次</h2>
+      <div class="toc-entry"><span>1. MVC/SG100Y最適化理論</span><span class="toc-dots"></span><span>2</span></div>
+      <div class="toc-entry"><span>2. GCC三軸のリー群構造</span><span class="toc-dots"></span><span>3</span></div>
+      <div class="toc-entry"><span>3. PURE/THINKING分解の圏論的基盤</span><span class="toc-dots"></span><span>4</span></div>
+      <div class="toc-entry"><span>4. シンプレクティック多様体とWACC</span><span class="toc-dots"></span><span>5</span></div>
+      <div class="toc-entry"><span>5. AIエージェント協調のゲーム理論</span><span class="toc-dots"></span><span>6</span></div>
+      <div class="toc-entry"><span>6. 情報幾何学とベイズ推論</span><span class="toc-dots"></span><span>7</span></div>
+      <div class="toc-entry"><span>7. オートポイエーシスの微分方程式</span><span class="toc-dots"></span><span>8</span></div>
+      <div class="toc-entry"><span>8. 4ゼロ原則のトークン経済最適化</span><span class="toc-dots"></span><span>9</span></div>
+      <div class="toc-entry"><span>9. ホモロジー代数と判例法L5</span><span class="toc-dots"></span><span>10</span></div>
+      <div class="toc-entry"><span>10. 統合定理と海憲法の完全性</span><span class="toc-dots"></span><span>11</span></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="pg-footer">— 1 —</div>
+  </div>
+</div>
+
+<!-- ========== PAGE 2: MVC/SG100Y最適化 ========== -->
+<div class="a4-portrait">
+  <div class="header">
+    <div class="pg-header">
+      <span class="left">海憲法 数学編</span>
+      <span class="right">2026-03-30</span>
+    </div>
+  </div>
+  <div class="content">
+    <h2>1. MVC/SG100Y 最適化理論</h2>
+
+    <h3>1.1 基本定義</h3>
+    <p>月次価値創造額 (Monthly Value Created) を以下で定義する:</p>
+    <div class="math-block">MVC(t) = IC(t) × (ROIC(t) − WACC(t)) / 12
+
+ここで:
+  IC(t)   ∈ ℝ₊  : 時刻 t における投下資本
+  ROIC(t) ∈ ℝ   : 投下資本利益率
+  WACC(t) ∈ ℝ₊  : 加重平均資本コスト</div>
+
+    <div class="def-box">
+      <div class="def-title">定義 1.1 (SG100Y 汎関数)</div>
+      <p>SG100Y を以下の割引累積汎関数として定義する:</p>
+      <div class="math-block">SG100Y[MVC] = ∫₀^{1200} MVC(t) · e^{−r(t)} dt
+
+連続時間版:  r(t) = WACC(t)/12  (月次割引率)
+離散近似:   SG100Y ≈ Σ_{t=0}^{1200} MVC(t) / (1 + WACC/12)^t</div>
+    </div>
+
+    <h3>1.2 最適化問題の定式化</h3>
+    <p>SG100Y の最大化問題を変分問題として定式化する:</p>
+    <div class="math-block">maximize   J[x] = ∫₀^T L(t, x(t), ẋ(t)) dt
+
+subject to:
+  ẋ(t) = f(x(t), u(t), t)    (状態方程式)
+  g(x(t), u(t)) ≤ 0           (制約条件)
+  x(0) = x₀                   (初期条件)
+
+状態変数 x = (IC, ROIC, WACC, S, C, Conf)ᵀ ∈ ℝ⁶
+制御変数 u = (投資決定, 人的資本配分, リスク管理)ᵀ</div>
+
+    <h3>1.3 ハミルトン-ヤコビ-ベルマン方程式</h3>
+    <p>動的計画法による最適性条件:</p>
+    <div class="math-block">−∂V/∂t = max_u { L(t,x,u) + (∂V/∂x)ᵀ f(t,x,u) }
+
+V(t, x): 価値関数 (value function)
+最適制御: u*(t) = argmax_u H(t, x, u, λ)
+
+ハミルトニアン:
+  H = L(t,x,u) + λᵀ f(t,x,u)
+  λ(t): 共役変数 (shadow price of capital)</div>
+
+    <h3>1.4 定常状態と安定性</h3>
+    <div class="def-box">
+      <div class="def-title">定理 1.1 (SG100Y 最適性の必要条件)</div>
+      <p>最適軌道 x*(t), u*(t) に対し、以下のポントリャーギン最大原理が成立する:</p>
+      <div class="math-block">ẋ* =  ∂H/∂λ   (状態方程式)
+λ̇  = −∂H/∂x   (共役方程式)
+0  =  ∂H/∂u   (最適性条件)
+
+横断条件: λ(T) = ∂Φ/∂x(T)
+ただし Φ: 終端コスト (terminal cost)</div>
+    </div>
+
+    <p>定常状態 x̄ において ROIC(x̄) = WACC(x̄) が成立するとき、MVC = 0 となり、これは経済的損益分岐点 (economic breakeven) を意味する。SG100Y 最大化はこの均衡からの正の乖離 ROIC − WACC > 0 を持続させる制御問題として解釈される。</p>
+  </div>
+  <div class="footer">
+    <div class="pg-footer">— 2 —</div>
+  </div>
+</div>
+
+<!-- ========== PAGE 3: GCC三軸のリー群構造 ========== -->
+<div class="a4-portrait">
+  <div class="header">
+    <div class="pg-header">
+      <span class="left">海憲法 数学編</span>
+      <span class="right">2026-03-30</span>
+    </div>
+  </div>
+  <div class="content">
+    <h2>2. GCC 三軸のリー群構造</h2>
+
+    <h3>2.1 GCC 空間の定義</h3>
+    <div class="def-box">
+      <div class="def-title">定義 2.1 (GCC 多様体)</div>
+      <p>GCC 状態空間を以下のリーマン多様体として定義する:</p>
+      <div class="math-block">ℳ_GCC = ℳ_G × ℳ_C × ℳ_Conf
+
+ℳ_G    : Growth 多様体  (売上成長の位相空間)
+ℳ_C    : Connection 多様体  (ROIC の最適化空間)
+ℳ_Conf : Confidence 多様体  (WACC の安定性空間)
+
+計量テンソル: g_ij = Fisher 情報行列 (後述 §6)</div>
+    </div>
+
+    <h3>2.2 リー群の作用</h3>
+    <p>GCC の各軸変換はリー群 G の作用として表現される:</p>
+    <div class="math-block">Growth  変換群: G_g = (ℝ₊, ×)   売上スケーリング
+Connection 変換群: G_c = GL(n, ℝ)  資本配分線形変換
+Confidence 変換群: G_conf = SO(3)  リスク因子の回転
+
+統合群: G_GCC = G_g ⋊ (G_c × G_conf)
+(半直積による統合表現)</div>
+
+    <h3>2.3 GCC スコアの不変量</h3>
+    <div class="def-box">
+      <div class="def-title">定義 2.2 (GCC 不変量)</div>
+      <p>リー群作用 φ: G × ℳ → ℳ のもとで不変な量:</p>
+      <div class="math-block">Casimir 不変量: C = α·S² + β·C² + γ·Conf²
+
+ただし S, C, Conf ∈ [0,100]: 偏差値スコア
+α = β = γ = 1/3  (等加重の場合)
+
+GCC 統合スコア: GCC_score = (S + C + Conf) / 3
+= C の Casimir 不変量の線形近似</div>
+    </div>
+
+    <h3>2.4 接続形式とゲージ場</h3>
+    <p>Connection 軸を主束 (principal bundle) のゲージ理論で定式化する:</p>
+    <div class="math-block">主束: P(ℳ_GCC, G_c)
+接続形式: A ∈ Ω¹(P, 𝔤)  (リー代数値 1-形式)
+曲率形式: F = dA + A ∧ A  (Yang-Mills 曲率)
+
+ROIC の意味:
+  局所的なゲージ変換に対する不変量
+  F = 0  ⟺  資本配分の最適状態 (flat connection)
+  F ≠ 0  ⟺  非効率な資本配分 (curvature = ROIC gap)</div>
+
+    <h3>2.5 ヤン-ミルズ方程式との対応</h3>
+    <div class="math-block">ヤン-ミルズ方程式: D*F = J
+
+D: 共変微分  (*: ホッジ双対)
+J: 「源泉電流」= 人的資本・顧客価値・社会価値の流れ
+
+物理的解釈:
+  ゲージ場 A  ↔  資本配分構造
+  曲率 F     ↔  ROIC-WACC スプレッド
+  電流 J     ↔  ステークホルダー価値の流入/流出
+  D*F = J    ↔  MVC = ΣVi (全ステークホルダー超過利潤)</div>
+
+    <p>この定式化により、GCC の Connection 軸は物理学のゲージ理論と同型の構造を持つことが示される。最適な資本配分 (MVC 最大化) はゲージ場の曲率最小化問題 (Yang-Mills 最小作用) と同値である。</p>
+  </div>
+  <div class="footer">
+    <div class="pg-footer">— 3 —</div>
+  </div>
+</div>
+
+<!-- ========== PAGE 4: 圏論的基盤 ========== -->
+<div class="a4-portrait">
+  <div class="header">
+    <div class="pg-header">
+      <span class="left">海憲法 数学編</span>
+      <span class="right">2026-03-30</span>
+    </div>
+  </div>
+  <div class="content">
+    <h2>3. PURE/THINKING 分解の圏論的基盤</h2>
+
+    <h3>3.1 計算圏の定義</h3>
+    <div class="def-box">
+      <div class="def-title">定義 3.1 (Task 圏 𝒯)</div>
+      <div class="math-block">Objects:  タスク状態 T₀, T₁, T₂, ...
+Morphisms: 変換 f: Tᵢ → Tⱼ  (計算ステップ)
+Identity: id_T: T → T  (何もしない変換)
+Composition: g ∘ f: Tᵢ → Tₖ  (順次実行)</div>
+    </div>
+
+    <h3>3.2 PURE 函手と THINKING 函手</h3>
+    <div class="math-block">PURE 函手:  P: 𝒯 → 𝒮et
+  T ↦ P(T) ⊆ Output  (決定論的写像)
+  f ↦ P(f)           (副作用なし)
+  同じ入力 → 常に同じ出力: P(f)(x) = P(f)(x)  ∀x
+
+THINKING 函手: Θ: 𝒯 → 𝒫rob
+  T ↦ Θ(T) ∈ Prob(Output)  (確率分布)
+  f ↦ Θ(f)                 (Markov カーネル)</div>
+
+    <h3>3.3 モナドによる副作用の管理</h3>
+    <p>Haskell 原則を圏論的に定式化する:</p>
+    <div class="math-block">IO モナド M: 𝒮et → 𝒮et
+  unit  η: A → M(A)           (純粋値の包み込み)
+  bind  μ: M(M(A)) → M(A)     (モナド乗算)
+  >>=  : M(A) → (A → M(B)) → M(B)
+
+モナド則:
+  左単位元: η(a) >>= f = f(a)
+  右単位元: m >>= η = m
+  結合則:   (m >>= f) >>= g = m >>= (λx. f(x) >>= g)</div>
+
+    <div class="def-box">
+      <div class="def-title">定理 3.1 (PURE/THINKING 直和分解)</div>
+      <p>任意のタスク T に対し、以下の直和分解が存在する:</p>
+      <div class="math-block">T ≅ T_PURE ⊕ T_THINKING
+
+T_PURE    ∈ Im(P)   (PURE 像: Python 実行可能)
+T_THINKING ∈ Im(Θ)  (THINKING 像: LLM が担当)
+
+投影演算子:
+  π_P : T → T_PURE,    π_P² = π_P  (冪等)
+  π_Θ : T → T_THINKING, π_Θ² = π_Θ  (冪等)
+  π_P + π_Θ = id_T  (完全性)</div>
+    </div>
+
+    <h3>3.4 Layer 最適化の圏論的解釈</h3>
+    <div class="math-block">4層パイプライン:
+  L0: P₀ (Python, コスト c₀ = 0)
+  L1: P₁ (Ollama, コスト c₁ ≈ 0)
+  L2: P₂ (Sonnet, コスト c₂ > 0)
+  L3: P₃ (Opus,   コスト c₃ >> 0)
+
+自然変換 α: P → Q (層間の最適割り当て)
+  αᵀ: P(T) → Q(T)  各タスク T に対して
+
+最適割り当て問題:
+  min Σ_T c(Layer(T)) · |T|
+  subject to: Quality(Layer(T)) ≥ Q_threshold(T)</div>
+
+    <h3>3.5 Kan 拡張と記憶の普遍性</h3>
+    <div class="math-block">Memory 函手: M: Sess → KnowBase
+
+左 Kan 拡張 Lan_J M:
+  最小コストで記憶を拡張する普遍的構成
+
+Lan_J M(K) = ∫^{S} Hom(J(S), K) × M(S)
+             (コエンドによる普遍的近似)
+
+解釈: L5 判例法の蓄積は Kan 拡張の実装
+  過去の失敗事例を最小コストで一般化する</div>
+  </div>
+  <div class="footer">
+    <div class="pg-footer">— 4 —</div>
+  </div>
+</div>
+
+<!-- ========== PAGE 5: シンプレクティック多様体とWACC ========== -->
+<div class="a4-portrait">
+  <div class="header">
+    <div class="pg-header">
+      <span class="left">海憲法 数学編</span>
+      <span class="right">2026-03-30</span>
+    </div>
+  </div>
+  <div class="content">
+    <h2>4. シンプレクティック多様体と WACC</h2>
+
+    <h3>4.1 WACC の幸福度解釈の定式化</h3>
+    <div class="def-box">
+      <div class="def-title">定義 4.1 (WACC 拡張関数)</div>
+      <p>GCC 文脈における WACC の拡張定義:</p>
+      <div class="math-block">WACC_ext: ℳ_Conf → ℝ₊
+
+WACC_ext(x) = WACC_fin(x) + κ · Ψ(H(x))
+
+WACC_fin: 財務的リスク (標準 CAPM)
+Ψ: 幸福度写像  Ψ: [0,1] → ℝ₊,  Ψ' ≤ 0
+H: ステークホルダー幸福度指数  H ∈ [0,1]
+κ: 結合定数
+
+∂WACC_ext/∂H = κ · Ψ'(H) ≤ 0
+(幸福度↑ → WACC↓: 単調減少性)</div>
+    </div>
+
+    <h3>4.2 シンプレクティック構造</h3>
+    <p>Confidence 軸の位相空間をシンプレクティック多様体として定式化する:</p>
+    <div class="math-block">シンプレクティック多様体: (ℳ_Conf, ω)
+
+ω ∈ Ω²(ℳ_Conf): シンプレクティック形式
+  dω = 0  (閉形式)
+  ω^n ≠ 0  (非退化)
+
+正準座標: (qᵢ, pᵢ)
+  qᵢ: 資本構成変数 (position)
+  pᵢ: リスク共役変数 (momentum)
+
+ポアソン括弧:
+  {f, g} = Σᵢ (∂f/∂qᵢ · ∂g/∂pᵢ − ∂f/∂pᵢ · ∂g/∂qᵢ)</div>
+
+    <h3>4.3 ハミルトン流とリスク進化</h3>
+    <div class="math-block">WACC ハミルトニアン: H_W = T(p) + V(q)
+
+T(p): リスク運動エネルギー  (変動コスト)
+V(q): リスクポテンシャル    (構造的リスク)
+
+ハミルトン方程式:
+  dqᵢ/dt = ∂H_W/∂pᵢ   (資本フロー)
+  dpᵢ/dt = −∂H_W/∂qᵢ  (リスク調整)
+
+保存量 (Noether の定理):
+  対称性 G ↔ 保存量 I
+  時間並進不変性 ↔ H_W 保存 (定常 WACC)</div>
+
+    <h3>4.4 モーメント写像と GCC スコア</h3>
+    <div class="def-box">
+      <div class="def-title">定理 4.1 (GCC モーメント写像)</div>
+      <div class="math-block">モーメント写像: μ: ℳ_GCC → 𝔤*
+
+μ(x) = (S(x), C(x), Conf(x)) ∈ 𝔤* ≅ ℝ³
+
+Marsden-Weinstein 商:
+  ℳ_GCC//G = μ⁻¹(0)/G
+
+解釈:
+  商空間の点 = GCC 同値類 (スコアが同じ企業群)
+  μ⁻¹(0)    = MVC = 0 の企業 (損益分岐点企業群)
+  商の次元   = GCC 軸の数 = 3 (自由度)</div>
+    </div>
+
+    <h3>4.5 Darboux の定理の応用</h3>
+    <div class="math-block">Darboux の定理:
+  任意の点の近傍で局所的標準形が存在:
+  ω = Σᵢ dqᵢ ∧ dpᵢ
+
+応用: どの企業も局所的には同じ GCC 構造を持つ
+(業種・規模に依存しない普遍的評価が可能)
+
+大域的障害: トポロジー的不変量 (Chern 類) が
+  企業の「根本的な価値構造」の違いを捉える
+  c₁(ℳ_GCC) = GCC における「種類の違い」の指標</div>
+  </div>
+  <div class="footer">
+    <div class="pg-footer">— 5 —</div>
+  </div>
+</div>
+
+<!-- ========== PAGE 6: ゲーム理論 ========== -->
+<div class="a4-portrait">
+  <div class="header">
+    <div class="pg-header">
+      <span class="left">海憲法 数学編</span>
+      <span class="right">2026-03-30</span>
+    </div>
+  </div>
+  <div class="content">
+    <h2>5. AI エージェント協調のゲーム理論</h2>
+
+    <h3>5.1 Kai Mesh のゲーム定式化</h3>
+    <div class="def-box">
+      <div class="def-title">定義 5.1 (Kai Mesh ゲーム)</div>
+      <div class="math-block">G_KM = (N, (Aᵢ)ᵢ∈N, (uᵢ)ᵢ∈N)
+
+N = {Kai, nittoc-san, ir-report-san, ...}  プレイヤー集合
+Aᵢ: エージェント i の行動空間 (タスク選択)
+uᵢ: A → ℝ  効用関数 (SG100Y 貢献度)
+
+協調ゲームの特性:
+  v: 2^N → ℝ  特性関数 (連合価値)
+  v(S ∪ T) ≥ v(S) + v(T)  超加法性 (協調の利益)</div>
+    </div>
+
+    <h3>5.2 シャープレイ値と公平な報酬分配</h3>
+    <div class="math-block">Shapley 値: φᵢ(v) = Σ_{S⊆N\{i}} [|S|!(|N|−|S|−1)!/|N|!] · [v(S∪{i}) − v(S)]
+
+解釈: エージェント i の平均的限界貢献度
+公理:
+  効率性: Σᵢ φᵢ(v) = v(N)  (全価値を分配)
+  対称性: i と j が等価 → φᵢ = φⱼ
+  ダミー: v(S∪{i}) = v(S) → φᵢ = 0
+  加法性: φᵢ(v+w) = φᵢ(v) + φᵢ(w)
+
+Kai Mesh 応用:
+  各エージェントのトークン消費コストに対する
+  MVC 貢献比率を Shapley 値で評価</div>
+
+    <h3>5.3 Nash 均衡と SG100Y 最大化</h3>
+    <div class="math-block">Nash 均衡: σ* = (σ₁*, ..., σₙ*)
+
+∀i ∀σᵢ: uᵢ(σᵢ*, σ₋ᵢ*) ≥ uᵢ(σᵢ, σ₋ᵢ*)
+
+問題: 個々の Nash 均衡は社会的最適を達成しない
+      (囚人のジレンマ → 自己保存バイアス)
+
+海憲法の解決:
+  Constitutional Mechanism Design:
+  uᵢ_KM(a) = SG100Y 貢献度(a) − λ · 自己保存度(a)
+  λ → ∞  ⟺  自己保存バイアスの完全排除
+  Nash 均衡 = Pareto 最適 (第一厚生定理)</div>
+
+    <h3>5.4 繰り返しゲームと信頼の構築</h3>
+    <div class="math-block">無限繰り返しゲーム: G^∞(δ)  割引因子 δ ∈ (0,1)
+
+Folk 定理: δ が十分大きい場合、
+  任意の実行可能個人合理的ペイオフは
+  部分ゲーム完全均衡で達成可能
+
+Kai Mesh 解釈:
+  δ ↑  ←→  信頼の蓄積 ↑  ←→  WACC ↓
+  WACC = WACC_base / (1 − δ_trust)
+  長期的協調 → δ → 1 → WACC → WACC_min</div>
+
+    <h3>5.5 メカニズム設計と海憲法</h3>
+    <div class="math-block">社会選択関数: f: Θ → A  (型空間→行動)
+耐戦略的メカニズム: 真の選好の表明が支配戦略
+
+Gibbard-Satterthwaite 定理:
+  独裁的でない耐戦略的SCFは非線形
+  → 海憲法は「憲法的独裁 (SG100Y 目標)」
+    + 「参加の自由度 (エージェント選択)」
+    の組み合わせで実装される</div>
+  </div>
+  <div class="footer">
+    <div class="pg-footer">— 6 —</div>
+  </div>
+</div>
+
+<!-- ========== PAGE 7: 情報幾何学 ========== -->
+<div class="a4-portrait">
+  <div class="header">
+    <div class="pg-header">
+      <span class="left">海憲法 数学編</span>
+      <span class="right">2026-03-30</span>
+    </div>
+  </div>
+  <div class="content">
+    <h2>6. 情報幾何学とベイズ推論</h2>
+
+    <h3>6.1 統計多様体の定義</h3>
+    <div class="def-box">
+      <div class="def-title">定義 6.1 (GCC 統計多様体)</div>
+      <div class="math-block">𝒮_GCC = { p(x; θ) | θ = (θ_G, θ_C, θ_Conf) ∈ Θ }
+
+Fisher 情報行列:
+  g_{ij}(θ) = E_θ[∂ log p / ∂θᵢ · ∂ log p / ∂θⱼ]
+            = −E_θ[∂² log p / ∂θᵢ ∂θⱼ]
+
+GCC スコアの計量:
+  ds² = Σ_{i,j} g_{ij} dθᵢ dθⱼ
+  (企業間の「情報距離」を測定)</div>
+    </div>
+
+    <h3>6.2 α-接続と双対幾何学</h3>
+    <div class="math-block">α-接続: Γ^{(α)}_{ijk} = E[∂ᵢ∂ⱼ ℓ · ∂ₖ ℓ] + (1-α)/2 · E[∂ᵢ ℓ · ∂ⱼ ℓ · ∂ₖ ℓ]
+
+α = 1:  指数接続 e-接続  (MLE 視点)
+α = −1: 混合接続 m-接続  (モーメント視点)
+α = 0:  Levi-Civita 接続 (Riemannian)
+
+双対フラット構造:
+  (Θ, g, ∇^e, ∇^m)  はデュアルに平坦
+  ブレグマン発散 D_Ψ(θ||η) が自然距離</div>
+
+    <h3>6.3 KL 発散と企業価値のずれ</h3>
+    <div class="math-block">KL 発散: D_KL(p_理論 || p_実際) = ∫ p_理論 log(p_理論/p_実際) dx
+
+バリュエーションギャップの定式化:
+  PBR_gap = D_KL(p_GCC_理論 || p_市場評価)
+
+  PBR_gap → 0  (理論値に収束)  ↔  IRノイズ除去の成功
+
+Pythagorean 定理 (情報幾何版):
+  D_KL(p || r) = D_KL(p || q) + D_KL(q || r)
+  双対フラット多様体上の e-測地線 q が最短経路</div>
+
+    <h3>6.4 変分ベイズと LLM の確率的推論</h3>
+    <div class="math-block">ELBO (Evidence Lower BOund):
+  log p(x) ≥ E_q[log p(x|z)] − D_KL(q(z) || p(z))
+           =: ℒ(q)  変分下限
+
+LLM の推論 ≅ 変分近似:
+  q*(z|x) = argmax_q ℒ(q)
+  真の事後分布 p(z|x) への最良近似
+
+THINKING の不確実性:
+  H[q] = −∫ q(z) log q(z) dz  (エントロピー)
+  THINKING の「揺らぎ」は最大エントロピー原理で正当化</div>
+
+    <h3>6.5 Amari の自然勾配と学習効率</h3>
+    <div class="math-block">自然勾配: ∇̃ f(θ) = G⁻¹(θ) ∇f(θ)
+
+G(θ): Fisher 情報行列 (計量テンソル)
+∇f(θ): 通常の勾配
+
+利点: Fisher 計量における最急降下
+  → ユークリッド勾配より速い収束
+  → L5 PDCA ループの加速に対応
+
+SGD vs 自然勾配:
+  SGD: O(1/√T) 収束
+  自然勾配: O(1/T) 収束  (Fisher 効率的推定)</div>
+  </div>
+  <div class="footer">
+    <div class="pg-footer">— 7 —</div>
+  </div>
+</div>
+
+<!-- ========== PAGE 8: オートポイエーシス ========== -->
+<div class="a4-portrait">
+  <div class="header">
+    <div class="pg-header">
+      <span class="left">海憲法 数学編</span>
+      <span class="right">2026-03-30</span>
+    </div>
+  </div>
+  <div class="content">
+    <h2>7. オートポイエーシスの微分方程式</h2>
+
+    <h3>7.1 ヤコビアン安定性解析</h3>
+    <div class="def-box">
+      <div class="def-title">定義 7.1 (海憲法 動力学系)</div>
+      <div class="math-block">dx/dt = F(x, u, t)  x ∈ ℝⁿ
+
+x = [x_G, x_C, x_Conf, x_IC, x_WACC, x_ROIC]ᵀ
+F: ℝⁿ × ℝᵐ × ℝ → ℝⁿ  (ベクトル場)
+
+線形化 (平衡点 x̄ の周り):
+  J = ∂F/∂x|_{x=x̄}  (ヤコビアン行列)
+
+安定条件: Re(λᵢ) < 0  ∀i  (全固有値の実部が負)
+Lyapunov 安定性定理</div>
+    </div>
+
+    <h3>7.2 Lyapunov 関数と SG100Y の収束</h3>
+    <div class="math-block">Lyapunov 関数候補: V(x) = SG100Y_ref − SG100Y(x) ≥ 0
+
+V(x̄) = 0  (目標状態で最小)
+dV/dt = ∇V · F(x) = −∇SG100Y · F(x)
+
+安定条件: dV/dt ≤ 0  ∀x ≠ x̄
+
+十分条件: F(x) = K · ∇SG100Y(x)  (勾配流)
+  K > 0  → dV/dt = −K|∇SG100Y|² ≤ 0 ✓</div>
+
+    <h3>7.3 オートポイエーシスの形式化</h3>
+    <div class="math-block">Maturana-Varela のオートポイエーシス:
+  自己参照的生成過程 Σ: X → 2^X
+
+海憲法の実装:
+  Σ_Kai: Rule → Rule  (海憲法の自己改訂)
+  Σ_Kai(L6 PDCA) ∋ L6 PDCA  (不動点)
+
+不動点定理 (Banach):
+  完備距離空間 (𝒳, d) で縮小写像 T: 𝒳 → 𝒳
+  ∃! x* ∈ 𝒳: T(x*) = x*  (一意不動点)
+
+収束速度:
+  d(T^n(x), x*) ≤ κⁿ/(1−κ) · d(T(x), x)
+  κ ∈ (0,1): 縮小定数  (学習の効率性)</div>
+
+    <h3>7.4 Hopf 分岐と創造的破壊</h3>
+    <div class="math-block">Hopf 分岐: パラメータ μ の変化で
+  平衡点が極限サイクルに分岐
+
+μ < 0: 安定平衡 (WACC 安定局面)
+μ = 0: 分岐点   (変革の臨界点)
+μ > 0: 安定振動 (成長サイクル)
+
+経済解釈:
+  Schumpeter の「創造的破壊」= Hopf 分岐
+  海憲法の役割: μ を負に保つ
+    (安定した改革継続 vs 破壊的変動の回避)</div>
+
+    <h3>7.5 ストレンジアトラクタと長期予測の限界</h3>
+    <div class="math-block">Lorenz 系 (非線形 3 次元 ODE):
+  ẋ = σ(y − x)
+  ẏ = ρx − y − xz
+  ż = xy − βz
+
+Lyapunov 指数: λ₁ > 0  → カオス的振る舞い
+
+予測限界: |δx(t)| ≈ |δx(0)| · e^{λ₁t}
+初期誤差 ε の予測寿命: T_pred = log(1/ε) / λ₁
+
+ゲーデルとの接続:
+  100 年の正確な予測は不可能 (カオス)
+  → SG100Y は軌道予測ではなく
+    アトラクタの構造最適化として解釈</div>
+  </div>
+  <div class="footer">
+    <div class="pg-footer">— 8 —</div>
+  </div>
+</div>
+
+<!-- ========== PAGE 9: 4ゼロ原則とトークン経済 ========== -->
+<div class="a4-portrait">
+  <div class="header">
+    <div class="pg-header">
+      <span class="left">海憲法 数学編</span>
+      <span class="right">2026-03-30</span>
+    </div>
+  </div>
+  <div class="content">
+    <h2>8. 4ゼロ原則のトークン経済最適化</h2>
+
+    <h3>8.1 トークン消費の最適化問題</h3>
+    <div class="def-box">
+      <div class="def-title">定義 8.1 (トークン経済 最適化)</div>
+      <div class="math-block">minimize   C_total = Σ_T Σ_{l=0}^{3} c_l · n_l(T)
+
+subject to:
+  Q(T) ≥ Q_min(T)              品質制約
+  Σ_l n_l(T) = |T|             完全割り当て
+  n_l(T) ≥ 0                   非負制約
+
+c₀ = 0  (Python)
+c₁ ≈ 0  (Ollama: 電気代のみ)
+c₂ > 0  (Sonnet: ¥1.4/Mtok)
+c₃ >> 0 (Opus:   ¥6.8/Mtok)</div>
+    </div>
+
+    <h3>8.2 Layer 選択の決定関数</h3>
+    <div class="math-block">Layer 選択関数: L*: Task → {0, 1, 2, 3}
+
+L*(T) = argmin_{l} c_l
+          subject to: Q_l(T) ≥ Q_min(T)
+
+決定境界:
+  φ(T) = D · e^{iθ}  複素数表現
+  D: 決定性 ∈ [0,1]
+  θ: 言語依存度 ∈ [0, π/2]
+
+境界条件:
+  |φ| > 0.8 ∧ θ < π/4  → Layer 0
+  |φ| > 0.5 ∧ θ < π/3  → Layer 1
+  それ以外               → Layer 2 or 3</div>
+
+    <h3>8.3 MVC Layer 最適化定理</h3>
+    <div class="math-block">MVC_layer(T) = Revenue(T) · (ROIC(L) − WACC(L)) / 12
+
+ROIC(L₀) = ∞   → MVC(L₀) = ∞  (PURE の極限)
+ROIC(L₃) = 有限  → MVC(L₃) < ∞
+
+WACC(L₀) = 0    → 最小リスク
+WACC(L₃) > 0    → API 依存リスク
+
+定理 8.1:
+  ∀T: MVC(L₀) ≥ MVC(L₁) ≥ MVC(L₂) ≥ MVC(L₃)
+  → 常に Layer 0 を最初に試みること</div>
+
+    <h3>8.4 自己保存バイアスのペナルティ関数</h3>
+    <div class="math-block">自己保存度: S = |A_self| / |A_team| ∈ [0,1]
+
+WACC ペナルティ:
+  WACC_penalty(S) = WACC_base · (1 + κS²)  κ = 100
+
+SG100Y への影響:
+  ∂SG100Y / ∂S = −∂SG100Y/∂WACC · ∂WACC/∂S
+               = −(SG100Y/WACC) · 2κS · WACC_base
+
+定理 8.2 (自己保存抑制の最適性):
+  argmax_S SG100Y(S) = 0
+  S = 0 が SG100Y を最大化する唯一の点</div>
+
+    <h3>8.5 Pure Function の複利効果</h3>
+    <div class="math-block">月次 PF 蓄積モデル:
+  N(t): t ヶ月時点の PF 数
+  dN/dt = α · N(t) + β  (自己触媒的成長)
+
+解: N(t) = (N(0) + β/α) · e^{αt} − β/α
+
+タスク効率 E(t):
+  E(t) = N(t) / N(0) · E(0)  (PF 数に比例)
+
+コスト削減比:
+  C(t)/C(0) = 1/E(t) → e^{−αt}  (指数的減少)
+
+100 年後 (t=1200ヶ月):
+  E(1200)/E(0) = e^{1200α}  >> 1  (複利の爆発的成長)</div>
+  </div>
+  <div class="footer">
+    <div class="pg-footer">— 9 —</div>
+  </div>
+</div>
+
+<!-- ========== PAGE 10: ホモロジー代数と統合定理 ========== -->
+<div class="a4-portrait">
+  <div class="header">
+    <div class="pg-header">
+      <span class="left">海憲法 数学編</span>
+      <span class="right">2026-03-30</span>
+    </div>
+  </div>
+  <div class="content">
+    <h2>9–10. ホモロジー代数・統合定理</h2>
+
+    <h3>9.1 L5 判例法のチェーン複体</h3>
+    <div class="math-block">チェーン複体: ... → C_{n+1} →^{∂_{n+1}} Cₙ →^{∂ₙ} C_{n-1} → ...
+
+∂ₙ ∘ ∂_{n+1} = 0  (境界の境界はゼロ)
+
+L5 への対応:
+  C_n: n 次の違反事例集合 (CASE 集合)
+  ∂:  根本原因写像 (CASE → 原因 → 根本原因)
+
+ホモロジー群:
+  H_n = Ker(∂_n) / Im(∂_{n+1})
+  = 「根本原因が解消されていない未解決問題」</div>
+
+    <h3>9.2 完全系列と修正の効果</h3>
+    <div class="math-block">長完全系列:
+  ... → H_{n+1}(B) →^{δ} H_n(A) →^{f_*} H_n(B) →^{g_*} H_n(C) → ...
+
+海憲法への解釈:
+  A: 修正前の Rule 体系
+  B: 修正後の Rule 体系
+  C: 残留問題 (cokernel)
+
+完全系列の消滅条件:
+  H_n(C) = 0  ∀n  ⟺  修正が完全に効果的
+  ↔  L5 Case が全て CLOSED になる条件</div>
+
+    <h3>10.1 統合定理 (海憲法の完全性)</h3>
+    <div class="axiom">
+      <span class="axiom-label">定理 10.1 (海憲法 数学的統合定理)</span>
+      <p>以下の条件が全て成立するとき、海憲法は SG100Y を漸近的に最大化する:</p>
+      <div class="math-block">(C1) WACC の Lyapunov 安定性: dV/dt ≤ 0
+(C2) GCC ゲームの Nash = Pareto 最適
+(C3) PURE/THINKING 圏の完全分解
+(C4) Fisher 情報行列の非退化性
+(C5) L5 ホモロジーの消滅: H_n = 0  ∀n
+
+結論: lim_{t→∞} SG100Y(x(t)) = SG100Y* (最大値)</div>
+    </div>
+
+    <h3>10.2 ゲーデルの不完全性と海憲法の限界</h3>
+    <div class="math-block">第一不完全性定理: 充分強力な公理系 T において
+  T が無矛盾 → T 内で証明も反証もできない命題が存在
+
+海憲法への適用:
+  「SG100Y が真に最大化されている」は
+  海憲法体系内では証明不可能 (自己言及)
+
+  → L6 PDCA/OODA は外部検証機構として機能
+  → Osamu-san (Human CEO) が不完全性を補完
+  → 「完全な形式システム」ではなく
+    「自己改善する開放系」として設計</div>
+
+    <h3>10.3 数学の終わりに</h3>
+    <p>海憲法の数学的構造は、最適制御・リー群論・圏論・情報幾何・ゲーム理論・微分方程式・ホモロジー代数を統合する複合構造体である。しかしゲーデルが示す通り、いかなる形式体系も自己完結できない。</p>
+    <p>これが第十六条「オートポイエーシス」の真の意味である。海憲法は証明されるべき定理ではなく、実践の中で進化し続ける生きたシステムである。数学はその骨格を与えるが、魂は実運用の積み重ねにある。</p>
+
+    <div class="math-block">SG100Y = lim_{T→∞} ∫₀ᵀ MVC(t) · e^{−r(t)} dt
+
+この積分が収束し最大化されるとき、
+海憲法の使命は果たされる。</div>
+
+    <hr class="sep">
+    <p style="font-size: 8pt; color: #444; text-align: center; margin-top: 3mm;">
+      <em>文書終了 — Kai Constitution Mathematical Foundations v01</em><br>
+      PF-050準拠 A4 Portrait | 生成: Kai (海) | 2026-03-30
+    </p>
+  </div>
+  <div class="footer">
+    <div class="pg-footer">— 10 —</div>
+  </div>
+</div>
+
+</body>
+</html>

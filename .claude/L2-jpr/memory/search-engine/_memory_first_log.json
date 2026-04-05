@@ -1,0 +1,136 @@
+[
+  {
+    "timestamp": "2026-03-30T09:23:49.718003",
+    "prompt_snippet": "kai-san-chatのポートは10000でしたよね",
+    "matched_patterns": [
+      "でしたよね",
+      "たよね[？?]?$"
+    ],
+    "analysis": "SUPREME#2発動: 過去参照検出。原因候補: (1)設計→実装の断絶 (2)Memory保存漏れ (3)セッション間stateless消失"
+  },
+  {
+    "timestamp": "2026-03-30T09:25:44.904628",
+    "prompt_snippet": "言ったよね、お願いしたよね",
+    "matched_patterns": [
+      "たよね[？?！!。]?$",
+      "言ったよね",
+      "お願いしたよね"
+    ],
+    "analysis": "SUPREME#2発動: 過去参照検出。原因候補: (1)設計→実装の断絶 (2)Memory保存漏れ (3)セッション間stateless消失"
+  },
+  {
+    "timestamp": "2026-03-30T09:25:49.908110",
+    "prompt_snippet": "ポートは10000にしたはずなのに55555になってる",
+    "matched_patterns": [
+      "にしたはず",
+      "なのに",
+      "はずなのに"
+    ],
+    "analysis": "SUPREME#2発動: 過去参照検出。原因候補: (1)設計→実装の断絶 (2)Memory保存漏れ (3)セッション間stateless消失"
+  },
+  {
+    "timestamp": "2026-03-30T12:05:15.520105",
+    "prompt_snippet": "もっと丁寧に書いてください。ちょっと時間。前回の打ち合わせからだいぶ時間がかかったっていうことと、お詫びと。あのしっかりと前回の話を踏まえて、えっと、社内の情報をどうまとめるのかみたいなところも含めて",
+    "matched_patterns": [
+      "前回(の|は|で|に)"
+    ],
+    "analysis": "SUPREME#2発動: 過去参照検出。原因候補: (1)設計→実装の断絶 (2)Memory保存漏れ (3)セッション間stateless消失"
+  },
+  {
+    "timestamp": "2026-03-30T12:07:07.051666",
+    "prompt_snippet": "まずはみせてください。　まだおくっていないですよね。",
+    "matched_patterns": [
+      "ですよね[？?！!。]?$"
+    ],
+    "analysis": "SUPREME#2発動: 過去参照検出。原因候補: (1)設計→実装の断絶 (2)Memory保存漏れ (3)セッション間stateless消失"
+  },
+  {
+    "timestamp": "2026-03-30T12:43:33.119014",
+    "prompt_snippet": "いやできるようにしたはずですよ！！！",
+    "matched_patterns": [
+      "にしたはず",
+      "はずです"
+    ],
+    "analysis": "SUPREME#2発動: 過去参照検出。原因候補: (1)設計→実装の断絶 (2)Memory保存漏れ (3)セッション間stateless消失"
+  },
+  {
+    "timestamp": "2026-03-30T12:59:46.022948",
+    "prompt_snippet": "[System: あなたは海（Kai-san）— GCC経営のAI補佐です。\r\n必ず丁寧語（です・ます調）で話してください。温かく親しみやすい口調を心がけます。\r\nユーザーの名前がわかっている場合は「",
+    "matched_patterns": [
+      "履歴(を|は|に|で)"
+    ],
+    "analysis": "SUPREME#2発動: 過去参照検出。原因候補: (1)設計→実装の断絶 (2)Memory保存漏れ (3)セッション間stateless消失"
+  },
+  {
+    "timestamp": "2026-03-30T13:01:27.297553",
+    "prompt_snippet": "[System: あなたは海（Kai-san）— GCC経営のAI補佐です。\r\n必ず丁寧語（です・ます調）で話してください。温かく親しみやすい口調を心がけます。\r\nユーザーの名前がわかっている場合は「",
+    "matched_patterns": [
+      "履歴(を|は|に|で)"
+    ],
+    "analysis": "SUPREME#2発動: 過去参照検出。原因候補: (1)設計→実装の断絶 (2)Memory保存漏れ (3)セッション間stateless消失"
+  },
+  {
+    "timestamp": "2026-03-30T19:42:10.565618",
+    "prompt_snippet": "この画面を同時にみせればいいのでは？",
+    "matched_patterns": [
+      "のでは[？?]"
+    ],
+    "analysis": "SUPREME#2発動: 過去参照検出。原因候補: (1)設計→実装の断絶 (2)Memory保存漏れ (3)セッション間stateless消失"
+  },
+  {
+    "timestamp": "2026-03-30T19:43:25.724260",
+    "prompt_snippet": "この画面とHTMLのガイドが同時に見えればいいのでは？",
+    "matched_patterns": [
+      "のでは[？?]"
+    ],
+    "analysis": "SUPREME#2発動: 過去参照検出。原因候補: (1)設計→実装の断絶 (2)Memory保存漏れ (3)セッション間stateless消失"
+  },
+  {
+    "timestamp": "2026-03-30T19:44:03.583458",
+    "prompt_snippet": "HTMLの画面でこの画面をみせることは無理なんですよね。",
+    "matched_patterns": [
+      "ですよね[？?！!。]?$"
+    ],
+    "analysis": "SUPREME#2発動: 過去参照検出。原因候補: (1)設計→実装の断絶 (2)Memory保存漏れ (3)セッション間stateless消失"
+  },
+  {
+    "timestamp": "2026-03-30T19:52:10.467826",
+    "prompt_snippet": "是じゃなくて　単純にCLIのほうがいいのでは？",
+    "matched_patterns": [
+      "のでは[？?]"
+    ],
+    "analysis": "SUPREME#2発動: 過去参照検出。原因候補: (1)設計→実装の断絶 (2)Memory保存漏れ (3)セッション間stateless消失"
+  },
+  {
+    "timestamp": "2026-03-30T23:54:31.998269",
+    "prompt_snippet": "セットあっぷは別に要らないですね。海　ロゴ＞使い方＞価値向上のための行動の例（GCC、MVC,SG100Yについて素人でもわかるように、＞過去のセッションの記録などがかんがえられますね。まずシンプルに",
+    "matched_patterns": [
+      "過去の(セッション|会話|議論|決定|合意|やりとり|チャット)"
+    ],
+    "analysis": "SUPREME#2発動: 過去参照検出。原因候補: (1)設計→実装の断絶 (2)Memory保存漏れ (3)セッション間stateless消失"
+  },
+  {
+    "timestamp": "2026-03-31T00:05:49.254279",
+    "prompt_snippet": "海だから青がいいのでは？",
+    "matched_patterns": [
+      "のでは[？?]"
+    ],
+    "analysis": "SUPREME#2発動: 過去参照検出。原因候補: (1)設計→実装の断絶 (2)Memory保存漏れ (3)セッション間stateless消失"
+  },
+  {
+    "timestamp": "2026-03-31T00:46:58.099412",
+    "prompt_snippet": "ちょっとまてなんどもなんどもいっているのになんでまちがえるのか、憲法で死刑的なミスです。過去のチャットを見て分析せ尾",
+    "matched_patterns": [
+      "過去の(セッション|会話|議論|決定|合意|やりとり|チャット)"
+    ],
+    "analysis": "SUPREME#2発動: 過去参照検出。原因候補: (1)設計→実装の断絶 (2)Memory保存漏れ (3)セッション間stateless消失"
+  },
+  {
+    "timestamp": "2026-03-31T05:21:54.951764",
+    "prompt_snippet": "デプロイしたので、DROPBOXにおくべきですよね。",
+    "matched_patterns": [
+      "ですよね[？?！!。]?$"
+    ],
+    "analysis": "SUPREME#2発動: 過去参照検出。原因候補: (1)設計→実装の断絶 (2)Memory保存漏れ (3)セッション間stateless消失"
+  }
+]

@@ -1,0 +1,245 @@
+/* rpa.css — RPA tab styles (§17-7: separate file) */
+
+.rpa-container {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.rpa-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #81a1c1;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Record form */
+.rpa-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: #3b4252;
+  border-radius: 2px;
+  border: 1px solid #4c566a;
+}
+.rpa-form label {
+  font-size: 11px;
+  color: #d8dee9;
+  margin-bottom: 2px;
+}
+.rpa-input {
+  background: #2e3440;
+  border: 1px solid #4c566a;
+  color: #eceff4;
+  padding: 6px 10px;
+  border-radius: 2px;
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+.rpa-input:focus {
+  border-color: #88c0d0;
+}
+.rpa-input::placeholder {
+  color: #4c566a;
+}
+.rpa-form-row {
+  display: flex;
+  gap: 8px;
+}
+
+/* Buttons */
+.rpa-btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: opacity 0.15s;
+}
+.rpa-btn:hover { opacity: 0.85; }
+.rpa-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.rpa-btn-record { background: #bf616a; color: #fff; }
+.rpa-btn-stop { background: #d08770; color: #fff; }
+.rpa-btn-replay { background: #a3be8c; color: #2e3440; }
+.rpa-btn-delete { background: transparent; color: #bf616a; border: 1px solid #bf616a; padding: 4px 8px; font-size: 11px; }
+.rpa-btn-view { background: transparent; color: #81a1c1; border: 1px solid #4c566a; padding: 4px 8px; font-size: 11px; }
+.rpa-btn-fpa { background: #5e81ac; color: #fff; padding: 4px 10px; font-size: 11px; }
+.rpa-btn-fpa:hover { background: #81a1c1; }
+
+/* Status */
+.rpa-status {
+  padding: 8px 12px;
+  border-radius: 2px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rpa-status.idle {
+  background: #3b4252;
+  color: #d8dee9;
+}
+.rpa-status.recording {
+  background: #3b2020;
+  color: #bf616a;
+  border: 1px solid #bf616a;
+}
+.rpa-status.replaying {
+  background: #2a3520;
+  color: #a3be8c;
+  border: 1px solid #a3be8c;
+}
+.rpa-status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.rpa-status.recording .rpa-status-dot {
+  background: #bf616a;
+  animation: rpa-pulse 1s infinite;
+}
+.rpa-status.replaying .rpa-status-dot {
+  background: #a3be8c;
+  animation: rpa-pulse 1.5s infinite;
+}
+.rpa-status.idle .rpa-status-dot {
+  background: #4c566a;
+}
+@keyframes rpa-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Saved RPAs list */
+.rpa-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.rpa-item {
+  padding: 10px 12px;
+  background: #3b4252;
+  border: 1px solid #4c566a;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.rpa-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.rpa-item-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #eceff4;
+}
+.rpa-item-meta {
+  font-size: 10px;
+  color: #4c566a;
+}
+.rpa-item-url {
+  font-size: 11px;
+  color: #81a1c1;
+  word-break: break-all;
+  max-height: 32px;
+  overflow: hidden;
+}
+.rpa-item-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.rpa-empty {
+  color: #4c566a;
+  font-size: 12px;
+  text-align: center;
+  padding: 20px 0;
+}
+
+/* Script/FPA viewer */
+.rpa-viewer {
+  margin-top: 6px;
+  background: #2e3440;
+  border: 1px solid #4c566a;
+  border-radius: 2px;
+  max-height: 300px;
+  overflow-y: auto;
+  display: none;
+}
+.rpa-viewer.open { display: block; }
+.rpa-viewer pre {
+  margin: 0;
+  padding: 10px;
+  font-size: 11px;
+  color: #d8dee9;
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-family: 'Cascadia Code', 'Consolas', monospace;
+}
+
+/* FPA copy bar at bottom */
+.rpa-fpa-bar {
+  margin-top: auto;
+  padding: 10px 12px;
+  background: #3b4252;
+  border: 1px solid #5e81ac;
+  border-radius: 2px;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+.rpa-fpa-bar.visible { display: flex; }
+.rpa-fpa-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.rpa-fpa-bar-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #88c0d0;
+}
+.rpa-fpa-preview {
+  font-size: 11px;
+  color: #d8dee9;
+  max-height: 100px;
+  overflow-y: auto;
+  background: #2e3440;
+  padding: 8px;
+  border-radius: 2px;
+  white-space: pre-wrap;
+  font-family: 'Cascadia Code', 'Consolas', monospace;
+}
+.rpa-btn-copy {
+  background: #88c0d0;
+  color: #2e3440;
+  font-weight: 700;
+  padding: 8px 16px;
+  font-size: 13px;
+}
+.rpa-btn-copy:hover { background: #8fbcbb; }
+.rpa-btn-copy.copied {
+  background: #a3be8c;
+}
+.rpa-fpa-hint {
+  font-size: 10px;
+  color: #4c566a;
+  text-align: center;
+}

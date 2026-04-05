@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kai-san セットアップガイド — J-Phoenix Research Inc.</title>
+<style>
+/* === PF-050: A4 Landscape === */
+@page { size: 297mm 210mm; margin: 0; }
+@media screen {
+  body { background: #e0e0e0; margin: 0; padding: 0; }
+  .page { background: white; box-shadow: 0 1mm 3mm rgba(0,0,0,.3); margin: 5mm auto; }
+}
+@media print {
+  html, body { width: 297mm; height: 210mm; margin: 0; padding: 0; background: #fff;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { box-shadow: none !important; margin: 0 !important; width: 297mm !important;
+    height: 210mm !important; page-break-after: always; overflow: hidden; }
+  .page:last-child { page-break-after: avoid; }
+  .no-print { display: none !important; }
+}
+h1,h2,h3,h4 { break-after: avoid-page; page-break-after: avoid; }
+figure,table { break-inside: avoid; page-break-inside: avoid; }
+p { orphans: 3; widows: 3; }
+
+.page { width: 297mm; height: 210mm; display: flex; flex-direction: column;
+  overflow: hidden; box-sizing: border-box; padding: 10mm 14mm; position: relative; }
+.page > .hdr { flex: none; }
+.page > .content { flex: 1; min-height: 0; overflow: hidden; }
+.page > .ftr { flex: none; margin-top: auto; font-size: 9px; color: #6b7280; text-align: right; padding-top: 3mm; border-top: 0.5px solid #dce0e8; }
+
+/* === Design === */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --navy: #0f1b3d; --green: #0d7a3e; --red: #c0392b; --bg: #f7f8fa; --border: #dce0e8; --muted: #6b7280; --r: 3px; --accent: 8px; --blue: #1a5fb4; }
+body { font-family: 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif; color: #1a1a2e; line-height: 1.65; font-size: 12.5px; }
+
+.hdr { display: flex; justify-content: space-between; align-items: center; padding-bottom: 3mm; border-bottom: 2px solid var(--navy); margin-bottom: 3mm; }
+.hdr h1 { font-size: 17px; color: var(--navy); }
+.hdr .sub { font-size: 10px; color: var(--muted); }
+.hdr .logo { font-size: 11px; color: var(--navy); font-weight: 700; }
+
+.step { border-left: var(--accent) solid var(--navy); border-radius: var(--r); padding: 5px 11px; margin-bottom: 3mm; background: white; }
+.step-green { border-left-color: var(--green); }
+.step-red { border-left-color: var(--red); }
+.step h2 { font-size: 13.5px; font-weight: 600; margin-bottom: 2px; display: flex; align-items: center; gap: 8px; }
+.step h3 { font-size: 12px; font-weight: 600; margin: 3px 0 2px; color: var(--navy); }
+.step-num { display: inline-flex; align-items: center; justify-content: center; background: var(--navy); color: white; width: 22px; height: 22px; border-radius: 50%; font-size: 12px; font-weight: 700; flex: none; }
+.step-time { font-size: 10px; color: var(--muted); background: var(--bg); padding: 1px 8px; border-radius: 10px; margin-left: auto; }
+
+.code { background: #0a0e1a; color: #63b3ed; font-family: 'Consolas', 'Menlo', monospace; font-size: 11.5px; padding: 5px 11px; border-radius: var(--r); margin: 3px 0; position: relative; word-break: break-all; }
+.code .hint { position: absolute; top: 3px; right: 8px; font-size: 8.5px; color: #4a5568; }
+.code-sm { font-size: 10.5px; padding: 3px 9px; }
+
+.warn { border-left: var(--accent) solid var(--red); background: #fdecea; padding: 5px 10px; border-radius: var(--r); margin: 3px 0; font-size: 11.5px; }
+.ok { border-left: var(--accent) solid var(--green); background: #e8f5ee; padding: 5px 10px; border-radius: var(--r); margin: 3px 0; font-size: 11.5px; }
+.info { border-left: var(--accent) solid var(--navy); background: #e8eef8; padding: 5px 10px; border-radius: var(--r); margin: 3px 0; font-size: 11.5px; }
+
+.cols { display: flex; gap: 4mm; }
+.col { flex: 1; }
+
+.trouble { font-size: 11px; margin-top: 2mm; }
+.trouble summary { font-weight: 600; color: var(--navy); cursor: pointer; padding: 2px 0; font-size: 11px; }
+.trouble-body { padding: 3px 0 3px 12px; border-left: 2px solid var(--border); margin-left: 6px; font-size: 10.5px; }
+
+table.glossary { width: 100%; border-collapse: collapse; font-size: 11px; }
+table.glossary th { background: var(--bg); text-align: left; padding: 3px 8px; border-bottom: 1px solid var(--border); font-weight: 600; color: var(--navy); }
+table.glossary td { padding: 3px 8px; border-bottom: 1px solid var(--border); }
+table.glossary tr:nth-child(even) { background: #fafbfc; }
+
+.checklist { list-style: none; padding: 0; }
+.checklist li { padding: 2px 0; font-size: 11.5px; display: flex; align-items: center; gap: 6px; }
+.checklist li::before { content: ''; width: 13px; height: 13px; border: 2px solid var(--border); border-radius: var(--r); display: inline-block; flex: none; }
+
+.arrow { text-align: center; font-size: 14px; color: var(--navy); margin: 1mm 0; }
+
+.flow-step { display: inline-flex; align-items: center; justify-content: center; background: var(--navy); color: white; border-radius: 50%; width: 32px; height: 32px; font-size: 14px; font-weight: 700; }
+.flow-label { font-size: 10px; text-align: center; max-width: 70px; margin-top: 2px; color: var(--navy); }
+.flow-arrow { color: var(--navy); font-size: 16px; margin: 0 2px; }
+.flow-row { display: flex; align-items: flex-start; justify-content: center; gap: 3px; flex-wrap: wrap; }
+.flow-item { display: flex; flex-direction: column; align-items: center; }
+.flow-time { font-size: 8px; color: var(--muted); margin-top: 1px; }
+
+/* Cover page */
+.cover-center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
+.cover-title { font-size: 36px; font-weight: 700; color: var(--navy); margin-bottom: 8mm; letter-spacing: 2px; }
+.cover-sub { font-size: 16px; color: var(--muted); margin-bottom: 12mm; }
+.cover-msg { font-size: 18px; color: var(--green); background: #e8f5ee; padding: 8mm 15mm; border-radius: 6px; border: 2px solid var(--green); margin-bottom: 8mm; }
+.cover-logo { font-size: 14px; color: var(--navy); font-weight: 700; margin-top: 10mm; }
+.cover-date { font-size: 11px; color: var(--muted); margin-top: 3mm; }
+.cover-badge { display: inline-block; background: var(--navy); color: white; padding: 3px 15px; border-radius: 20px; font-size: 12px; margin-top: 5mm; }
+
+.qa { margin-bottom: 3mm; }
+.qa-q { font-weight: 600; font-size: 12px; color: var(--navy); }
+.qa-a { font-size: 11px; padding-left: 10px; margin-top: 1px; }
+</style>
+</head>
+<body>
+
+<!-- ==================== PAGE 1: 表紙 ==================== -->
+<div class="page">
+  <div class="content">
+    <div class="cover-center">
+      <div class="cover-badge">完全初心者向け</div>
+      <div class="cover-title">Kai-san<br>セットアップガイド</div>
+      <div class="cover-sub" style="font-size:18px; color:var(--navy); font-weight:600; margin-bottom:3mm;">あなたのPCを「頭脳」に変える</div>
+      <div style="font-size:12px; color:var(--muted);">AIアドバイザー Kai-san をインストールします</div>
+      <div style="font-size:12.5px; color:#1a1a2e; max-width:580px; text-align:left; background:#f7f8fa; padding:8mm 10mm; border-radius:6px; border-left:8px solid var(--navy); margin-bottom:6mm; line-height:1.8;">
+        Kai-san（海さん）は、ジェイ・フェニックス・リサーチ代表 宮下 修（CFA）の<br>
+        <strong>証券アナリスト30年のノウハウと英知</strong>をAIに合体させたものです。<br><br>
+        宮下が数ヶ月かかるような分析も、場合によっては<strong>数日・数時間</strong>で完了する能力を備えています。<br><br>
+        その能力で、<strong>すべての資料作成</strong>、<strong>すべての投資判断</strong>、<strong>日々の日常活動</strong>まで——<br>
+        企業価値の視点で、短期・中期・長期の視点で、<br>
+        会社の情報と整合性を取ってアドバイスを行い、資料作りも行えます。
+      </div>
+      <div style="font-size:12px; color:#1a1a2e; max-width:580px; text-align:left; background:white; padding:6mm 10mm; border-radius:6px; border-left:8px solid var(--green); margin-bottom:5mm; line-height:1.9;">
+        今までのAIは、会社の全体の情報のほんの数分の一——<br>
+        1/10どころか<strong>1/100、いや1/1000</strong>しか理解していませんでした。<br><br>
+        もし、あなたのPCの情報を<strong>全部理解したAI</strong>がいたらどうでしょう？<br>
+        PCどころではありません。<strong>会社全体の方向性</strong>も含めて全てを分析し、<br>
+        あなたの行動を<strong>企業価値の視点</strong>で支援します。<br><br>
+        しかも<strong>長期的な視点</strong>で、<strong>バランスよく</strong>——<br>
+        規模の拡大（Growth）と稼ぐ力（Connection）の両方を支援する。<br>
+        それがこの<strong>自動支援システム「海さん」</strong>です。
+      </div>
+      <div style="font-size:11.5px; color:var(--navy); max-width:580px; text-align:left; background:#e8eef8; padding:5mm 10mm; border-radius:6px; line-height:1.9;">
+        <strong style="font-size:13px;">なぜ「海（Kai）」という名前なのか</strong><br><br>
+        <strong>海は、すべての生命と価値のもと</strong>です。<br>
+        地球上の生命は海から生まれ、海に育まれてきました。<br><br>
+        海さんは、あなたにとっての「海」——<br>
+        <strong>新しい価値をどんどん生み出し、育て、発展させる</strong>。<br>
+        その想いを込めて、この名前がつけられました。
+      </div>
+      <div class="cover-msg">
+        所要時間 約15分 ・ 専門知識不要<br>
+        <strong>難しいことは一切ありません</strong>
+      </div>
+      <div style="font-size:11.5px; color:#1a1a2e; max-width:580px; text-align:left; background:white; padding:5mm 8mm; border-radius:6px; border:1px solid var(--border); margin-bottom:5mm;">
+        <strong style="color:var(--navy);">JPR（ジェイ・フェニックス・リサーチ）がお届けするもの：</strong>
+        <table style="width:100%; border:none; margin-top:3px;">
+          <tr style="background:none;"><td style="border:none; padding:2px 0; font-size:11px;">✅ Kai-sanの頭脳（ルール・知識・分析ロジック）</td></tr>
+          <tr style="background:none;"><td style="border:none; padding:2px 0; font-size:11px;">✅ 30年分の証券分析ノウハウ（数式・テンプレート・判断基準）</td></tr>
+          <tr style="background:none;"><td style="border:none; padding:2px 0; font-size:11px;">✅ 定期アップデート（週1回、最新の分析手法を自動反映）</td></tr>
+          <tr style="background:none;"><td style="border:none; padding:2px 0; font-size:11px;">✅ サポート（エラー時はスクリーンショット1枚で解決）</td></tr>
+        </table>
+        <strong style="color:var(--navy); display:block; margin-top:4px;">あなたがやること：</strong>
+        <table style="width:100%; border:none;">
+          <tr style="background:none;"><td style="border:none; padding:2px 0; font-size:11px;">📋 このガイドに沿ってソフトをインストール（15分）</td></tr>
+          <tr style="background:none;"><td style="border:none; padding:2px 0; font-size:11px;">💬 日本語で話しかけるだけ（Claudeを起動して質問するだけ）</td></tr>
+        </table>
+      </div>
+      <p style="font-size:13px; color:var(--muted); max-width:500px;">
+        画面に表示されるコマンドをコピー＆ペーストするだけ。<br>
+        途中で困ったらいつでも修さんに連絡してください。
+      </p>
+      <div class="cover-logo">J-Phoenix Research Inc.<br>ジェイ・フェニックス・リサーチ株式会社</div>
+      <div class="cover-date">2026年3月31日 版</div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Setup Guide — Cover — J-Phoenix Research Inc. 2026 — Confidential</div>
+</div>
+
+<!-- ==================== PAGE 1b: Kai-sanの仕組み + 日常での使い方 ==================== -->
+<div class="page">
+  <div class="hdr">
+    <div><h1>Kai-sanの仕組みと日常業務での活用</h1><div class="sub">どう動くのか？毎日どう使うのか？</div></div>
+    <div class="logo">J-Phoenix Research</div>
+  </div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <h2>Kai-sanはどうやって動くのか？</h2>
+        <div class="info" style="font-size:11px; margin-bottom:3mm;">
+          <strong>イメージ：超優秀なアシスタントがPCの中に住んでいる</strong><br>
+          Kai-sanはインターネット上のAI（Claude）と、あなたのPC内のデータを組み合わせて動きます。
+        </div>
+
+        <pre style="font-size:10px; line-height:1.8;">
+あなたが質問・指示を入力（日本語でOK）
+    ↓
+Kai-san が質問を理解
+    ↓
+必要に応じてPC内のデータを検索
+（Excel, PDF, 過去の資料など）
+    ↓
+AI（Claude）が分析・文章作成
+    ↓
+結果をあなたに返す
+（テキスト / 表 / HTML / PDF）</pre>
+
+        <h3>技術構成（覚えなくてOK）</h3>
+        <table>
+          <tr><th>部品</th><th>役割</th><th>たとえると</th></tr>
+          <tr><td><strong>Claude（AI）</strong></td><td>考える・書く・分析する</td><td>超優秀な頭脳</td></tr>
+          <tr><td><strong>.claude/フォルダ</strong></td><td>Kai-sanの知識・ルール・記憶</td><td>仕事のマニュアル集</td></tr>
+          <tr><td><strong>Python</strong></td><td>データ計算・グラフ作成</td><td>電卓＋製図道具</td></tr>
+          <tr><td><strong>Ollama</strong></td><td>PC内で動く補助AI（無料）</td><td>見習いアシスタント</td></tr>
+          <tr><td><strong>DuckDB</strong></td><td>大量データの高速検索</td><td>超高速ファイリングキャビネット</td></tr>
+        </table>
+
+        <div class="ok" style="font-size:11px;">
+          <strong>ポイント</strong>: あなたのデータは<strong>PCの中だけ</strong>で処理されます。外部サーバーに送信されることはありません。
+        </div>
+      </div>
+      <div class="col">
+        <h2>通常業務ではどう使うのか？</h2>
+
+        <div style="border-left:6px solid var(--navy); padding:5px 10px; margin-bottom:3mm; border-radius:3px; background:white;">
+          <h3 style="margin:0;">朝：メール確認 + 今日のタスク</h3>
+          <p style="font-size:10.5px;">Claudeを起動 →「今日のメールと予定を教えて」→ Kai-sanが未読メール・カレンダーを一覧表示。返信ドラフトも自動作成。</p>
+        </div>
+
+        <div style="border-left:6px solid var(--green); padding:5px 10px; margin-bottom:3mm; border-radius:3px; background:white;">
+          <h3 style="margin:0;">午前：資料作成</h3>
+          <p style="font-size:10.5px;">「先月の業績データからレポートを作って」→ Excelデータを読み込み → A4 HTMLレポート生成 → PDF保存。デザインも自動。</p>
+        </div>
+
+        <div style="border-left:6px solid #6b7280; padding:5px 10px; margin-bottom:3mm; border-radius:3px; background:white;">
+          <h3 style="margin:0;">午後：分析・判断</h3>
+          <p style="font-size:10.5px;">「この会社のROICとWACCを計算して」→ 財務データから自動計算 → GCC（Growth/Connection/Confidence）の3軸で評価 → 投資判断の材料を提示。</p>
+        </div>
+
+        <div style="border-left:6px solid var(--red); padding:5px 10px; margin-bottom:3mm; border-radius:3px; background:white;">
+          <h3 style="margin:0;">夕方：レビュー + 翌日準備</h3>
+          <p style="font-size:10.5px;">「今日やったことをまとめて」→ 活動ログを自動記録。「明日の面談の準備資料を作って」→ 相手企業の情報を整理してブリーフィング資料を生成。</p>
+        </div>
+
+        <div class="info" style="font-size:11px; margin-top:2mm;">
+          <strong>使い方はとてもシンプル</strong><br>
+          黒い画面で <code>claude</code> と入力するだけ。<br>
+          あとは<strong>日本語で話しかける</strong>だけです。<br>
+          「〜して」「〜を調べて」「〜のレポートを作って」<br>
+          スマホのSiriやAlexaに話しかけるのと同じ感覚です。
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Setup Guide — Page 2/16 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 2b: 黒い画面 超詳細ガイド ==================== -->
+<div class="page">
+  <div class="hdr">
+    <div><h1>「黒い画面」完全ガイド</h1><div class="sub">コマンドプロンプト・ターミナル・PowerShell・Bash — 全部わかります</div></div>
+    <div class="logo">J-Phoenix Research</div>
+  </div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <div class="info" style="font-size:12px; padding:8px 12px;">
+          <strong>「黒い画面」とは？</strong><br>
+          パソコンに<strong>文字で命令を出す画面</strong>です。<br>
+          普段はマウスでクリックして操作しますが、「黒い画面」では<strong>キーボードで文字を打って命令</strong>します。<br>
+          難しそうに見えますが、<strong>コピペするだけ</strong>なので安心してください。
+        </div>
+
+        <h2>Windowsの「黒い画面」は2種類あります</h2>
+
+        <div style="border-left:6px solid var(--navy); padding:5px 10px; margin-bottom:3mm; border-radius:3px; background:white;">
+          <h3 style="margin:0;">① コマンドプロンプト（cmd）</h3>
+          <p style="font-size:11px;">黒い背景に白い文字。一番シンプル。</p>
+          <p style="font-size:11px;"><strong>開き方:</strong></p>
+          <ol style="padding-left:16px; font-size:10.5px;">
+            <li>キーボードの<strong>Windowsキー</strong>（旗マーク ⊞）を押す</li>
+            <li>そのまま <strong>cmd</strong> と3文字入力</li>
+            <li>「コマンドプロンプト」が表示される → <strong>クリック</strong></li>
+            <li>黒い画面が開く！</li>
+          </ol>
+          <div class="ok" style="font-size:10px;">このガイドでは<strong>コマンドプロンプト</strong>を使います。どちらでも動きますが、これが一番シンプルです。</div>
+        </div>
+
+        <div style="border-left:6px solid #6b7280; padding:5px 10px; margin-bottom:3mm; border-radius:3px; background:white;">
+          <h3 style="margin:0;">② PowerShell（パワーシェル）</h3>
+          <p style="font-size:11px;">青い背景のこともある。より高機能版。</p>
+          <p style="font-size:11px;"><strong>開き方:</strong> Windowsキー → <strong>powershell</strong> と入力 → クリック</p>
+          <p style="font-size:10px; color:var(--muted);">コマンドプロンプトと同じコマンドが使えます。こちらでもOKです。</p>
+        </div>
+
+        <h3>管理者として実行（権限エラーが出た時）</h3>
+        <p style="font-size:10.5px;">「アクセスが拒否されました」と出たら：</p>
+        <ol style="padding-left:16px; font-size:10.5px;">
+          <li>Windowsキー → <strong>cmd</strong> と入力</li>
+          <li>「コマンドプロンプト」を<strong>右クリック</strong></li>
+          <li>「<strong>管理者として実行</strong>」をクリック</li>
+          <li>「はい」をクリック → 管理者権限の黒い画面が開く</li>
+        </ol>
+      </div>
+      <div class="col">
+        <h2>Macの「黒い画面」</h2>
+
+        <div style="border-left:6px solid var(--navy); padding:5px 10px; margin-bottom:3mm; border-radius:3px; background:white;">
+          <h3 style="margin:0;">ターミナル（Terminal）</h3>
+          <p style="font-size:11px;">Macの「コマンドプロンプト」。名前が違うだけです。</p>
+          <p style="font-size:11px;"><strong>開き方:</strong></p>
+          <ol style="padding-left:16px; font-size:10.5px;">
+            <li><strong>Cmd + スペース</strong>を同時に押す（Spotlight検索）</li>
+            <li><strong>ターミナル</strong> と入力</li>
+            <li>Enterを押す → ターミナルが開く</li>
+          </ol>
+          <p style="font-size:10px; color:var(--muted);">別の方法: Finder → アプリケーション → ユーティリティ → ターミナル</p>
+        </div>
+
+        <div style="border-left:6px solid #6b7280; padding:5px 10px; margin-bottom:3mm; border-radius:3px; background:white;">
+          <h3 style="margin:0;">Bash（バッシュ）/ Zsh（ジーシェル）</h3>
+          <p style="font-size:11px;">ターミナルの「中で動いている言語」。<strong>気にしなくてOK</strong>。</p>
+          <p style="font-size:10px; color:var(--muted);">古いMac = Bash / 新しいMac = Zsh。どちらでも同じコマンドが使えます。</p>
+        </div>
+
+        <h2>コマンドの入力方法（全OS共通）</h2>
+        <div class="step" style="border-left-color: var(--green);">
+          <ol style="padding-left:16px; font-size:11px;">
+            <li>このガイドの<strong>黒い枠</strong>の中のテキストを<strong>全選択</strong>（トリプルクリック or Ctrl+A）</li>
+            <li><strong>コピー</strong>（Ctrl+C / Cmd+C）</li>
+            <li>黒い画面に移動</li>
+            <li><strong>貼り付け</strong><br>
+              <strong>Windows:</strong> 黒い画面で<strong>右クリック</strong>（自動で貼り付け）<br>
+              <strong>Mac:</strong> <strong>Cmd+V</strong>
+            </li>
+            <li><strong>Enter</strong>キーを押す → 実行される</li>
+          </ol>
+        </div>
+
+        <div class="warn" style="font-size:10.5px;">
+          <strong>注意</strong>: 黒い画面では<strong>Ctrl+V</strong>が使えないことがあります（Windows）。<br>
+          代わりに<strong>右クリック</strong>で貼り付けてください。
+        </div>
+
+        <h3>早見表</h3>
+        <table>
+          <tr><th>OS</th><th>黒い画面の名前</th><th>開き方</th><th>貼り付け</th></tr>
+          <tr><td>Windows</td><td>コマンドプロンプト</td><td>⊞ → cmd</td><td>右クリック</td></tr>
+          <tr><td>Windows</td><td>PowerShell</td><td>⊞ → powershell</td><td>右クリック or Ctrl+V</td></tr>
+          <tr><td>Mac</td><td>ターミナル</td><td>Cmd+Space → ターミナル</td><td>Cmd+V</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Setup Guide — Page 3/17 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 2: 用語辞書 ==================== -->
+<div class="page">
+  <div class="hdr">
+    <div><h1>用語辞書</h1><div class="sub">このガイドに出てくる言葉をすべて説明します</div></div>
+    <div class="logo">J-Phoenix Research</div>
+  </div>
+  <div class="content">
+    <div class="info" style="margin-bottom:3mm;">はじめて見る言葉ばかりでも大丈夫です。このページに戻ればいつでも確認できます。</div>
+    <div class="cols">
+      <div class="col">
+        <table class="glossary">
+          <tr><th style="width:25%">用語</th><th>意味</th></tr>
+          <tr><td><strong>Kai-san（海さん）</strong></td><td>JPRのAIアドバイザー。あなたのPC内で動く、修さんと同じAI環境です。</td></tr>
+          <tr><td><strong>コマンドプロンプト</strong></td><td>パソコンに文字で命令を出す黒い画面（Windows用）。略して「cmd」。</td></tr>
+          <tr><td><strong>ターミナル</strong></td><td>Macのコマンドプロンプト。名前が違うだけで同じものです。</td></tr>
+          <tr><td><strong>Git（ギット）</strong></td><td>ファイルのバージョン管理ツール。変更履歴を記録します。無料。</td></tr>
+          <tr><td><strong>GitHub（ギットハブ）</strong></td><td>Gitのファイルをネット上に安全に保管・共有するサービス。</td></tr>
+          <tr><td><strong>clone（クローン）</strong></td><td>GitHubからファイルを自分のPCにダウンロードすること。</td></tr>
+          <tr><td><strong>pull（プル）</strong></td><td>GitHubから最新の更新をダウンロードすること。</td></tr>
+          <tr><td><strong>リポジトリ</strong></td><td>ファイルの保管場所。フォルダのようなものです。</td></tr>
+        </table>
+      </div>
+      <div class="col">
+        <table class="glossary">
+          <tr><th style="width:25%">用語</th><th>意味</th></tr>
+          <tr><td><strong>JavaScript（ジャバスクリプト）</strong></td><td>プログラミング言語の一種。ウェブサイトの動きを作る言語。皆さんが知る必要はありません。裏で勝手に動きます。</td></tr>
+          <tr><td><strong>Node.js（ノードジェイエス）</strong></td><td>JavaScriptを動かすためのソフト。Claude CLIがこの上で動きます。「エンジン」のようなもの。インストールするだけでOK。</td></tr>
+          <tr><td><strong>npm（エヌピーエム）</strong></td><td>Node.jsの「アプリストア」のようなもの。ここからClaude CLIをダウンロード・インストールします。</td></tr>
+          <tr><td><strong>Python（パイソン）</strong></td><td>プログラミング言語の一種。Kai-sanのデータ分析・計算に使います。インストールするだけでOK。</td></tr>
+          <tr><td><strong>pip（ピップ）</strong></td><td>Pythonの「アプリストア」。追加機能をここからインストールします。</td></tr>
+          <tr><td><strong>PATH（パス）</strong></td><td>PCが「どこにソフトがあるか」を覚えている住所録。PATHに登録されていないとPCがソフトを見つけられません。</td></tr>
+          <tr><td><strong>Claude（クロード）</strong></td><td>Anthropic社が作ったAI。人間の言葉で会話できます。Kai-sanの「頭脳」として使います。</td></tr>
+          <tr><td><strong>CLI（シーエルアイ）</strong></td><td>Command Line Interface。黒い画面から文字で操作するツール。ボタンではなく文字で命令します。</td></tr>
+          <tr><td><strong>Ollama（オラマ）</strong></td><td>あなたのPC内だけで動くAI。インターネット不要。無料。コスト削減に使います。</td></tr>
+          <tr><td><strong>インストール</strong></td><td>ソフトをPCに入れること。スマホでアプリをダウンロードするのと同じです。</td></tr>
+          <tr><td><strong>ダウンロード</strong></td><td>インターネットからファイルを自分のPCに取ってくること。</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Setup Guide — Page 2/15 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 3: 全体の流れ ==================== -->
+<div class="page">
+  <div class="hdr">
+    <div><h1>セットアップの全体像</h1><div class="sub">9ステップで完了 — 合計約15分</div></div>
+    <div class="logo">J-Phoenix Research</div>
+  </div>
+  <div class="content">
+    <div class="info" style="margin-bottom:3mm; font-size:11px;">
+      <strong>なぜこれらのソフトが必要なの？</strong> — Kai-sanは複数のソフトが協力して動きます。イメージは「チーム」です。<br>
+      <strong>Git</strong>（配達員）がKai-sanの頭脳をダウンロード → <strong>Node.js</strong>（エンジン）がClaude CLIを動かす → <strong>Claude</strong>（頭脳）が考える → <strong>Python</strong>（計算機）がデータ分析 → <strong>Ollama</strong>（助手）がコスト削減<br>
+      皆さんがこの仕組みを理解する必要はありません。<strong>インストールするだけ</strong>で全部つながります。
+    </div>
+
+    <div style="display:flex; justify-content:center; margin-top:3mm;">
+      <div class="flow-row">
+        <div class="flow-item"><div class="flow-step">1</div><div class="flow-label">Git<br><span style="font-size:8px;color:var(--muted)">配達員</span></div><div class="flow-time">2分</div></div>
+        <div class="flow-item" style="align-self:center;"><div class="flow-arrow">→</div></div>
+        <div class="flow-item"><div class="flow-step">2</div><div class="flow-label">Node.js<br><span style="font-size:8px;color:var(--muted)">エンジン</span></div><div class="flow-time">2分</div></div>
+        <div class="flow-item" style="align-self:center;"><div class="flow-arrow">→</div></div>
+        <div class="flow-item"><div class="flow-step">3</div><div class="flow-label">Claude CLI<br><span style="font-size:8px;color:var(--muted)">頭脳接続</span></div><div class="flow-time">1分</div></div>
+        <div class="flow-item" style="align-self:center;"><div class="flow-arrow">→</div></div>
+        <div class="flow-item"><div class="flow-step">4</div><div class="flow-label">ログイン<br><span style="font-size:8px;color:var(--muted)">本人確認</span></div><div class="flow-time">1分</div></div>
+        <div class="flow-item" style="align-self:center;"><div class="flow-arrow">→</div></div>
+        <div class="flow-item"><div class="flow-step">5</div><div class="flow-label">Python<br><span style="font-size:8px;color:var(--muted)">計算機</span></div><div class="flow-time">2分</div></div>
+        <div class="flow-item" style="align-self:center;"><div class="flow-arrow">→</div></div>
+        <div class="flow-item"><div class="flow-step">6</div><div class="flow-label">Ollama<br><span style="font-size:8px;color:var(--muted)">助手</span></div><div class="flow-time">2分</div></div>
+        <div class="flow-item" style="align-self:center;"><div class="flow-arrow">→</div></div>
+        <div class="flow-item"><div class="flow-step">7</div><div class="flow-label">GoGCLI<br><span style="font-size:8px;color:var(--muted)">メール</span></div><div class="flow-time">1分</div></div>
+        <div class="flow-item" style="align-self:center;"><div class="flow-arrow">→</div></div>
+        <div class="flow-item"><div class="flow-step">8</div><div class="flow-label">Kai-san<br><span style="font-size:8px;color:var(--muted)">本体</span></div><div class="flow-time">2分</div></div>
+        <div class="flow-item" style="align-self:center;"><div class="flow-arrow">→</div></div>
+        <div class="flow-item"><div class="flow-step" style="background:var(--green)">9</div><div class="flow-label">確認<br>完了！</div><div class="flow-time">1分</div></div>
+      </div>
+    </div>
+
+    <div class="cols" style="margin-top:6mm;">
+      <div class="col">
+        <div class="info"><strong>必要なもの</strong><br>・インターネット接続<br>・PCの管理者権限（自分のPCなら通常OK）<br>・GitHubアカウント（無料・途中で作成案内あり）<br>・修さんからの招待メール</div>
+      </div>
+      <div class="col">
+        <div class="ok"><strong>安心ポイント</strong><br>・全ステップ「コピペ」するだけ。自分で考える操作はゼロ<br>・途中で止めてもOK。続きからできます<br>・失敗しても元に戻せます（アンインストール=フォルダ削除だけ）<br>・困ったらスクリーンショットを修さんに送ればすぐ解決</div>
+      </div>
+      <div class="col">
+        <div class="step" style="border-left-color: var(--muted);">
+          <h3>対応OS</h3>
+          <p><strong>Windows 10 / 11</strong> — 推奨<br>
+          <strong>macOS 12+</strong> — 対応<br>
+          <strong>Linux</strong> — 上級者向け（Mac手順に準ずる）</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="warn" style="margin-top:4mm;">
+      <strong>会社PCの場合</strong>: ソフトのインストールに管理者権限が必要なことがあります。IT部門に「Git, Node.js, Python, Claude CLIをインストールしてよいか」確認してください。
+    </div>
+  </div>
+  <div class="ftr">Kai-san Setup Guide — Page 3/15 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 4: Step 1 — Git ==================== -->
+<div class="page">
+  <div class="hdr">
+    <div><h1>Step 1 — Gitインストール</h1><div class="sub">ファイル管理ツール（無料）</div></div>
+    <div class="logo">J-Phoenix Research</div>
+  </div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <div class="step">
+          <h2><span class="step-num">1</span> まず確認：既に入っていませんか？ <span class="step-time">30秒</span></h2>
+          <p>黒い画面（コマンドプロンプト）を開いて以下を入力：</p>
+          <div class="code">git --version</div>
+          <div class="ok">「git version 2.xx.x」と表示されたら → <strong>Step 2へスキップ！</strong></div>
+          <div class="warn">「'git' は認識されていません」→ 下のインストールへ進む</div>
+        </div>
+
+        <div class="step">
+          <h3>Windows の場合</h3>
+          <div class="code" style="font-size:13px; text-align:center; padding:8px; background:#1a365d; color:#90cdf4; letter-spacing:1px;">https://git-scm.com/download/win</div>
+          <p style="font-size:10px; color:var(--muted); text-align:center;">↑ このURLをブラウザのアドレスバーにコピペしてEnter</p>
+          <ol style="padding-left:16px; font-size:11.5px;">
+            <li>上のURLをブラウザで開く</li>
+            <li>「Click here to download」をクリック → ファイルがダウンロードされる</li>
+            <li>ダウンロードしたファイルをダブルクリック</li>
+            <li>「このアプリがデバイスに変更を加えることを許可しますか？」→ <strong>はい</strong></li>
+            <li>あとは全て <strong>「Next」→「Next」→「Install」→「Finish」</strong></li>
+          </ol>
+          <div class="warn"><strong>重要</strong>: インストール後、コマンドプロンプトを<strong>一度閉じて、もう一度開いてください</strong>。閉じないとgitが認識されません。</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="step">
+          <h3>Mac の場合</h3>
+          <ol style="padding-left:16px; font-size:11.5px;">
+            <li>ターミナルを開く（Cmd + スペース →「ターミナル」と入力 → Enter）</li>
+            <li>以下をコピペ + Enter：</li>
+          </ol>
+          <div class="code">xcode-select --install</div>
+          <p style="font-size:11px;">ポップアップが出たら「インストール」をクリック。数分かかります。</p>
+          <p style="font-size:11px; color:var(--muted);">※ これでGitとPythonが同時にインストールされます。</p>
+        </div>
+
+        <div class="step step-green">
+          <h3>確認</h3>
+          <p>コマンドプロンプト（Mac: ターミナル）で：</p>
+          <div class="code">git --version</div>
+          <div class="ok">「git version 2.xx.x」と表示されれば成功！ → <strong>Step 2へ</strong></div>
+        </div>
+
+        <details class="trouble">
+          <summary>「Next」ボタンが見つからない / 画面が違う</summary>
+          <div class="trouble-body">
+            <p>Gitのインストーラーのバージョンにより多少画面が異なります。基本は全てデフォルトのまま「Next」で問題ありません。不安な場合はスクリーンショットを修さんに送ってください。</p>
+          </div>
+        </details>
+        <details class="trouble">
+          <summary>「管理者権限がありません」と表示される</summary>
+          <div class="trouble-body">
+            <p>会社PCの場合、IT部門に依頼してください。「Git for Windowsをインストールしたい」と伝えればOKです。</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Setup Guide — Page 4/15 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 5: Step 2 — Node.js ==================== -->
+<div class="page">
+  <div class="hdr">
+    <div><h1>Step 2 — Node.jsインストール</h1><div class="sub">Claude CLIの動作に必要（無料）</div></div>
+    <div class="logo">J-Phoenix Research</div>
+  </div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <div class="step">
+          <h2><span class="step-num">2</span> まず確認：既に入っていませんか？ <span class="step-time">30秒</span></h2>
+          <div class="code">node --version</div>
+          <div class="ok">「v20.xx.x」や「v22.xx.x」と表示 → <strong>Step 3へスキップ！</strong></div>
+          <div class="warn">「'node' は認識されていません」→ 下のインストールへ</div>
+        </div>
+
+        <div class="step">
+          <h3>Windows の場合</h3>
+          <div class="code" style="font-size:13px; text-align:center; padding:8px; background:#1a365d; color:#90cdf4; letter-spacing:1px;">https://nodejs.org/</div>
+          <p style="font-size:10px; color:var(--muted); text-align:center;">↑ ブラウザで開く</p>
+          <ol style="padding-left:16px; font-size:11.5px;">
+            <li>上のURLをブラウザで開く</li>
+            <li>緑のボタン <strong>「LTS」（推奨版）</strong> をクリック → ダウンロード開始</li>
+            <li>ダウンロードしたファイルをダブルクリック</li>
+            <li><strong>「Next」→「Next」→「Next」→「Install」→「Finish」</strong></li>
+          </ol>
+          <div class="info" style="font-size:10.5px;">「LTS」= Long Term Support（長期サポート版）。安定しています。「Current」ではなく必ず「LTS」を選んでください。</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="step">
+          <h3>Mac の場合</h3>
+          <ol style="padding-left:16px; font-size:11.5px;">
+            <li><strong>https://nodejs.org/</strong> をブラウザで開く</li>
+            <li>緑のボタン <strong>「LTS」</strong> をクリック → .pkg ファイルがダウンロード</li>
+            <li>ダウンロードした .pkg をダブルクリック</li>
+            <li>「続ける」→「インストール」→ パスワード入力 →「完了」</li>
+          </ol>
+        </div>
+
+        <div class="step step-green">
+          <h3>確認（2つのコマンドで確認）</h3>
+          <div class="code">node --version</div>
+          <div class="code">npm --version</div>
+          <div class="ok">両方ともバージョン番号が表示されれば成功！ → <strong>Step 3へ</strong></div>
+          <div class="warn">表示されない場合 → コマンドプロンプトを<strong>閉じて開き直して</strong>再度実行</div>
+        </div>
+
+        <details class="trouble">
+          <summary>npm が認識されない場合</summary>
+          <div class="trouble-body">
+            <p>Node.jsを再インストールしてください。npmはNode.jsに含まれています。インストーラーで「Add to PATH」にチェックが入っていることを確認してください。</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Setup Guide — Page 5/15 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 6: Step 3 — Claude CLI ==================== -->
+<div class="page">
+  <div class="hdr">
+    <div><h1>Step 3 — Claude CLIインストール</h1><div class="sub">AIの頭脳をPCに接続します</div></div>
+    <div class="logo">J-Phoenix Research</div>
+  </div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <div class="step">
+          <h2><span class="step-num">3</span> Claude CLIをインストール <span class="step-time">1分</span></h2>
+
+          <div class="info" style="font-size:11px; margin-bottom:3mm;">
+            <strong>「黒い画面」の開き方（もう一度確認）</strong><br>
+            <strong>Windows:</strong> Windowsキー（旗マーク）→「cmd」と入力 →「コマンドプロンプト」クリック<br>
+            <strong>Mac:</strong> Cmd + スペース →「ターミナル」と入力 → Enter
+          </div>
+
+          <p>黒い画面で以下をコピペ＋Enter：</p>
+          <p style="font-size:10.5px; margin-top:2px;"><strong>Windows（コマンドプロンプト or PowerShell）:</strong></p>
+          <div class="code">
+            <span class="hint">右クリック → 貼り付け → Enter</span>
+            npm install -g @anthropic-ai/claude-code
+          </div>
+          <p style="font-size:10.5px; margin-top:3px;"><strong>Mac（ターミナル）:</strong></p>
+          <div class="code">
+            <span class="hint">Cmd+V → Enter</span>
+            npm install -g @anthropic-ai/claude-code
+          </div>
+          <p style="font-size:10px; color:var(--muted);">※ WindowsもMacも同じコマンドです。貼り付け方法だけ違います。</p>
+
+          <p style="font-size:11px; margin-top:2mm;">しばらく文字が流れます。1〜2分かかることがあります。じっと待ってください。</p>
+        </div>
+
+        <div class="step step-green">
+          <h3>確認</h3>
+          <div class="code">claude --version</div>
+          <div class="ok">バージョン番号が表示されれば成功！ → <strong>Step 4へ</strong></div>
+        </div>
+      </div>
+      <div class="col">
+        <details class="trouble">
+          <summary>「npm: command not found」の場合</summary>
+          <div class="trouble-body"><p>Node.jsがインストールされていません。→ <strong>Step 2に戻る</strong></p></div>
+        </details>
+        <details class="trouble">
+          <summary>「EACCES: permission denied」の場合</summary>
+          <div class="trouble-body">
+            <p>管理者権限が必要です。</p>
+            <p><strong>Windows:</strong> コマンドプロンプトを「管理者として実行」で開き直す（右クリック→「管理者として実行」）</p>
+            <p><strong>Mac:</strong> コマンドの前に <code>sudo</code> を付ける：</p>
+            <div class="code code-sm">sudo npm install -g @anthropic-ai/claude-code</div>
+            <p>パスワードを聞かれたらMacのログインパスワードを入力（文字は表示されませんが入力されています）</p>
+          </div>
+        </details>
+        <details class="trouble">
+          <summary>赤い文字でエラーが出た場合</summary>
+          <div class="trouble-body">
+            <p>エラー画面のスクリーンショットを修さんに送ってください。すぐに対応します。</p>
+            <p>miyashita@j-phoenix.com</p>
+          </div>
+        </details>
+
+        <div class="info" style="margin-top:4mm;">
+          <strong>「npm install -g」とは？</strong><br>
+          npmが持っているツールの倉庫から「claude-code」を取ってきて、PCのどこからでも使えるようにインストールするコマンドです。「-g」= global（どこからでも使える）。
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Setup Guide — Page 6/15 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 7: Step 4 — Claude ログイン ==================== -->
+<div class="page">
+  <div class="hdr">
+    <div><h1>Step 4 — Claudeにログイン</h1><div class="sub">ブラウザで認証するだけ（初回のみ）</div></div>
+    <div class="logo">J-Phoenix Research</div>
+  </div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <div class="step">
+          <h2><span class="step-num">4</span> ログインコマンドを実行 <span class="step-time">1分</span></h2>
+          <p>黒い画面で：</p>
+          <div class="code">claude login</div>
+          <p style="font-size:11.5px; margin-top:3px;">自動的にブラウザが開きます。</p>
+        </div>
+
+        <div class="step">
+          <h3>ブラウザでの操作</h3>
+          <ol style="padding-left:16px; font-size:11.5px;">
+            <li>Anthropicのログイン画面が開く</li>
+            <li>メールアドレスを入力（会社のメール推奨）</li>
+            <li>確認コードがメールに届く → コードを入力</li>
+            <li>「Authorize」または「許可」をクリック</li>
+            <li>「認証成功」と表示される → ブラウザを閉じてOK</li>
+          </ol>
+        </div>
+
+        <div class="ok">黒い画面に「Logged in successfully」と表示されれば完了！</div>
+      </div>
+      <div class="col">
+        <div class="warn">
+          <strong>Claude MAXプランが必要です</strong><br>
+          Kai-sanの利用にはClaude MAXプラン（定額制）が必要です。まだの場合は修さんに相談してください。従量課金APIは使用しません。
+        </div>
+
+        <details class="trouble">
+          <summary>ブラウザが自動で開かない場合</summary>
+          <div class="trouble-body">
+            <p>黒い画面に表示されるURLをコピーして、手動でブラウザに貼り付けてください。</p>
+          </div>
+        </details>
+        <details class="trouble">
+          <summary>メールが届かない場合</summary>
+          <div class="trouble-body">
+            <p>・迷惑メールフォルダを確認<br>・1分ほど待ってみる<br>・「Resend code」をクリック</p>
+          </div>
+        </details>
+        <details class="trouble">
+          <summary>「既にログイン済み」と表示される場合</summary>
+          <div class="trouble-body"><p>問題ありません。そのまま Step 5 に進んでください。</p></div>
+        </details>
+
+        <div class="info" style="margin-top:3mm;">
+          <strong>セキュリティ</strong>: ログイン情報はあなたのPC内にのみ保存されます。JPRのサーバーには一切送信されません。
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Setup Guide — Page 7/15 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 8: Step 5 — Python ==================== -->
+<div class="page">
+  <div class="hdr">
+    <div><h1>Step 5 — Pythonインストール</h1><div class="sub">データ処理エンジン（無料）— ★注意点あり</div></div>
+    <div class="logo">J-Phoenix Research</div>
+  </div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <div class="step">
+          <h2><span class="step-num">5</span> まず確認：既に入っていませんか？ <span class="step-time">30秒</span></h2>
+          <div class="code">python --version</div>
+          <div class="ok">「Python 3.xx.x」と表示 → ライブラリのインストールだけでOK（右下へ）</div>
+          <div class="warn">「'python' は認識されていません」→ 下のインストールへ</div>
+        </div>
+
+        <div class="step step-red">
+          <h3>Windows — ★最重要注意★</h3>
+          <ol style="padding-left:16px; font-size:11.5px;">
+            <li><strong>https://python.org/downloads/</strong> を開く</li>
+            <li>黄色いボタン「Download Python 3.xx」をクリック</li>
+            <li>ダウンロードしたファイルをダブルクリック</li>
+          </ol>
+          <div class="warn" style="font-size:13px; padding:8px 12px; border-width:4px;">
+            <strong style="color:var(--red); font-size:15px;">⚠ 絶対にチェックを入れてください！</strong><br>
+            インストーラーの<strong>一番下</strong>にある<br>
+            <strong style="font-size:14px;">「Add python.exe to PATH」</strong><br>
+            に<strong style="color:var(--red);">必ずチェック</strong>を入れてから「Install Now」。<br>
+            <span style="font-size:10px;">チェックを忘れると、pythonが認識されず全てやり直しになります。</span>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="step">
+          <h3>Mac の場合</h3>
+          <p style="font-size:11.5px;">Step 1 で <code>xcode-select --install</code> を実行済みなら、Pythonも入っています。確認：</p>
+          <div class="code">python3 --version</div>
+          <div class="ok">表示されればOK。Macでは <code>python3</code> と入力します（<code>python</code> ではなく）。</div>
+        </div>
+
+        <div class="step step-green">
+          <h3>ライブラリのインストール</h3>
+          <p>Pythonが入ったら、Kai-sanに必要なライブラリを追加：</p>
+          <p><strong>Windows:</strong></p>
+          <div class="code">pip install duckdb cryptography</div>
+          <p><strong>Mac:</strong></p>
+          <div class="code">pip3 install duckdb cryptography</div>
+          <div class="ok">エラーなく終わればOK → <strong>Step 6へ</strong></div>
+        </div>
+
+        <details class="trouble">
+          <summary>「pip: command not found」の場合</summary>
+          <div class="trouble-body">
+            <p><strong>Windows:</strong> Pythonの「Add to PATH」チェックを忘れた可能性大。Pythonを再インストールしてください。今度は必ずチェックを入れてください。</p>
+            <p><strong>Mac:</strong> <code>pip3</code>（数字の3を付ける）で試してください。</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Setup Guide — Page 8/15 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 9: Step 6 — Ollama ==================== -->
+<div class="page">
+  <div class="hdr">
+    <div><h1>Step 6 — Ollamaインストール</h1><div class="sub">PCで動くローカルAI（無料・オプション）</div></div>
+    <div class="logo">J-Phoenix Research</div>
+  </div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <div class="step">
+          <h2><span class="step-num">6</span> Ollamaインストール <span class="step-time">2分</span></h2>
+          <div class="info" style="font-size:11px; margin-bottom:3mm;">
+            <strong>Ollamaとは？</strong> あなたのPC内で動くAIです。インターネットなしでも動作し、Kai-sanのコスト削減に使います。無料。
+          </div>
+
+          <h3>Windows</h3>
+          <ol style="padding-left:16px; font-size:11.5px;">
+            <li><strong>https://ollama.com/download</strong> を開く</li>
+            <li>「Download for Windows」をクリック</li>
+            <li>ダウンロードしたファイルをダブルクリック → インストール</li>
+          </ol>
+
+          <h3 style="margin-top:3mm;">Mac</h3>
+          <ol style="padding-left:16px; font-size:11.5px;">
+            <li><strong>https://ollama.com/download</strong> を開く</li>
+            <li>「Download for macOS」をクリック</li>
+            <li>ダウンロードした .zip を展開 → Ollama.app を「アプリケーション」に移動</li>
+            <li>Ollama.appをダブルクリックして起動</li>
+          </ol>
+        </div>
+      </div>
+      <div class="col">
+        <div class="step step-green">
+          <h3>確認</h3>
+          <p>新しいコマンドプロンプト / ターミナルで：</p>
+          <div class="code">ollama --version</div>
+          <div class="ok">バージョン番号が表示されればOK → <strong>Step 7へ</strong></div>
+        </div>
+
+        <div class="step">
+          <h3>推奨モデルのダウンロード（任意）</h3>
+          <p style="font-size:11.5px;">以下のコマンドでAIモデルをダウンロードします（数分かかります）：</p>
+          <div class="code">ollama pull gemma3:4b</div>
+          <p style="font-size:10px; color:var(--muted);">約2.5GBのダウンロード。Wi-Fi推奨。後からでもOK。</p>
+        </div>
+
+        <details class="trouble">
+          <summary>「ollama: command not found」の場合</summary>
+          <div class="trouble-body">
+            <p>コマンドプロンプト/ターミナルを閉じて開き直してから再度実行してください。それでもダメな場合、PCを再起動してください。</p>
+          </div>
+        </details>
+
+        <div class="info" style="margin-top:3mm;">
+          <strong>スキップしてもOK</strong>: Ollamaは必須ではありません。なくてもKai-sanは動きます。ただし、あった方がコストが下がり高速です。後からいつでもインストールできます。
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Setup Guide — Page 9/15 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 10: Step 7 — GoGCLI ==================== -->
+<div class="page">
+  <div class="hdr">
+    <div><h1>Step 7 — GoGCLIインストール</h1><div class="sub">Gmail・カレンダー連携ツール（オプション）</div></div>
+    <div class="logo">J-Phoenix Research</div>
+  </div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <div class="step">
+          <h2><span class="step-num">7</span> GoGCLIダウンロード <span class="step-time">1分</span></h2>
+          <div class="info" style="font-size:11px; margin-bottom:3mm;">
+            <strong>GoGCLIとは？</strong> Kai-sanがGmail・Googleカレンダーと連携するためのツールです。メールの読み書き、予定の確認ができるようになります。
+          </div>
+
+          <h3>Windows</h3>
+          <ol style="padding-left:16px; font-size:11.5px;">
+            <li>修さんからGoGCLIのファイル（gog.exe）を受け取る</li>
+            <li>以下のフォルダを作成：<br><code>C:\Users\あなたの名前\gogcli\</code></li>
+            <li>gog.exe をそのフォルダに入れる</li>
+          </ol>
+          <div class="code">mkdir %USERPROFILE%\gogcli</div>
+          <p style="font-size:10.5px; color:var(--muted);">フォルダ作成後、gog.exe をそこにコピーしてください。</p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="step">
+          <h3>Mac</h3>
+          <ol style="padding-left:16px; font-size:11.5px;">
+            <li>修さんからGoGCLIのファイルを受け取る</li>
+            <li>ホームフォルダに gogcli フォルダを作成：</li>
+          </ol>
+          <div class="code">mkdir -p ~/gogcli</div>
+          <p style="font-size:10.5px;">受け取ったファイルを ~/gogcli/ に配置してください。</p>
+        </div>
+
+        <div class="step step-green">
+          <h3>確認</h3>
+          <p><strong>Windows:</strong></p>
+          <div class="code">%USERPROFILE%\gogcli\gog.exe --help</div>
+          <p><strong>Mac:</strong></p>
+          <div class="code">~/gogcli/gog --help</div>
+          <div class="ok">ヘルプが表示されれば成功！ → <strong>Step 8へ</strong></div>
+        </div>
+
+        <div class="info" style="margin-top:3mm;">
+          <strong>スキップしてもOK</strong>: GoGCLIは必須ではありません。Gmail・カレンダー連携が不要なら後からインストールできます。
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Setup Guide — Page 10/15 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 11: Step 8 — git clone ==================== -->
+<div class="page">
+  <div class="hdr">
+    <div><h1>Step 8 — Kai-san本体のインストール</h1><div class="sub">いよいよ本体をダウンロード！</div></div>
+    <div class="logo">J-Phoenix Research</div>
+  </div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <div class="step">
+          <h2><span class="step-num">8</span> GitHubの準備 <span class="step-time">1分</span></h2>
+          <h3>GitHubアカウントがない場合</h3>
+          <ol style="padding-left:16px; font-size:11.5px;">
+            <li><strong>https://github.com/signup</strong> で無料アカウント作成</li>
+            <li>作成したユーザー名を修さんに連絡</li>
+            <li>修さんから招待メールが届く → 「<strong>Accept invitation</strong>」クリック</li>
+          </ol>
+
+          <h3 style="margin-top:3mm;">Git設定（初回のみ）</h3>
+          <div class="code code-sm">git config --global user.name "あなたの名前"</div>
+          <div class="code code-sm">git config --global user.email "あなたのメール"</div>
+          <p style="font-size:10px; color:var(--muted);">例: git config --global user.name "Akihisa Miyashita"</p>
+        </div>
+
+        <div class="step" style="border-left-color: var(--blue);">
+          <h3>Kai-sanをダウンロード（1行コピペ）</h3>
+          <div class="warn"><strong>1文字も変えずに</strong>そのままコピペしてください。</div>
+          <p style="margin-top:3px;"><strong>Windows:</strong></p>
+          <div class="code">
+            <span class="hint">全選択→コピー→右クリック貼り付け→Enter</span>
+            git clone https://github.com/osamumiyashita/jpr-home-claude-source.git %USERPROFILE%\.claude
+          </div>
+          <p style="margin-top:3px;"><strong>Mac:</strong></p>
+          <div class="code">
+            <span class="hint">全選択→コピー→Cmd+V→Enter</span>
+            git clone https://github.com/osamumiyashita/jpr-home-claude-source.git ~/.claude
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="ok" style="font-size:12px; padding:8px;">
+          <strong>成功の目安</strong>: ダウンロード進捗が表示され、赤い文字がなく「done.」で終われば成功！
+        </div>
+
+        <details class="trouble">
+          <summary>「Authentication failed」エラー</summary>
+          <div class="trouble-body">
+            <p>GitHubにログインできていません。ブラウザで https://github.com にログインしてからもう一度実行してください。</p>
+          </div>
+        </details>
+        <details class="trouble">
+          <summary>「destination path '.claude' already exists」エラー</summary>
+          <div class="trouble-body">
+            <p>既にインストール済み。最新版に更新するには：</p>
+            <p><strong>Win:</strong></p>
+            <div class="code code-sm">cd %USERPROFILE%\.claude && git pull</div>
+            <p><strong>Mac:</strong></p>
+            <div class="code code-sm">cd ~/.claude && git pull</div>
+          </div>
+        </details>
+        <details class="trouble">
+          <summary>「repository not found」エラー</summary>
+          <div class="trouble-body">
+            <p>アクセス権がありません。以下を確認：</p>
+            <p>1. GitHubの招待メールで「Accept invitation」をクリックしたか</p>
+            <p>2. 届いていなければ修さんに連絡 → 再招待</p>
+          </div>
+        </details>
+        <details class="trouble">
+          <summary>「'git' is not recognized」エラー</summary>
+          <div class="trouble-body"><p>Gitがインストールされていません → <strong>Step 1に戻る</strong></p></div>
+        </details>
+        <details class="trouble">
+          <summary>「Permission denied」エラー</summary>
+          <div class="trouble-body">
+            <p>管理者権限が必要かもしれません。コマンドプロンプトを「管理者として実行」で開き直してください。</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Setup Guide — Page 11/15 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 12: Step 9 — 確認＋完了 ==================== -->
+<div class="page">
+  <div class="hdr">
+    <div><h1>Step 9 — 確認 ＋ 完了！</h1><div class="sub">最終確認して完了です</div></div>
+    <div class="logo">J-Phoenix Research</div>
+  </div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <div class="step step-green">
+          <h2><span class="step-num" style="background:var(--green)">9</span> インストール確認 <span class="step-time">30秒</span></h2>
+          <p>以下のコマンドでKai-sanが入ったか確認します：</p>
+          <p><strong>Windows:</strong></p>
+          <div class="code">dir %USERPROFILE%\.claude\rules</div>
+          <p><strong>Mac:</strong></p>
+          <div class="code">ls ~/.claude/rules</div>
+          <div class="ok" style="font-size:13px;">
+            ファイル一覧が表示され、<strong>「kai-constitution.md」</strong>が見えていれば成功です！
+          </div>
+        </div>
+
+        <div class="step step-green">
+          <h3>Claudeを起動してみましょう</h3>
+          <div class="code">claude</div>
+          <p style="font-size:11.5px;">Claudeが起動し、Kai-sanのルールが自動で読み込まれます。</p>
+          <p style="font-size:11.5px;">「Kai(海):」と名乗ったら、Kai-sanが正常に動いています！</p>
+        </div>
+
+        <div style="background: var(--green); color: white; padding: 12px 16px; border-radius: 6px; text-align: center; margin-top: 5mm;">
+          <div style="font-size: 22px; font-weight: 700; margin-bottom: 4px;">🎉 おめでとうございます！</div>
+          <div style="font-size: 14px;">修さんと同じKai-san環境が使えるようになりました。</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="step" style="border-left-color: var(--muted);">
+          <h3>将来の更新方法（今は覚えなくてOK）</h3>
+          <p style="font-size:11.5px;">Kai-sanは週1回程度進化します。最新版にするには：</p>
+          <p><strong>Win:</strong></p>
+          <div class="code code-sm">cd %USERPROFILE%\.claude && git pull</div>
+          <p><strong>Mac:</strong></p>
+          <div class="code code-sm">cd ~/.claude && git pull</div>
+          <p style="font-size:10px; color:var(--muted);">※ 将来は自動更新になる予定です。</p>
+        </div>
+
+        <div class="info" style="margin-top:3mm;">
+          <strong>次にやること</strong><br>
+          <ol style="padding-left:16px; font-size:11.5px;">
+            <li>Claudeを起動して「hello」と入力 → Kai-sanが応答</li>
+            <li>「/what-next」と入力 → 次のアクション提案が表示</li>
+            <li>困ったことがあれば修さんに連絡</li>
+          </ol>
+        </div>
+
+        <div class="info" style="margin-top:3mm;">
+          <strong>データの安全性</strong><br>
+          <ul style="padding-left:16px; font-size:11px;">
+            <li>あなたのデータはPC内にのみ保存されます</li>
+            <li>JPRのサーバーには一切送信されません</li>
+            <li>アンインストール = .claudeフォルダを削除するだけ</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Setup Guide — Page 12/15 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 13: トラブルシューティング全集 ==================== -->
+<div class="page">
+  <div class="hdr">
+    <div><h1>トラブルシューティング全集</h1><div class="sub">エラーが出た？ここで解決できます</div></div>
+    <div class="logo">J-Phoenix Research</div>
+  </div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <div class="warn" style="margin-bottom:2mm;">
+          <strong>「'git' は認識されていません」</strong><br>
+          <span style="font-size:11px;">原因: Gitが未インストール、またはPATHに未登録</span><br>
+          <span style="font-size:11px;">対策: Step 1でGitをインストール → コマンドプロンプトを閉じて開き直す</span>
+        </div>
+        <div class="warn" style="margin-bottom:2mm;">
+          <strong>「'node' は認識されていません」</strong><br>
+          <span style="font-size:11px;">原因: Node.jsが未インストール</span><br>
+          <span style="font-size:11px;">対策: Step 2でNode.jsをインストール → 閉じて開き直す</span>
+        </div>
+        <div class="warn" style="margin-bottom:2mm;">
+          <strong>「'python' は認識されていません」</strong><br>
+          <span style="font-size:11px;">原因: Pythonの「Add to PATH」チェック忘れ</span><br>
+          <span style="font-size:11px;">対策: Pythonを再インストール。今度は必ず「Add python.exe to PATH」にチェック</span>
+        </div>
+        <div class="warn" style="margin-bottom:2mm;">
+          <strong>「npm ERR! code EACCES」</strong><br>
+          <span style="font-size:11px;">原因: 管理者権限が不足</span><br>
+          <span style="font-size:11px;">対策: Windows=「管理者として実行」/ Mac=sudoを先頭に付ける</span>
+        </div>
+        <div class="warn" style="margin-bottom:2mm;">
+          <strong>「Authentication failed」</strong><br>
+          <span style="font-size:11px;">原因: GitHubにログインしていない</span><br>
+          <span style="font-size:11px;">対策: ブラウザで github.com にログイン → もう一度コマンド実行</span>
+        </div>
+      </div>
+      <div class="col">
+        <div class="warn" style="margin-bottom:2mm;">
+          <strong>「repository not found」</strong><br>
+          <span style="font-size:11px;">原因: GitHubの招待を承諾していない</span><br>
+          <span style="font-size:11px;">対策: メールで「Accept invitation」クリック。届いていなければ修さんに連絡</span>
+        </div>
+        <div class="warn" style="margin-bottom:2mm;">
+          <strong>「destination path already exists」</strong><br>
+          <span style="font-size:11px;">原因: 既にインストール済み</span><br>
+          <span style="font-size:11px;">対策: 更新するだけ → <code>cd %USERPROFILE%\.claude && git pull</code></span>
+        </div>
+        <div class="warn" style="margin-bottom:2mm;">
+          <strong>「pip: command not found」</strong><br>
+          <span style="font-size:11px;">原因: PythonのPATH設定が不足</span><br>
+          <span style="font-size:11px;">対策: Pythonを再インストール（「Add to PATH」必須）。Macは<code>pip3</code>で実行</span>
+        </div>
+        <div class="warn" style="margin-bottom:2mm;">
+          <strong>「SSL certificate problem」</strong><br>
+          <span style="font-size:11px;">原因: 会社のネットワークがSSL検査をしている</span><br>
+          <span style="font-size:11px;">対策: IT部門に「git, npm のSSL通信を許可してほしい」と依頼</span>
+        </div>
+
+        <div class="info" style="margin-top:3mm;">
+          <strong>上記で解決しない場合</strong><br>
+          エラー画面の<strong>スクリーンショット</strong>を送ってください。すぐに対応します。<br>
+          <strong>miyashita@j-phoenix.com</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Setup Guide — Page 13/15 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 14: FAQ ==================== -->
+<div class="page">
+  <div class="hdr">
+    <div><h1>よくある質問（FAQ）</h1><div class="sub">安心してお使いいただくために</div></div>
+    <div class="logo">J-Phoenix Research</div>
+  </div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <div class="qa">
+          <div class="qa-q">Q: パスワードは必要ですか？</div>
+          <div class="qa-a">A: いいえ。GitHubとClaudeの認証のみです。Kai-san自体に別のパスワードはありません。</div>
+        </div>
+        <div class="qa">
+          <div class="qa-q">Q: 2台目のPCにも入れられますか？</div>
+          <div class="qa-a">A: はい。同じ手順を別のPCで実行するだけです。何台でもOKです。</div>
+        </div>
+        <div class="qa">
+          <div class="qa-q">Q: アンインストールするには？</div>
+          <div class="qa-a">A: .claudeフォルダを削除するだけです。他に何も残りません。レジストリも汚しません。<br>
+          Windows: <code>rmdir /s %USERPROFILE%\.claude</code><br>
+          Mac: <code>rm -rf ~/.claude</code></div>
+        </div>
+        <div class="qa">
+          <div class="qa-q">Q: 私のデータはどこに保存されますか？</div>
+          <div class="qa-a">A: あなたのPCの中だけです。JPRのサーバーには一切送信されません。データ主権はあなたにあります。</div>
+        </div>
+        <div class="qa">
+          <div class="qa-q">Q: 料金はかかりますか？</div>
+          <div class="qa-a">A: Claude MAXプラン（定額制・月額固定）が必要です。従量課金は一切発生しません。プランの詳細は修さんに確認してください。</div>
+        </div>
+        <div class="qa">
+          <div class="qa-q">Q: インターネットは常に必要ですか？</div>
+          <div class="qa-a">A: Claude利用時はインターネットが必要です。ただしOllamaを入れれば、一部の機能はオフラインでも動作します。</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="qa">
+          <div class="qa-q">Q: 会社のセキュリティポリシーに抵触しませんか？</div>
+          <div class="qa-a">A: Kai-sanはローカル動作のみ。外部サーバーへのデータ送信はありません。IT部門には「GitからCLIツールを使用する」と説明してください。</div>
+        </div>
+        <div class="qa">
+          <div class="qa-q">Q: Kai-sanが暴走することはありませんか？</div>
+          <div class="qa-a">A: 海憲法（Kai Constitution）で行動が厳密に制御されています。人間の最終意思決定権が保証されています。</div>
+        </div>
+        <div class="qa">
+          <div class="qa-q">Q: 更新はどうすればいいですか？</div>
+          <div class="qa-a">A: <code>cd %USERPROFILE%\.claude && git pull</code> で最新版に更新できます。将来は自動化予定です。</div>
+        </div>
+        <div class="qa">
+          <div class="qa-q">Q: 他の人が私のKai-sanを使えますか？</div>
+          <div class="qa-a">A: いいえ。あなたのPCにインストールされ、あなたのClaudeアカウントでのみ動作します。</div>
+        </div>
+        <div class="qa">
+          <div class="qa-q">Q: WindowsとMacで機能差はありますか？</div>
+          <div class="qa-a">A: 基本的にありません。同じKai-sanが動きます。一部コマンドの書き方が異なるだけです。</div>
+        </div>
+        <div class="qa">
+          <div class="qa-q">Q: 古いPCでも動きますか？</div>
+          <div class="qa-a">A: Windows 10以降、macOS 12以降であれば動作します。メモリ8GB以上推奨です。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Setup Guide — Page 14/15 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 15: チェックリスト + 連絡先 ==================== -->
+<div class="page">
+  <div class="hdr">
+    <div><h1>完了チェックリスト・連絡先</h1><div class="sub">全て終わったら確認しましょう</div></div>
+    <div class="logo">J-Phoenix Research</div>
+  </div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <h3 style="margin-bottom:3mm; color:var(--navy);">完了チェックリスト</h3>
+        <ul class="checklist">
+          <li>Step 1: Git がインストールされている（git --version）</li>
+          <li>Step 2: Node.js がインストールされている（node --version）</li>
+          <li>Step 3: Claude CLI がインストールされている（claude --version）</li>
+          <li>Step 4: Claude にログイン済み（claude login）</li>
+          <li>Step 5: Python がインストールされている（python --version）</li>
+          <li>Step 5: pip ライブラリ（duckdb, cryptography）がインストール済み</li>
+          <li>Step 6: Ollama がインストールされている（任意）</li>
+          <li>Step 7: GoGCLI がインストールされている（任意）</li>
+          <li>Step 8: git clone が完了している</li>
+          <li>Step 9: rules/ フォルダにファイルが見える</li>
+          <li>Step 9: claude コマンドでKai-sanが起動する</li>
+        </ul>
+
+        <div class="ok" style="margin-top:5mm; text-align:center; font-size:13px; padding:8px;">
+          <strong>このガイドはPDF保存しておくと便利です</strong><br>
+          <span style="font-size:11px;">ブラウザで Ctrl+P（Mac: Cmd+P）→「PDFに保存」</span>
+        </div>
+      </div>
+      <div class="col">
+        <div class="info" style="padding:12px; margin-bottom:4mm;">
+          <strong style="font-size:14px;">お問い合わせ</strong><br><br>
+          <strong>宮下 修</strong>（みやした おさむ）<br>
+          ジェイ・フェニックス・リサーチ株式会社<br>
+          J-Phoenix Research Inc.<br><br>
+          <strong>Email:</strong> miyashita@j-phoenix.com<br><br>
+          エラーが出た場合は<strong>画面のスクリーンショット</strong>を<br>メールに添付して送ってください。すぐに対応します。
+        </div>
+
+        <div class="step" style="border-left-color: var(--green);">
+          <h3>Kai-sanでできること（一例）</h3>
+          <ul style="padding-left:16px; font-size:11px;">
+            <li>業務の質問に即座に回答</li>
+            <li>データ分析（Excel, PDF, DuckDB）</li>
+            <li>レポート・提案書の自動生成（A4 HTML → PDF）</li>
+            <li>メール・カレンダー管理（GoGCLI連携）</li>
+            <li>GCC（Growth / Connection / Confidence）分析</li>
+            <li>修さんと同じAI環境で業務効率化</li>
+          </ul>
+        </div>
+
+        <div style="text-align:center; margin-top:5mm; color:var(--navy); font-size:11px;">
+          <strong>J-Phoenix Research Inc.</strong><br>
+          「全てのステークホルダーの心をつかむ企業価値の創造支援」<br>
+          <span style="font-size:9px; color:var(--muted);">© 2026 J-Phoenix Research Inc. All Rights Reserved.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Setup Guide — Page 15/15 — J-Phoenix Research Inc. 2026 — Confidential</div>
+</div>
+
+</body>
+</html>

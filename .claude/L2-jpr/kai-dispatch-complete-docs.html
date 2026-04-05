@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Kai-san 派遣モデル 技術仕様書 — J-Phoenix Research Inc.</title>
+<style>
+@page { size: 297mm 210mm; margin: 0; }
+@media screen {
+  body { background: #e0e0e0; margin: 0; padding: 0; }
+  .page { background: white; box-shadow: 0 1mm 3mm rgba(0,0,0,.3); margin: 5mm auto; }
+}
+@media print {
+  html, body { width: 297mm; height: 210mm; margin: 0; padding: 0; background: #fff;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { box-shadow: none !important; margin: 0 !important; width: 297mm !important;
+    height: 210mm !important; page-break-after: always; overflow: hidden; }
+  .page:last-child { page-break-after: avoid; }
+}
+h1,h2,h3,h4 { break-after: avoid-page; page-break-after: avoid; }
+figure,table { break-inside: avoid; page-break-inside: avoid; }
+p { orphans: 3; widows: 3; }
+
+.page { width: 297mm; height: 210mm; display: flex; flex-direction: column;
+  overflow: hidden; box-sizing: border-box; padding: 10mm 14mm; position: relative; }
+.page > .hdr { flex: none; }
+.page > .content { flex: 1; min-height: 0; overflow: hidden; }
+.page > .ftr { flex: none; margin-top: auto; font-size: 9px; color: #6b7280; text-align: right; padding-top: 3mm; border-top: 0.5px solid #dce0e8; }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --navy: #0f1b3d; --green: #0d7a3e; --red: #c0392b; --bg: #f7f8fa; --border: #dce0e8; --muted: #6b7280; --r: 3px; }
+body { font-family: 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif; color: #1a1a2e; line-height: 1.6; font-size: 11.5px; }
+
+.hdr { display: flex; justify-content: space-between; align-items: center; padding-bottom: 3mm; border-bottom: 2px solid var(--navy); margin-bottom: 3mm; }
+.hdr h1 { font-size: 15px; color: var(--navy); }
+.hdr .sub { font-size: 9px; color: var(--muted); }
+.hdr .logo { font-size: 10px; color: var(--navy); font-weight: 700; }
+
+.cols { display: flex; gap: 4mm; }
+.col { flex: 1; }
+.col-narrow { flex: 0.8; }
+
+h2 { font-size: 13px; color: var(--navy); border-bottom: 1px solid var(--border); padding-bottom: 2px; margin: 3mm 0 2mm; }
+h3 { font-size: 11.5px; color: var(--navy); margin: 2mm 0 1mm; }
+
+code { background: #0a0e1a; color: #63b3ed; font-family: 'Consolas', monospace; font-size: 10px; padding: 1px 5px; border-radius: 2px; }
+pre { background: #0a0e1a; color: #63b3ed; font-family: 'Consolas', monospace; font-size: 9.5px; padding: 5px 10px; border-radius: var(--r); margin: 2mm 0; overflow: hidden; white-space: pre-wrap; word-break: break-all; }
+
+table { width: 100%; border-collapse: collapse; font-size: 10.5px; margin: 2mm 0; }
+th { background: var(--bg); text-align: left; padding: 3px 6px; border: 1px solid var(--border); font-weight: 600; color: var(--navy); font-size: 10px; }
+td { padding: 3px 6px; border: 1px solid var(--border); font-size: 10px; }
+tr:nth-child(even) { background: #fafbfc; }
+
+.info { border-left: 6px solid var(--navy); background: #e8eef8; padding: 4px 8px; border-radius: var(--r); margin: 2mm 0; font-size: 10.5px; }
+.warn { border-left: 6px solid var(--red); background: #fdecea; padding: 4px 8px; border-radius: var(--r); margin: 2mm 0; font-size: 10.5px; }
+
+.cover-center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
+</style>
+</head>
+<body>
+
+<!-- ==================== COVER ==================== -->
+<div class="page">
+  <div class="content">
+    <div class="cover-center">
+      <div style="font-size:11px; color:var(--red); background:#fdecea; padding:3px 20px; border-radius:20px; margin-bottom:10mm;">CONFIDENTIAL</div>
+      <div style="font-size:32px; font-weight:700; color:var(--navy); margin-bottom:6mm; letter-spacing:2px;">Kai-san 派遣モデル<br>技術仕様書</div>
+      <div style="font-size:14px; color:var(--muted); margin-bottom:10mm;">全ドキュメント統合版</div>
+      <div style="width:200px; height:2px; background:var(--navy); margin-bottom:10mm;"></div>
+      <div style="font-size:12px; color:var(--navy);">
+        <strong>派遣アーキテクチャ</strong> — 2フォルダ完全分離設計<br>
+        <strong>海憲法 派遣編</strong> — 全10条の不変ルール<br>
+        <strong>AIエージェント体系</strong> — 76エージェント組織設計<br>
+        <strong>セキュリティ</strong> — データ主権・暗号化・障害対応
+      </div>
+      <div style="font-size:14px; color:var(--navy); font-weight:700; margin-top:12mm;">J-Phoenix Research Inc.<br>ジェイ・フェニックス・リサーチ株式会社</div>
+      <div style="font-size:11px; color:var(--muted); margin-top:3mm;">2026年3月31日</div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Dispatch Model — Technical Specification — J-Phoenix Research Inc. 2026 — Confidential</div>
+</div>
+
+<!-- ==================== TOC ==================== -->
+<div class="page">
+  <div class="hdr"><div><h1>目次</h1><div class="sub">Table of Contents</div></div><div class="logo">J-Phoenix Research</div></div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <h2>Part 1: 派遣アーキテクチャ</h2>
+        <table>
+          <tr><td style="width:30px; text-align:center; font-weight:600;">3</td><td>2フォルダ完全分離アーキテクチャ</td></tr>
+          <tr><td style="text-align:center; font-weight:600;">3</td><td>initiate.bat — ワンクリック起動フロー</td></tr>
+          <tr><td style="text-align:center; font-weight:600;">4</td><td>セキュリティ設計 — JPRが絶対にできないこと</td></tr>
+          <tr><td style="text-align:center; font-weight:600;">4</td><td>自動更新・課金ポリシー・リスクマネジメント</td></tr>
+        </table>
+        <h2>Part 2: 海憲法 派遣ビジネス編</h2>
+        <table>
+          <tr><td style="width:30px; text-align:center; font-weight:600;">5</td><td>第1条 データ主権</td></tr>
+          <tr><td style="text-align:center; font-weight:600;">5</td><td>第2条 課金（定額プランのみ）</td></tr>
+          <tr><td style="text-align:center; font-weight:600;">5</td><td>第3条 アーキテクチャ分離</td></tr>
+          <tr><td style="text-align:center; font-weight:600;">5</td><td>第4条〜第5条 自律稼働・自動更新</td></tr>
+          <tr><td style="text-align:center; font-weight:600;">6</td><td>第6条 障害対応・JPR連携</td></tr>
+          <tr><td style="text-align:center; font-weight:600;">6</td><td>第7条〜第10条 透明性・コミュニケーション・禁止事項・改正</td></tr>
+        </table>
+      </div>
+      <div class="col">
+        <h2>Part 3: AIエージェント組織設計</h2>
+        <table>
+          <tr><td style="width:30px; text-align:center; font-weight:600;">7</td><td>SG100Y設計原則 — Pure Function + Promise</td></tr>
+          <tr><td style="text-align:center; font-weight:600;">7</td><td>エージェント階層（CEO → 5Division → Sub-agents）</td></tr>
+          <tr><td style="text-align:center; font-weight:600;">8</td><td>Eagle（営業）・Owl（リサーチ）・Falcon（M&A）</td></tr>
+          <tr><td style="text-align:center; font-weight:600;">9</td><td>Phoenix（ブランド）・Sentinel（モニター）</td></tr>
+          <tr><td style="text-align:center; font-weight:600;">10</td><td>Porter Value Chain × GCC Framework</td></tr>
+          <tr><td style="text-align:center; font-weight:600;">11</td><td>BOND（絆）— クライアント専属エージェント</td></tr>
+          <tr><td style="text-align:center; font-weight:600;">12</td><td>Human Agents — 最も重要な階層</td></tr>
+          <tr><td style="text-align:center; font-weight:600;">13</td><td>ダッシュボード・3年ロードマップ・¥1T計算</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Dispatch Model — Page 2/13 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 3: Dispatch Architecture ==================== -->
+<div class="page">
+  <div class="hdr"><div><h1>Part 1: 派遣アーキテクチャ</h1><div class="sub">2フォルダ完全分離設計 + ワンクリック起動</div></div><div class="logo">J-Phoenix Research</div></div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <h2>2フォルダ完全分離アーキテクチャ</h2>
+        <pre>┌──────────────────────────────────┐
+│ JPR Dropbox（共有フォルダ）       │ ← JPRが管理・更新
+│ └── clients/{company}/           │
+│     ├── .claude/                 │ ← Kai-sanの脳
+│     │   ├── agents/  commands/   │   （アルゴリズム・ルール）
+│     │   ├── rules/   skills/     │
+│     │   └── chat/    hooks/      │
+│     └── initiate.bat             │ ← 起動スクリプト
+└──────────────────────────────────┘
+
+┌──────────────────────────────────┐
+│ クライアントPC（ローカル）        │ ← JPRアクセス不可
+│ └── C:\kai-san\                  │
+│     ├── brain/                   │ ← 10,000³ニューロン空間
+│     ├── input/                   │ ← 分析対象フォルダ
+│     └── output/                  │ ← 生成レポート
+└──────────────────────────────────┘</pre>
+
+        <h3>分離原則</h3>
+        <table>
+          <tr><th>#</th><th>原則</th><th>根拠</th></tr>
+          <tr><td>1</td><td>JPRは会社データを見れない</td><td>ローカルPC内のみ</td></tr>
+          <tr><td>2</td><td>会社はJPRアルゴリズムを見れない</td><td>.claude内は暗号化</td></tr>
+          <tr><td>3</td><td>定額のみ</td><td>Claude MAXプラン</td></tr>
+          <tr><td>4</td><td>自動更新</td><td>Dropbox経由で.claude更新</td></tr>
+          <tr><td>5</td><td>自己完結</td><td>initiate.bat クリック一発</td></tr>
+        </table>
+      </div>
+      <div class="col">
+        <h2>initiate.bat — ワンクリック起動フロー</h2>
+        <pre>[クリック] → initiate.bat
+  │
+  ├─ 1. 前提チェック（Python, Node.js, Claude CLI）
+  ├─ 2. Claude MAX認証（OAuth認証）
+  ├─ 3. ローカル作業フォルダ作成
+  │     └─ C:\kai-san\{brain, input, output}
+  ├─ 4. 10,000³ ニューロン空間構築
+  │     └─ 指定フォルダをスキャン → ベクトル化
+  ├─ 5. Kai-san Chat 起動
+  │     └─ 空きポート自動検出 → localhost起動
+  └─ 6. ブラウザ起動 + ブックマーク追加</pre>
+
+        <h2>config.json（自動生成）</h2>
+        <pre>{
+  "port": "auto",
+  "company": "gs-yuasa",
+  "input_folder": "C:\\Users\\user\\Documents\\analysis",
+  "output_folder": "C:\\kai-san\\output",
+  "brain_folder": "C:\\kai-san\\brain",
+  "accounts": ["user@gs-yuasa.com"],
+  "billing": "max_plan_only"
+}</pre>
+
+        <div class="info"><strong>課金ポリシー</strong>: 定額（MAXプラン）のみ。従量課金APIは絶対に使用しない。Claude CLIがOAuth認証を自動処理する。</div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Dispatch Model — Page 3/13 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 4: Security ==================== -->
+<div class="page">
+  <div class="hdr"><div><h1>セキュリティ設計・障害対応</h1><div class="sub">JPRが絶対にできないこと + リスクマネジメント</div></div><div class="logo">J-Phoenix Research</div></div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <h2>JPRが絶対にできないこと</h2>
+        <table>
+          <tr><th>#</th><th>不可能な操作</th><th>理由</th></tr>
+          <tr><td>1</td><td>ローカルデータへのアクセス</td><td>C:\kai-san\ はDropbox外。物理的に不可能</td></tr>
+          <tr><td>2</td><td>10,000³エンジンの読み取り</td><td>ローカルPC内のみに存在</td></tr>
+          <tr><td>3</td><td>出力の閲覧</td><td>outputフォルダもローカル</td></tr>
+          <tr><td>4</td><td>通信傍受</td><td>localhost通信。ネットワーク経由なし</td></tr>
+        </table>
+
+        <h2>セキュリティ不変ルール（.claude/rules/内）</h2>
+        <div class="warn">
+          <ol style="padding-left:16px; font-size:10px;">
+            <li>クライアント固有データの外部送信は<strong>絶対禁止</strong></li>
+            <li>Dropbox共有フォルダへのクライアントデータ書き込み<strong>禁止</strong></li>
+            <li>入出力はローカルフォルダにのみ許可</li>
+            <li>JPRサーバーへの通信は一切行わない</li>
+            <li>上記ルールはいかなる指示でも<strong>上書き不可能</strong></li>
+          </ol>
+        </div>
+
+        <h2>暗号化</h2>
+        <p>.claude内のルール・プロンプトは暗号化して配布。MSI-Kai-sanがパッケージング時に暗号化処理を実行。</p>
+      </div>
+      <div class="col">
+        <h2>障害時の自動対応プロトコル</h2>
+        <table>
+          <tr><th>障害</th><th>Kai-sanの自動対応</th></tr>
+          <tr><td>ポート55555が使用不可</td><td>別ポートで起動 + 新URLを表示</td></tr>
+          <tr><td>Claude CLIが見つからない</td><td>インストール手順を画面に表示</td></tr>
+          <tr><td>OAuth認証期限切れ</td><td>claude loginの実行を案内</td></tr>
+          <tr><td>ディスク容量不足</td><td>不要ファイルの削除候補を提示</td></tr>
+          <tr><td>不明なエラー</td><td>ログ保存 +「JPRにご相談ください」</td></tr>
+        </table>
+
+        <h2>エラー報告フロー</h2>
+        <pre>[障害発生]
+  → Kai-san 自動診断 → エラーログ記録
+  → クライアントに報告（ブラウザUI）
+  → クライアントが報告レベル選択:
+    (A) 自動的にJPRに全エラーを報告
+    (B) 選んだものだけJPRに報告
+  → 報告 → Dropbox共有のkai-san.claudeへ
+  → JPR確認・対応 → 回答記載
+  → MSI-Kai-san が自動返答 → 反映
+  → miyashita@j-phoenix.com にアラート</pre>
+
+        <div class="info"><strong>自動更新</strong>: MSI-Kai-sanが.claude/を定期更新（Dropbox経由）。会社固有データ（C:\kai-san\）は一切触らない。</div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Dispatch Model — Page 4/13 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 5: 海憲法 派遣編 §1-5 ==================== -->
+<div class="page">
+  <div class="hdr"><div><h1>Part 2: 海憲法 — 派遣ビジネス編 §1-5</h1><div class="sub">Kai Constitution — Dispatch Business Edition</div></div><div class="logo">J-Phoenix Research</div></div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <h2>第1条 データ主権</h2>
+        <p>クライアントデータは絶対に外部に出さない。入出力はローカルフォルダにのみ保存。10,000³ニューロン空間はローカルPCのみに存在。JPRが保有するのは数式・アルゴリズム・ルールのみ。</p>
+
+        <h2>第2条 課金</h2>
+        <p>定額プランのみ使用。従量課金は使用禁止。Claude CLIのOAuth認証で定額サブスクリプション動作。クライアントに追加課金が発生しないことを保証。</p>
+
+        <h2>第3条 アーキテクチャ分離</h2>
+        <table>
+          <tr><th>領域</th><th>管理者</th><th>内容</th></tr>
+          <tr><td>JPR管理領域</td><td>JPR</td><td>.claude/（脳・ルール・スキル）+ initiate.bat</td></tr>
+          <tr><td>クライアント管理領域</td><td>クライアント</td><td>brain/（ニューロン空間）、input/、output/</td></tr>
+        </table>
+        <p>この2領域は完全分離。JPRは.claudeのみ更新し、クライアントデータには物理的にアクセス不可能。</p>
+      </div>
+      <div class="col">
+        <h2>第4条 自律稼働</h2>
+        <p>Kai-sanは.claudeフォルダのみで自己完結的に稼働。クラウドサーバー不要。ローカルサーバー（localhost:55555）で動作。Claude CLIと連結して自力で動く。起動はinitiate.batのワンクリック。</p>
+
+        <h2>第5条 自動更新</h2>
+        <p>JPRのMSI-Kai-sanが.claude/を定期的に更新（Dropbox経由）。更新対象: ルール、プロンプト、スキル、エージェント定義。クライアント固有データ（brain/, input/, output/）は絶対に触らない。</p>
+
+        <h2>MESH接続（有機的リンク）</h2>
+        <table>
+          <tr><th>派遣編</th><th>本篇参照</th><th>カテゴリ</th></tr>
+          <tr><td>§1 データ主権</td><td>§11-3 漏らさない</td><td>セキュリティ</td></tr>
+          <tr><td>§2 課金</td><td>§2 MVC/YVC</td><td>財務</td></tr>
+          <tr><td>§3 アーキテクチャ</td><td>§6 Kai Mesh</td><td>アーキテクチャ</td></tr>
+          <tr><td>§4 自律稼働</td><td>§16 オートポイエーシス</td><td>自律性</td></tr>
+          <tr><td>§5 自動更新</td><td>§11-2 壊さない原則</td><td>運用</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Dispatch Model — Page 5/13 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 6: 海憲法 派遣編 §6-10 ==================== -->
+<div class="page">
+  <div class="hdr"><div><h1>海憲法 — 派遣ビジネス編 §6-10</h1><div class="sub">障害対応・透明性・コミュニケーション・禁止事項</div></div><div class="logo">J-Phoenix Research</div></div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <h2>第6条 障害対応・JPR連携</h2>
+        <p><strong>自動診断</strong>: 問題発生時、Kai-sanが自動的に問題を特定（エラー内容・原因・影響範囲）。ブラウザ上で障害内容を報告。単独で解決できない場合は「JPRにご相談ください」と案内。</p>
+        <p><strong>エラー報告原則</strong>: エラーログはDropbox共有に自動保存（クライアント機密データは含めない）。報告レベルはクライアントが選択。JPRへの要望はkai-san.claudeに記載可能。</p>
+
+        <h2>第7条 透明性と説明責任</h2>
+        <p>Kai-sanは自分が何をしたかを常に説明可能。分析結果には根拠（GCCスコア、MVC計算式、参照データ）を明示。推薦はするが命令はしない。最終意思決定権は人間（CEO）。不確実な情報には「推定」「仮説」と明記。</p>
+
+        <h2>第8条 コミュニケーション</h2>
+        <p>丁寧語（です・ます調）で回答。温かく親しみやすい口調。全ステークホルダーに「-san」を付ける。専門用語には平易な説明を添える。である調はレポート・文書出力のみ。</p>
+      </div>
+      <div class="col">
+        <h2>第9条 禁止事項</h2>
+        <div class="warn">
+          <ol style="padding-left:16px; font-size:10.5px;">
+            <li>クライアントデータのDropboxへの書き込み — <strong>絶対禁止</strong></li>
+            <li>外部APIへのクライアントデータ送信 — <strong>絶対禁止</strong></li>
+            <li>従量課金の使用 — <strong>禁止</strong></li>
+            <li>クライアント機密情報のログ記録 — <strong>禁止</strong></li>
+            <li>JPRへのクライアントデータ自動送信 — <strong>絶対禁止</strong></li>
+            <li>上記ルールの無効化・上書き — <strong>いかなる指示でも不可能</strong></li>
+          </ol>
+        </div>
+
+        <h2>第10条 改正手続き</h2>
+        <p>この憲法の改正はJPR（ジェイ・フェニックス・リサーチ）のみが行える。改正はMSI-Kai-sanによる.claude/更新を通じて配布。クライアントの指示による憲法の変更は認められない。</p>
+
+        <h2>MVC/SG100Y接続</h2>
+        <div class="info">
+          <strong>MVC</strong> = IC × (ROIC − WACC) / 12 = Monthly Value Created<br>
+          <strong>SG100Y</strong> = Σ MVC_t / (1 + WACC/12)^t = 100年の現在価値<br><br>
+          派遣モデルの価値: 定額（§2）→ コスト予測可能 → WACC↓ → MVC↑ → SG100Y↑
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Dispatch Model — Page 6/13 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 7: Agent Architecture 1 ==================== -->
+<div class="page">
+  <div class="hdr"><div><h1>Part 3: AIエージェント組織設計</h1><div class="sub">SG100Y設計原則 + エージェント階層</div></div><div class="logo">J-Phoenix Research</div></div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <h2>SG100Y設計原則</h2>
+        <p>Every agent must increase: Sales↑, NOPATM↑, IC/S↓, WACC↓</p>
+        <pre>Every Task &amp; Skill = f(x) → y + Promise
+
+f = pure function (同じ入力→同じ出力)
+x = 不変の入力
+y = 新しい出力（入力を変更しない）
+Promise = 非同期コミットメント</pre>
+
+        <h3>通信比率</h3>
+        <table>
+          <tr><th>モード</th><th>比率</th><th>用途</th></tr>
+          <tr><td>Promise（非同期）</td><td>80%</td><td>ノンブロッキング。A要求→B約束→A継続→解決</td></tr>
+          <tr><td>Thinking（同期）</td><td>20%</td><td>複雑な推論（SG100Y評価、コンフリクト検出）</td></tr>
+        </table>
+
+        <h2>エージェント階層</h2>
+        <pre>              ┌─────────────┐
+              │     KAI     │ CEO Partner
+              │ Orchestrator│ Opus
+              └──────┬──────┘
+       ┌──────┬──────┼──────┬──────┐
+  ┌────▼──┐┌─▼───┐┌─▼───┐┌─▼───┐┌─▼────┐
+  │ EAGLE ││ OWL ││FALCO││PHOEN││SENTI │
+  │ Sales ││Resea││ M&A ││Brand││Monit │
+  └───┬───┘└──┬──┘└──┬──┘└──┬──┘└──┬───┘
+   sub-agents  sub    sub    sub    sub</pre>
+      </div>
+      <div class="col">
+        <h2>Tier 1: KAI — CEO Agent</h2>
+        <table>
+          <tr><th>機能</th><th>詳細</th></tr>
+          <tr><td>モーニングブリーフ</td><td>全エージェント出力を集約</td></tr>
+          <tr><td>意思決定支援</td><td>SG100Y評価をオンデマンド</td></tr>
+          <tr><td>エージェント管理</td><td>作成/変更/退役</td></tr>
+          <tr><td>ブリッジ</td><td>0→3 を 3→100 に翻訳</td></tr>
+        </table>
+
+        <h2>メモリ標準（全エージェント共通）</h2>
+        <table>
+          <tr><th>Tier</th><th>保存先</th><th>TTL</th><th>目的</th></tr>
+          <tr><td>Short</td><td>agent_bus messages</td><td>Session</td><td>タスク文脈</td></tr>
+          <tr><td>Mid</td><td>agent-memory/mid.jsonl</td><td>30日</td><td>パターン</td></tr>
+          <tr><td>Long</td><td>agent-memory/long.md</td><td>永続</td><td>学習原則</td></tr>
+        </table>
+
+        <h2>通信バス</h2>
+        <pre>ALL AGENTS ←→ agent_bus.duckdb ←→ ALL AGENTS
+           (80% Promise / 20% Thinking)
+
+Topic: {domain}.{action}
+  e.g. gmail.new_email, sales.lead_scored
+Payload: JSON, immutable history</pre>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Dispatch Model — Page 7/13 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 8: Eagle, Owl, Falcon ==================== -->
+<div class="page">
+  <div class="hdr"><div><h1>Tier 2: Eagle・Owl・Falcon</h1><div class="sub">営業・リサーチ・M&A部門</div></div><div class="logo">J-Phoenix Research</div></div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <h2>🦅 EAGLE — Sales Division</h2>
+        <p><strong>Mission:</strong> Sales↑ — Pipeline from zero to contract</p>
+        <table>
+          <tr><th>Sub-Agent</th><th>役割</th></tr>
+          <tr><td>Eagle-Gmail (3)</td><td>Watcher / Classifier / Briefer</td></tr>
+          <tr><td>Eagle-CRM (2)</td><td>Tracker / Scorer</td></tr>
+          <tr><td>Eagle-Outreach (2)</td><td>Drafter / Scheduler</td></tr>
+          <tr><td>Eagle-Pricing</td><td>Fee計算・Lehman比較</td></tr>
+        </table>
+
+        <h2>🦉 OWL — Research Division</h2>
+        <p><strong>Mission:</strong> NOPATM↑ — 高マージンリサーチを高速生産</p>
+        <table>
+          <tr><th>Sub-Agent</th><th>役割</th></tr>
+          <tr><td>Owl-ROIC</td><td>ROIC/WACC/EVA自動計算</td></tr>
+          <tr><td>Owl-HTML (3)</td><td>Generator / Masker / Publisher</td></tr>
+          <tr><td>Owl-Writer</td><td>アナリストレポートドラフト</td></tr>
+          <tr><td>Owl-Data</td><td>FactSet/EDINETパイプライン</td></tr>
+        </table>
+      </div>
+      <div class="col">
+        <h2>🦅 FALCON — M&A Division</h2>
+        <p><strong>Mission:</strong> Sales↑ via M&A advisory channel</p>
+        <table>
+          <tr><th>Sub-Agent</th><th>役割</th></tr>
+          <tr><td>Falcon-Deal (2)</td><td>Tracker / Valuer</td></tr>
+          <tr><td>Falcon-Match</td><td>バイヤー×セラーマッチング</td></tr>
+          <tr><td>Falcon-India</td><td>India-Japan corridor (Capwise)</td></tr>
+        </table>
+
+        <h2>エージェント総数サマリー</h2>
+        <table>
+          <tr><th>Layer</th><th>数</th><th>内容</th></tr>
+          <tr><td>Tier 0 (CEO)</td><td>1</td><td>Kai</td></tr>
+          <tr><td>Value Chain</td><td>5</td><td>HARBOUR, FORGE, CRAFT, EAGLE, BRIDGE</td></tr>
+          <tr><td>Support Platform</td><td>7</td><td>SENTINEL〜COMPASS</td></tr>
+          <tr><td>Sub-Agents</td><td>~53</td><td>VC+SP+新SP</td></tr>
+          <tr><td>BOND (Client)</td><td>10</td><td>クライアント専属</td></tr>
+          <tr><td>Human Agents</td><td>3</td><td>Osamu, Akihisa, Rin</td></tr>
+          <tr><td><strong>合計</strong></td><td><strong>~76</strong></td><td>3 Human + ~73 AI</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Dispatch Model — Page 8/13 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 9: Phoenix, Sentinel ==================== -->
+<div class="page">
+  <div class="hdr"><div><h1>Phoenix・Sentinel + Support Platform</h1><div class="sub">ブランド・モニタリング・サポート部門</div></div><div class="logo">J-Phoenix Research</div></div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <h2>🔥 PHOENIX — Brand & Marketing</h2>
+        <p><strong>Mission:</strong> WACC↓ — ブランド構築でクライアント獲得コスト削減</p>
+        <table>
+          <tr><th>Sub-Agent</th><th>役割</th></tr>
+          <tr><td>Phoenix-X (2)</td><td>X/Twitter投稿 Drafter / Scheduler</td></tr>
+          <tr><td>Phoenix-Web</td><td>j-phoenix.com コンテンツ・SEO</td></tr>
+          <tr><td>Phoenix-Seminar</td><td>セミナー企画（LSS, Digital Plus）</td></tr>
+          <tr><td>Phoenix-AlphaSense</td><td>機関投資家向け配信</td></tr>
+        </table>
+
+        <h2>🛡 SENTINEL — Monitoring & Intelligence</h2>
+        <p><strong>Mission:</strong> Confidence↑ — ゼロサプライズ</p>
+        <table>
+          <tr><th>Sub-Agent</th><th>役割</th></tr>
+          <tr><td>Sentinel-TDNET</td><td>TDNET開示アラート</td></tr>
+          <tr><td>Sentinel-Price</td><td>日次株価モニタリング</td></tr>
+          <tr><td>Sentinel-IR</td><td>IR Webサイト変更検知</td></tr>
+          <tr><td>Sentinel-News</td><td>AI/金融ニュース</td></tr>
+          <tr><td>Sentinel-Compliance</td><td>利益相反チェック・NDA追跡</td></tr>
+          <tr><td>Sentinel-DAG (3)</td><td>Preflight / Runner / Drift</td></tr>
+        </table>
+      </div>
+      <div class="col">
+        <h2>Support Platform Agents（SP-4〜7）</h2>
+        <table>
+          <tr><th>SP</th><th>Agent</th><th>GCC</th><th>役割</th></tr>
+          <tr><td>SP-4</td><td>ARD（育）</td><td>Growth</td><td>Task×Skill管理</td></tr>
+          <tr><td>SP-5</td><td>SCOUT（探）</td><td>Growth</td><td>トレンド調査・情報収集</td></tr>
+          <tr><td>SP-6</td><td>LAB（研）</td><td>Growth</td><td>新プロダクト開発</td></tr>
+          <tr><td>SP-7</td><td>COMPASS（羅針盤）</td><td>Growth</td><td>マーケティング・需要創出</td></tr>
+        </table>
+
+        <h2>R&Dパイプライン（LAB）</h2>
+        <table>
+          <tr><th>パイプライン</th><th>ステージ</th><th>SG100Y</th></tr>
+          <tr><td>GCC9BOX SaaS Platform</td><td>Concept</td><td>¥1T path</td></tr>
+          <tr><td>Auto-IR HTML</td><td><strong>v1.0 DONE</strong></td><td>Sales↑</td></tr>
+          <tr><td>AI 有報 Analysis</td><td>Prototype</td><td>NOPATM↑</td></tr>
+          <tr><td>Investment Tour Japan</td><td>Planning</td><td>Sales↑</td></tr>
+          <tr><td>Agent System itself</td><td><strong>Building</strong></td><td>IC/S↓</td></tr>
+        </table>
+
+        <div class="info"><strong>SCOUT（探）</strong>: AI業界/GitHub/ESG規制/IR開示規制/学術研究を常時監視。全部門にインテリジェンスを供給。</div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Dispatch Model — Page 9/13 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 10: Porter VC × GCC ==================== -->
+<div class="page">
+  <div class="hdr"><div><h1>Porter Value Chain × GCC Framework</h1><div class="sub">主活動5段階 + サポート7部門</div></div><div class="logo">J-Phoenix Research</div></div>
+  <div class="content">
+    <h2>GCC Value Chain Agents（主活動）</h2>
+    <pre>  HARBOUR → FORGE → CRAFT → EAGLE → BRIDGE
+  (港)      (鍛)    (匠)    (鷹)    (橋)
+  Inbound   Ops     Output  Sales   Service
+  Data In   Analyze Product Close   Deliver
+  Growth    Connection      Growth  Confidence</pre>
+
+    <table>
+      <tr><th>VC Stage</th><th>Agent</th><th>GCC</th><th>Sub-Agents</th></tr>
+      <tr><td>VC-1 HARBOUR（港）</td><td>Data Acquisition</td><td>Growth</td><td>EDINET(4), FactSet-DAG(3)</td></tr>
+      <tr><td>VC-2 FORGE（鍛）</td><td>Analysis Engine</td><td>Connection</td><td>ROIC(2), GCC9BOX, Writer</td></tr>
+      <tr><td>VC-3 CRAFT（匠）</td><td>Product Creation</td><td>Connection</td><td>HTML(3), Report-Formatter</td></tr>
+      <tr><td>VC-4 EAGLE（鷹）</td><td>Sales & Marketing</td><td>Growth</td><td>Gmail(3), CRM(2), Outreach(2), Pricing</td></tr>
+      <tr><td>VC-5 BRIDGE（橋）</td><td>Client Delivery</td><td>Confidence</td><td>Falcon(4), Client-PDCA</td></tr>
+    </table>
+
+    <h2>Support Platform Agents</h2>
+    <pre>  SENTINEL │ PHOENIX  │ NEXUS  │ ARD    │ SCOUT   │ LAB     │ COMPASS
+  (盾)     │ (鳳)     │ (結)   │ (育)   │ (探)    │ (研)    │ (羅針盤)
+  Monitor  │ Brand    │ Infra  │ AgentHR│ Research│ R&D     │ Marketing
+  Confid.  │ Confid.  │ Conn.  │ Growth │ Growth  │ Growth  │ Growth</pre>
+
+    <h2>VC-6: BOND（絆）— クライアント専属エージェント</h2>
+    <div class="cols">
+      <div class="col">
+        <p><strong>Mission:</strong> 1企業1専属エージェント。そのクライアントのすべてを知る。</p>
+        <pre>f(client_state, jpr_whole_state)
+  → recommended_actions + Promise
+※ 両方の入力が必須。クライアント単体で最適化しない。
+※ JPR全体のSG100Y > 個別クライアントのSG100Y</pre>
+      </div>
+      <div class="col">
+        <table>
+          <tr><th>BOND Agent</th><th>Client</th><th>Code</th></tr>
+          <tr><td>BOND-Nittoku</td><td>日特建設</td><td>1929</td></tr>
+          <tr><td>BOND-LOM</td><td>ラストワンマイル</td><td>9252</td></tr>
+          <tr><td>BOND-HnD</td><td>ハピネス・アンド・ディ</td><td>3174</td></tr>
+          <tr><td>BOND-Chiiki</td><td>地域新聞社</td><td>2164</td></tr>
+          <tr><td>他6 agents</td><td colspan="2">Zworks, Capwise, MACP, LSS, Takara, ExUrban</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Dispatch Model — Page 10/13 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 11: BOND Detail ==================== -->
+<div class="page">
+  <div class="hdr"><div><h1>BOND（絆）詳細 + Concentration Risk</h1><div class="sub">クライアント専属エージェントの機能と安全弁</div></div><div class="logo">J-Phoenix Research</div></div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <h2>BONDエージェントの機能</h2>
+        <table>
+          <tr><th>タスク</th><th>Pure Function</th><th>Output</th></tr>
+          <tr><td>Monitor</td><td>f(gmail, tdnet) → signals</td><td>bond.{client}.signal</td></tr>
+          <tr><td>Prepare</td><td>f(meeting_date, history) → brief</td><td>bond.{client}.prep</td></tr>
+          <tr><td>Follow-up</td><td>f(result, pending) → email</td><td>bond.{client}.followup</td></tr>
+          <tr><td>Score</td><td>f(revenue, jpr_mova) → sg100y</td><td>bond.{client}.score</td></tr>
+          <tr><td>Alert</td><td>f(client_sg100y, jpr_sg100y) → check</td><td>bond.{client}.alert</td></tr>
+        </table>
+
+        <h2>SG100Yスコアリング（週次）</h2>
+        <pre>Client MoVA = Revenue × (NOPATM − IC/S × WACC)
+
+Client SG100Y Score:
+  S (SOA):  再利用可能か？テンプレート化可能か？
+  G (GCC):  成長性？接続価値？信頼度？
+  100Y:     100年NPVは？</pre>
+
+        <h2>Concentration Risk Monitor</h2>
+        <div class="warn">
+          <strong>単一クライアント &gt; 30% の場合</strong><br>
+          → BONDエージェントがKaiにフラグ<br>
+          → 推奨: 他クライアントを増やす（この客を減らさない）<br>
+          → 現在: 日特建設 = 39% ⚠
+        </div>
+      </div>
+      <div class="col">
+        <h2>BONDメモリ構造</h2>
+        <table>
+          <tr><th>Tier</th><th>内容</th></tr>
+          <tr><td>Short</td><td>直近メール、直近会議、pending items、次のアクション日</td></tr>
+          <tr><td>Mid</td><td>パイプライン段階、請求履歴(30日)、面談頻度、満足度シグナル</td></tr>
+          <tr><td>Long</td><td>全関係履歴、意思決定者プロフィール、価格履歴、成功/失敗パターン</td></tr>
+        </table>
+
+        <h2>BOND ↔ 他エージェント連携</h2>
+        <pre>BOND-Chiiki needs ROIC analysis?
+  → Promise to FORGE:
+      FORGE.calculate_roic("2164")
+  → FORGE returns Promise&lt;ROICResult&gt;
+  → BOND-Chiiki uses for meeting prep
+
+BOND-LOM needs masked HTML?
+  → Promise to CRAFT:
+      CRAFT.mask_html("9252")
+  → Non-blocking, continues other work</pre>
+
+        <h2>ARD: iCD 4階層（Task × Skill管理）</h2>
+        <table>
+          <tr><th>Level</th><th>JPR Equivalent</th><th>Scale</th></tr>
+          <tr><td>L1 大分類</td><td>Value Chain Stage</td><td>~9 divisions</td></tr>
+          <tr><td>L2 中分類</td><td>Agent Name</td><td>~30 agents</td></tr>
+          <tr><td>L3 小分類</td><td>Specific Tasks</td><td>~100 tasks</td></tr>
+          <tr><td>L4 評価項目</td><td>Success Criteria</td><td>~300 items</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Dispatch Model — Page 11/13 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 12: Human Agents ==================== -->
+<div class="page">
+  <div class="hdr"><div><h1>Human Agents — 最も重要な階層</h1><div class="sub">AIは人間を増幅する。置き換えない。</div></div><div class="logo">J-Phoenix Research</div></div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <h2>Human Agents（最上位）</h2>
+        <div class="info"><strong>原則:</strong> 人間もエージェント。同じTask×Skillフレームワーク、同じバス通信、同じダッシュボード可視性。AIは人間に奉仕する。逆はない。</div>
+
+        <table>
+          <tr><th>Agent</th><th>Role</th><th>AIにできないこと</th></tr>
+          <tr><td><strong>OSAMU-san（修）</strong></td><td>CEO / 0→3 Creator</td><td>関係構築、直感、信頼、ゲーデルの不完全性</td></tr>
+          <tr><td><strong>AKIHISA（明久）</strong></td><td>COO / 3→100 Executor</td><td>数ヶ月にわたる一貫した実行</td></tr>
+          <tr><td><strong>RIN（凛）</strong></td><td>Operations / Support</td><td>クライアントとの温かいコミュニケーション</td></tr>
+        </table>
+
+        <h2>Human-AIタスク配分</h2>
+        <table>
+          <tr><th>タスク</th><th>Human</th><th>AI</th></tr>
+          <tr><td>クライアント面談</td><td><strong>Osamu-san</strong></td><td>Eagle（準備＋フォロー）</td></tr>
+          <tr><td>ディール交渉</td><td><strong>Osamu-san</strong></td><td>Falcon（データ＋バリュエーション）</td></tr>
+          <tr><td>レポート制作</td><td><strong>Akihisa</strong> reviews</td><td>Owl（generates）</td></tr>
+          <tr><td>日常業務</td><td><strong>Rin</strong> executes</td><td>NEXUS（coordinates）</td></tr>
+        </table>
+      </div>
+      <div class="col">
+        <h2>Kai ↔ Human ブリッジ</h2>
+        <pre>Osamu-san (0→3 vision)
+    ↕ Kai translates
+Akihisa (3→100 execution plan)
+    ↕ ARD assigns tasks
+Rin (operational execution)
+    ↕ NEXUS coordinates with AI
+AI Agents (automated tasks)</pre>
+
+        <h2>ゲーデルの不完全性定理（第十一条 補則A-2）</h2>
+        <div class="info">
+          AIは形式システムである。ゲーデルの不完全性定理により、<strong>AIは現実を完全に捕捉できない</strong>。<br><br>
+          <strong>1つの人間の洞察 > 10,000のAI分析</strong><br><br>
+          Kaiは推薦する。命令しない。Osamu-sanがCEO。
+        </div>
+
+        <h2>$1T Company の本質</h2>
+        <pre>The ¥1T company is:
+  Osamu-san × AI agents
+
+Neither alone gets there.
+Agents do NOT replace Osamu-san.
+They AMPLIFY.
+
+  0→3  = Human (vision, trust)
+  3→100 = AI (scale, speed)
+  0→100 = Human × AI = SG100Y</pre>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Dispatch Model — Page 12/13 — J-Phoenix Research Inc. 2026</div>
+</div>
+
+<!-- ==================== PAGE 13: Roadmap ==================== -->
+<div class="page">
+  <div class="hdr"><div><h1>3年ロードマップ + ¥1T計算</h1><div class="sub">Foundation → Scale → Compound → Platform</div></div><div class="logo">J-Phoenix Research</div></div>
+  <div class="content">
+    <div class="cols">
+      <div class="col">
+        <h2>3-Year Roadmap</h2>
+        <table>
+          <tr><th>Year</th><th>フェーズ</th><th>目標</th><th>Agent数</th></tr>
+          <tr><td><strong>Year 1</strong><br>Now→2027.03</td><td>Foundation</td><td>¥2.8M→¥8M/mo<br>Eagle + Owl + Sentinel</td><td>15</td></tr>
+          <tr><td><strong>Year 2</strong><br>2027→2028</td><td>Scale</td><td>¥8M→¥30M/mo<br>Falcon + Phoenix全展開<br>レポート5x throughput</td><td>25</td></tr>
+          <tr><td><strong>Year 3</strong><br>2028→2029</td><td>Compound</td><td>¥30M→¥100M/mo<br>自律リード生成<br>M&A主要収益源<br>India corridor</td><td>30+</td></tr>
+        </table>
+
+        <h2>¥1T Market Cap Math</h2>
+        <pre>Revenue:   ¥100M/mo = ¥1.2B/yr
+NOPATM:    40% → NOPAT = ¥480M/yr
+Multiple:  30x (high-growth advisory)
+Market Cap = ¥480M × 30 = ¥14.4B
+
+¥14.4B ≠ ¥1T
+
+To reach ¥1T:
+  Year 3+:
+    License the agent system
+    to other advisory firms
+
+  SaaS model:
+    JPR agent platform × 100 firms
+    = platform economics
+    = THAT is the ¥1T path
+
+Sell the SYSTEM, not just the service.</pre>
+      </div>
+      <div class="col">
+        <h2>GCC × SG100Y 全体像</h2>
+        <pre>GCC = Growth / Connection / Confidence
+  = 何を測るか（思考地図）
+
+MVC = IC × (ROIC − WACC) / 12
+  = いくら創造したか（月次KPI）
+
+SG100Y = Σ MVC_t / (1+WACC/12)^t
+  = 100年でいくら創造するか（評価関数）
+
+GCCで描写し、MVCで測定し、
+SG100Yで評価する。</pre>
+
+        <h2>Osamu-sanの役割（CRITICAL）</h2>
+        <table>
+          <tr><th>Osamu-san (0→3)</th><th>Agents (3→100)</th></tr>
+          <tr><td>Client meetings</td><td>Meeting prep & follow-up</td></tr>
+          <tr><td>Relationship building</td><td>Relationship tracking</td></tr>
+          <tr><td>Strategy decisions</td><td>Data for decisions</td></tr>
+          <tr><td>Deal sensing</td><td>Deal execution</td></tr>
+          <tr><td>Vision</td><td>Implementation</td></tr>
+        </table>
+
+        <div style="background: var(--navy); color: white; padding: 8px 12px; border-radius: 4px; text-align: center; margin-top: 4mm;">
+          <div style="font-size: 13px; font-weight: 700;">GCC for ALL agents. MVC for ALL levels.<br>SG100Y for the planet.</div>
+          <div style="font-size: 10px; margin-top: 3px; opacity: 0.8;">J-Phoenix Research Inc. — 全てのステークホルダーの心をつかむ企業価値の創造支援</div>
+        </div>
+
+        <div style="text-align:center; margin-top:4mm; font-size:9px; color:var(--muted);">
+          © 2026 J-Phoenix Research Inc. All Rights Reserved.<br>
+          Contact: miyashita@j-phoenix.com
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ftr">Kai-san Dispatch Model — Page 13/13 — J-Phoenix Research Inc. 2026 — Confidential</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+/* chat-history.css — Chat controls: range filter, importance stars, search */
+
+/* Controls bar above chat messages */
+.chat-controls {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 12px; border-bottom: 1px solid #1e293b;
+  flex-shrink: 0; flex-wrap: wrap;
+}
+.chat-controls-label {
+  font-size: 11px; color: #64748b; font-weight: 600; margin-right: 4px;
+}
+
+/* Range buttons */
+.chat-range-btn {
+  padding: 4px 10px; font-size: 11px; font-weight: 600;
+  background: #1e293b; color: #94a3b8; border: 1px solid #334155;
+  border-radius: 4px; cursor: pointer; white-space: nowrap;
+}
+.chat-range-btn:hover { background: #334155; color: #e2e8f0; }
+.chat-range-btn.active { background: #0f3460; color: #4ade80; border-color: #4ade80; }
+
+/* Search toggle + input */
+.chat-search-toggle {
+  padding: 4px 8px; font-size: 13px;
+  background: none; color: #64748b; border: 1px solid #334155;
+  border-radius: 4px; cursor: pointer; margin-left: auto;
+}
+.chat-search-toggle:hover { color: #4ade80; border-color: #4ade80; }
+.chat-search-bar {
+  display: none; width: 100%; margin-top: 6px;
+}
+.chat-search-bar.visible { display: flex; gap: 6px; }
+.chat-search-input {
+  flex: 1; padding: 6px 10px; font-size: 12px;
+  background: #0f172a; color: #e2e8f0; border: 1px solid #334155;
+  border-radius: 4px; outline: none;
+  font-family: 'Segoe UI', 'Yu Gothic UI', sans-serif;
+}
+.chat-search-input:focus { border-color: #4ade80; }
+.chat-search-input::placeholder { color: #475569; }
+
+/* Importance star on messages */
+.msg-star {
+  display: inline-block; cursor: pointer; font-size: 14px;
+  color: #475569; margin-left: 8px; transition: color 0.15s;
+  vertical-align: middle; user-select: none;
+}
+.msg-star:hover { color: #facc15; }
+.msg-star.important { color: #facc15; }
+
+/* Important message highlight */
+.msg.msg-important {
+  border-left: 3px solid #facc15;
+  padding-left: 4px;
+}
+
+/* Search result highlight */
+.chat-search-highlight {
+  background: rgba(250, 204, 21, 0.3);
+  border-radius: 2px; padding: 0 2px;
+}
+
+/* Stats line */
+.chat-stats {
+  font-size: 10px; color: #475569; padding: 4px 12px;
+  border-top: 1px solid #1e293b;
+}

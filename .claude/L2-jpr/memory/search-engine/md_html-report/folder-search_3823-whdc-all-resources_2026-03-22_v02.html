@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>3823 WHDC 全資料マップ | Kai</title>
+<style>
+  @page { size: A4 landscape; margin: 10mm; }
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .no-print { display: none; }
+    .page { box-shadow: none; margin: 0; }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans JP', 'Segoe UI', -apple-system, sans-serif;
+    background: #f5f5f0;
+    color: #2d2d2d;
+    line-height: 1.6;
+  }
+
+  .page {
+    width: 277mm;
+    min-height: 190mm;
+    margin: 8mm auto;
+    background: white;
+    padding: 0;
+    box-shadow: 0 1px 12px rgba(0,0,0,0.08);
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── Hero Banner ── */
+  .hero {
+    background: linear-gradient(135deg, #1b2a4a 0%, #2c4a7c 60%, #3d6098 100%);
+    color: white;
+    padding: 18px 28px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .hero-left h1 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 2px;
+  }
+
+  .hero-left h1 .code { color: #7eb8f7; }
+
+  .hero-left .tagline {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    font-weight: 400;
+  }
+
+  .hero-right {
+    text-align: right;
+  }
+
+  .hero-right .deadline {
+    font-size: 28px;
+    font-weight: 900;
+    color: #fbbf24;
+    line-height: 1;
+  }
+
+  .hero-right .deadline-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .hero-right .date {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 2px;
+  }
+
+  /* ── Main Content ── */
+  .content {
+    padding: 16px 28px 60px;
+  }
+
+  /* ── Story Section ── */
+  .story {
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    background: #fafaf5;
+    border-radius: 6px;
+    border-left: 4px solid #2c4a7c;
+    line-height: 1.7;
+  }
+
+  .story strong { color: #1b2a4a; }
+
+  /* ── Resource Map ── */
+  .map-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1b2a4a;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .map-title .line {
+    flex: 1;
+    height: 1px;
+    background: #ddd;
+  }
+
+  .map {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .resource {
+    border-radius: 8px;
+    padding: 12px 14px;
+    position: relative;
+    overflow: hidden;
+    min-height: 100px;
+  }
+
+  .resource::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+  }
+
+  .resource.finance { background: #fef3f2; }
+  .resource.finance::before { background: #dc2626; }
+
+  .resource.analysis { background: #f0f7ff; }
+  .resource.analysis::before { background: #2563eb; }
+
+  .resource.client { background: #f0fdf4; }
+  .resource.client::before { background: #16a34a; }
+
+  .resource.legal { background: #fefce8; }
+  .resource.legal::before { background: #ca8a04; }
+
+  .resource.data { background: #faf5ff; }
+  .resource.data::before { background: #9333ea; }
+
+  .resource.report { background: #fff7ed; }
+  .resource.report::before { background: #ea580c; }
+
+  .resource-icon {
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+
+  .resource-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1b2a4a;
+    margin-bottom: 4px;
+  }
+
+  .resource-what {
+    font-size: 10px;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+
+  .resource-where {
+    font-size: 9px;
+    color: #999;
+    font-style: italic;
+  }
+
+  .resource-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 8px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+
+  .badge-dropbox { background: #fee2e2; color: #b91c1c; }
+  .badge-onedrive { background: #dbeafe; color: #1d4ed8; }
+
+  .resource-count {
+    font-size: 9px;
+    color: #888;
+    margin-top: 4px;
+  }
+
+  /* ── Action Plan ── */
+  .action-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1b2a4a;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .action {
+    border-radius: 8px;
+    padding: 12px 14px;
+    position: relative;
+  }
+
+  .action.p1 {
+    background: #1b2a4a;
+    color: white;
+  }
+
+  .action.p2 {
+    background: #f1f5f9;
+    color: #1b2a4a;
+    border: 1px solid #e2e8f0;
+  }
+
+  .action-number {
+    font-size: 22px;
+    font-weight: 900;
+    opacity: 0.2;
+    position: absolute;
+    top: 6px;
+    right: 10px;
+  }
+
+  .action .priority {
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .action.p1 .priority { color: #fbbf24; }
+  .action.p2 .priority { color: #64748b; }
+
+  .action .action-desc {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .action .action-detail {
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  .action.p1 .action-detail { color: rgba(255,255,255,0.7); }
+  .action.p2 .action-detail { color: #64748b; }
+
+  .action .action-who {
+    font-size: 9px;
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  .action.p1 .action-who { color: #7eb8f7; }
+  .action.p2 .action-who { color: #2563eb; }
+
+  /* ── Footer ── */
+  .footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fafaf5;
+    padding: 6px 28px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: #aaa;
+    border-top: 1px solid #eee;
+  }
+
+  .footer strong { color: #2c4a7c; }
+
+  /* Print button */
+  .print-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #1b2a4a;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 100;
+  }
+
+  .print-btn:hover { background: #2c4a7c; transform: translateY(-1px); }
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">PDF / 印刷</button>
+
+<div class="page">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-left">
+      <h1><span class="code">3823</span> THE WHY HOW DO COMPANY</h1>
+      <div class="tagline">「人助けM&A」で中小企業を永続保有 ― 全資料の所在と次のアクション</div>
+    </div>
+    <div class="hero-right">
+      <div class="deadline-label">ファイナンス開示まで</div>
+      <div class="deadline">あと6日</div>
+      <div class="date">開示予定: 2026年3月27日(金) 17:00</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Story -->
+    <div class="story">
+      このレポートは、<strong>3823 ワイハウに関する全資料の所在地</strong>をまとめたものです。OneDriveとDropboxの両方にまたがる<strong>8つの重要フォルダ</strong>を、「何があるか」「次に何をすべきか」の視点で整理しました。3月27日のファイナンス開示＋JPR第1弾レポートの公開に向けて、<strong>この1枚で全体像を把握</strong>できます。
+    </div>
+
+    <!-- Resource Map -->
+    <div class="map-title">資料マップ ― どこに何がある？<span class="line"></span></div>
+
+    <div class="map">
+
+      <div class="resource finance">
+        <span class="resource-badge badge-dropbox">Dropbox 共有</span>
+        <div class="resource-icon">📋</div>
+        <div class="resource-name">ファイナンス関連資料</div>
+        <div class="resource-what">有価証券届出書（関東財コメント反映済み 3/12版）、手取金の使途がわかる資料。<strong>開示の核心書類。</strong></div>
+        <div class="resource-where">Dropbox > JPR_共有作業 > 3823_sharedwithclients</div>
+        <div class="resource-count">2ファイル | 4.8MB</div>
+      </div>
+
+      <div class="resource finance">
+        <span class="resource-badge badge-dropbox">Dropbox 共有</span>
+        <div class="resource-icon">🏢</div>
+        <div class="resource-name">M&A関連資料</div>
+        <div class="resource-what">買収候補2社の企業概要書。<strong>コーウェル</strong>（LED照明 EBITDA 325M）、<strong>飯山土建</strong>（土木 NC~7億 OPM17%）。</div>
+        <div class="resource-where">Dropbox > JPR_共有作業 > 3823_sharedwithclients</div>
+        <div class="resource-count">2ファイル (PDF) | 19MB</div>
+      </div>
+
+      <div class="resource report">
+        <span class="resource-badge badge-onedrive">OneDrive</span>
+        <div class="resource-icon">📊</div>
+        <div class="resource-name">Excelレポート (全版)</div>
+        <div class="resource-what">アナリストレポートa~g版。<strong>g版が最新。</strong>GCC予測モデル、自動化スクリプト、PDF出力済み。</div>
+        <div class="resource-where">1000_company_report_consulting > 3823 > 1100_Excel</div>
+        <div class="resource-count">22ファイル | 67MB</div>
+      </div>
+
+      <div class="resource client">
+        <span class="resource-badge badge-onedrive">OneDrive</span>
+        <div class="resource-icon">💬</div>
+        <div class="resource-name">クライアント提供資料</div>
+        <div class="resource-what">亀田CEO取材メモ、コーウェル・飯山土建サマリー、有価証券届出書要約、適時開示ドラフト。</div>
+        <div class="resource-where">1000_company_report_consulting > 3823 > 9000_fromClients</div>
+        <div class="resource-count">5ファイル (MD)</div>
+      </div>
+
+      <div class="resource legal">
+        <span class="resource-badge badge-onedrive">OneDrive</span>
+        <div class="resource-icon">📝</div>
+        <div class="resource-name">契約書</div>
+        <div class="resource-what">IR支援業務委託契約書。3/9作成、3/12 PDF化。<strong>署名状況を要確認。</strong></div>
+        <div class="resource-where">9900_情報管理 > 法務 > 契約書 > 3823_WHDC</div>
+        <div class="resource-count">3ファイル (docx, pdf, md)</div>
+      </div>
+
+      <div class="resource analysis">
+        <span class="resource-badge badge-onedrive">OneDrive</span>
+        <div class="resource-icon">📈</div>
+        <div class="resource-name">分析・予測</div>
+        <div class="resource-what">12年GCC予測MD、TOPIX比較チャートSVG、Wordレポートテンプレート2種。</div>
+        <div class="resource-where">1000_company_report_consulting > 3823_WHDC (root + 1200_Word)</div>
+        <div class="resource-count">5ファイル</div>
+      </div>
+
+      <div class="resource data">
+        <span class="resource-badge badge-onedrive">OneDrive</span>
+        <div class="resource-icon">🔍</div>
+        <div class="resource-name">RAGデータベース</div>
+        <div class="resource-what">全開示資料をベクトル化したChromaDB。AIが過去資料を即座に参照するためのエンジン。</div>
+        <div class="resource-where">1000_company_report_consulting > 3823 > RAG > chroma_db</div>
+        <div class="resource-count">1ファイル (sqlite3) | 0.6MB</div>
+      </div>
+
+      <div class="resource analysis">
+        <span class="resource-badge badge-onedrive">OneDrive</span>
+        <div class="resource-icon">📅</div>
+        <div class="resource-name">タスク管理・メモ</div>
+        <div class="resource-what">3823関連のタスクメモ、中計四半期データ、セッションログ。日常的な作業記録。</div>
+        <div class="resource-where">0200_TODO > -Now (3823関連ファイル多数)</div>
+        <div class="resource-count">145ファイル中 複数が3823関連</div>
+      </div>
+
+    </div>
+
+    <!-- Action Plan -->
+    <div class="action-title">今すぐやること<span class="line"></span></div>
+
+    <div class="actions">
+      <div class="action p1">
+        <div class="action-number">1</div>
+        <div class="priority">最優先 / 3月27日まで</div>
+        <div class="action-desc">Excel g版の最終チェック</div>
+        <div class="action-detail">GCC9BOXの整合性確認。匂わせニュアンスの最終レビュー。希薄化22%の記載確認。</div>
+        <div class="action-who">担当: 修さん + 明久さん</div>
+      </div>
+
+      <div class="action p1">
+        <div class="action-number">2</div>
+        <div class="priority">最優先 / 3月27日まで</div>
+        <div class="action-desc">有価証券届出書の最終確認</div>
+        <div class="action-detail">Dropbox共有フォルダの関東財コメント版。手取金の使途資料と合わせて整合性チェック。</div>
+        <div class="action-who">担当: 修さん</div>
+      </div>
+
+      <div class="action p2">
+        <div class="action-number">3</div>
+        <div class="priority">重要 / 4月中旬に向けて</div>
+        <div class="action-desc">M&A候補2社の分析整理</div>
+        <div class="action-detail">コーウェル(Lean ROIC 10.2%) vs 飯山土建(34.7%)。4月M&A開示のナラティブ準備。</div>
+        <div class="action-who">担当: ir-report-san + 修さん</div>
+      </div>
+
+      <div class="action p2">
+        <div class="action-number">4</div>
+        <div class="priority">確認事項</div>
+        <div class="action-desc">契約書の署名状況</div>
+        <div class="action-detail">3/12にPDF化済みだが、双方の署名・押印が完了しているか確認。</div>
+        <div class="action-who">担当: 凛さん or 修さん</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span><strong>Kai(海)</strong> | memory-search-san | 34,592フォルダから検索 | 認知負担ゼロ</span>
+    <span>J-Phoenix Research | 2026-03-22 | 印刷: Ctrl+P → A4横向き</span>
+  </div>
+
+</div>
+
+</body>
+</html>

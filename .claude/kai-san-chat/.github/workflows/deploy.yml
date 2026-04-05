@@ -1,0 +1,37 @@
+name: Kai-san Deploy Sync
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate deploy.js
+        run: node -e "const d = require('./deploy'); console.log('Layers:', Object.keys(d.LAYERS).join(', ')); console.log('Config:', JSON.stringify(d.getConfig(), null, 2))"
+
+      - name: Check server.js syntax
+        run: node --check server.js
+
+      - name: Verify overlays/meta exists
+        run: |
+          test -f overlays/meta/gcc-framework.md || (echo "FAIL: meta overlay missing" && exit 1)
+          echo "OK: meta overlay present"
+
+      - name: Security scan - no secrets in code
+        run: |
+          ! grep -rn "sk-ant-\|sk-proj-\|xoxb-\|ghp_" --include="*.js" --include="*.json" --include="*.md" . || (echo "FAIL: secret detected" && exit 1)
+          echo "OK: no secrets found"
+
+      - name: Security scan - no client data in repo
+        run: |
+          test ! -d overlays/jpr || (echo "FAIL: JPR data in repo" && exit 1)
+          test ! -d overlays/client-analysis || (echo "FAIL: client data in repo" && exit 1)
+          echo "OK: no private data in repo"

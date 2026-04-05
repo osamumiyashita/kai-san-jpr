@@ -1,0 +1,709 @@
+{
+ "total_opportunities": 152,
+ "total_recommendations": 152,
+ "total_adopted": 0,
+ "total_mvc_saved": 0.0,
+ "total_joy": -25.85,
+ "history": [
+  {
+   "ts": "2026-03-29T04:09:57.137151",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 6.5
+  },
+  {
+   "ts": "2026-03-29T04:10:45.330517",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:12:36.399480",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": -2.0
+  },
+  {
+   "ts": "2026-03-29T04:13:41.663327",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:14:11.742188",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": -2.0
+  },
+  {
+   "ts": "2026-03-29T04:19:13.488750",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:20:37.258459",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:23:17.519654",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 2.0
+  },
+  {
+   "ts": "2026-03-29T04:25:55.850953",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:28:26.965918",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 2.0
+  },
+  {
+   "ts": "2026-03-29T04:29:17.992719",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:29:20.903991",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:30:44.356149",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 5.0
+  },
+  {
+   "ts": "2026-03-29T04:31:50.210417",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 5.0
+  },
+  {
+   "ts": "2026-03-29T04:32:15.106811",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:34:36.989748",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 10.0
+  },
+  {
+   "ts": "2026-03-29T04:34:47.044549",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:35:25.090572",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:36:01.658027",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:36:04.365366",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": -2.0
+  },
+  {
+   "ts": "2026-03-29T04:37:02.963660",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:37:46.547948",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:38:12.640460",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:39:13.971481",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:39:47.392901",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:41:14.442820",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": -5.0
+  },
+  {
+   "ts": "2026-03-29T04:41:42.604069",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": -2.0
+  },
+  {
+   "ts": "2026-03-29T04:42:05.232016",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:43:30.024389",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:46:32.502796",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:48:02.531111",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:48:57.959687",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": -5.0
+  },
+  {
+   "ts": "2026-03-29T04:50:25.604278",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:52:16.335687",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:53:10.626802",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:54:20.162294",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:55:12.240512",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:56:01.220197",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 2.0
+  },
+  {
+   "ts": "2026-03-29T04:56:39.466660",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": -2.6
+  },
+  {
+   "ts": "2026-03-29T04:57:56.357868",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:58:47.998183",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T04:59:19.442890",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": -2.0
+  },
+  {
+   "ts": "2026-03-29T04:59:26.888013",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:00:11.344979",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:04:16.287682",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:04:42.951050",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:05:21.416752",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:06:09.452498",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": -2.0
+  },
+  {
+   "ts": "2026-03-29T05:07:19.949391",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:08:41.482285",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:09:49.611221",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:10:34.756420",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": -2.0
+  },
+  {
+   "ts": "2026-03-29T05:13:30.010033",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:13:34.046163",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:13:37.798312",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:13:41.308810",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:13:44.472754",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:14:20.978310",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:15:40.202620",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:16:52.596809",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:20:03.686563",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:20:38.495960",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:20:44.148567",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": -2.6
+  },
+  {
+   "ts": "2026-03-29T05:23:33.996620",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:25:19.712275",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:30:04.995721",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": -2.6
+  },
+  {
+   "ts": "2026-03-29T05:31:18.400967",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:33:05.123546",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:35:17.092553",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": -2.0
+  },
+  {
+   "ts": "2026-03-29T05:38:29.854555",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:39:22.515714",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:40:43.407369",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:42:00.813534",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:43:18.328816",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:44:15.128235",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:44:58.070817",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:45:34.077264",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-29T05:47:11.498707",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T01:57:50.774279",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T01:57:52.245736",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T01:59:01.766252",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T01:59:24.993519",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T02:01:00.979944",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T02:01:02.464369",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T02:01:12.739670",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T02:01:14.639590",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T02:01:16.117877",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T02:01:17.603312",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T02:01:18.970199",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T02:01:20.437830",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T02:01:21.906057",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T02:01:23.376618",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T02:01:24.890405",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T02:02:04.950574",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T02:03:04.268429",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": -2.0
+  },
+  {
+   "ts": "2026-03-30T02:05:05.944880",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T02:12:49.801425",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T02:15:45.249612",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 2.0
+  },
+  {
+   "ts": "2026-03-30T02:17:39.461743",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  },
+  {
+   "ts": "2026-03-30T02:18:20.981410",
+   "recommended": true,
+   "adopted": false,
+   "mvc_saved": 0.0,
+   "joy": 0.0
+  }
+ ]
+}

@@ -1,0 +1,120 @@
+/* x-worklog.css — AI作業経過 + 改善要望の見た目 */
+
+/* ===== 作業経過エリア ===== */
+#worklog {
+  margin: 12px 0; border: 1px solid #1e293b; border-radius: 8px;
+  background: #0a0f1a; overflow: hidden;
+}
+.worklog-header {
+  padding: 8px 12px; font-size: 12px; font-weight: 600;
+  color: #64748b; border-bottom: 1px solid #1e293b;
+  letter-spacing: 1px;
+}
+.worklog-entries {
+  max-height: 400px; overflow-y: auto; padding: 8px 0;
+}
+.worklog-entries::-webkit-scrollbar { width: 4px; }
+.worklog-entries::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
+
+/* ===== ログ行 ===== */
+.worklog-row {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 4px 12px; font-size: 13px; color: #e2e8f0;
+  animation: wlFadeIn 0.2s ease;
+}
+@keyframes wlFadeIn { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
+
+.worklog-icon { flex-shrink: 0; width: 20px; text-align: center; }
+.worklog-text { flex: 1; line-height: 1.5; }
+
+/* Status colors */
+.worklog-running .worklog-icon { animation: wlPulse 1s infinite; }
+@keyframes wlPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.worklog-done .worklog-icon { color: #4ade80; }
+.worklog-error .worklog-icon { color: #f87171; }
+
+/* Detail line */
+.worklog-detail {
+  padding: 1px 12px 1px 40px; font-size: 11px; color: #64748b; line-height: 1.5;
+}
+
+/* Numbers line (financial results — prominent) */
+.worklog-numbers {
+  padding: 2px 12px 2px 40px; font-size: 12px; color: #4ade80;
+  font-weight: 600; line-height: 1.5;
+}
+
+/* AI explanation (WHY — warm tone) */
+.worklog-explanation {
+  padding: 2px 12px 6px 40px; font-size: 12px; color: #94a3b8;
+  line-height: 1.6; font-style: italic;
+}
+
+/* ===== 改善要望フォーム ===== */
+.worklog-feedback {
+  margin: 12px; padding: 16px; background: #1e293b;
+  border-radius: 8px; border: 1px solid #334155;
+}
+.feedback-title {
+  font-size: 14px; font-weight: 700; color: #e2e8f0; margin-bottom: 12px;
+}
+.feedback-label {
+  font-size: 12px; color: #94a3b8; margin: 10px 0 6px;
+}
+
+/* 0-5 Scale */
+.feedback-scale {
+  display: flex; gap: 4px; flex-wrap: wrap;
+}
+.scale-btn {
+  padding: 8px 12px; font-size: 12px; font-weight: 600;
+  background: #0f172a; color: #64748b; border: 1px solid #334155;
+  border-radius: 6px; cursor: pointer; min-width: 48px; text-align: center;
+}
+.scale-btn:hover { background: #334155; color: #e2e8f0; }
+.scale-btn.scale-selected {
+  background: #0f3460; color: #4ade80; border-color: #4ade80;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.2);
+}
+
+/* Textarea */
+.feedback-textarea {
+  width: 100%; padding: 10px 12px; font-size: 13px;
+  font-family: 'Segoe UI', 'Yu Gothic UI', 'Meiryo', sans-serif;
+  background: #0f172a; color: #e2e8f0; border: 1px solid #334155;
+  border-radius: 6px; outline: none; resize: vertical;
+}
+.feedback-textarea:focus { border-color: #4ade80; }
+.feedback-textarea::placeholder { color: #475569; }
+
+/* Send */
+.feedback-send-row {
+  display: flex; align-items: center; gap: 12px; margin-top: 12px;
+}
+.feedback-send-btn {
+  padding: 10px 24px; font-size: 14px; font-weight: 600;
+  background: #4ade80; color: #0f172a; border: none;
+  border-radius: 8px; cursor: pointer;
+}
+.feedback-send-btn:hover { background: #22c55e; }
+.feedback-send-btn:disabled { background: #334155; color: #475569; cursor: not-allowed; }
+.feedback-send-btn.feedback-sent {
+  background: #22c55e; cursor: default;
+}
+.feedback-dest {
+  font-size: 11px; color: #475569;
+}
+
+/* Thank you */
+/* Hedge clause */
+.feedback-hedge {
+  margin-top: 10px; padding: 8px 10px; font-size: 10px;
+  color: #475569; line-height: 1.6;
+  border-top: 1px solid #334155;
+}
+
+.feedback-thankyou {
+  padding: 10px 12px; margin: 8px 12px; font-size: 13px;
+  color: #4ade80; background: #052e16; border-radius: 6px;
+  text-align: center;
+}

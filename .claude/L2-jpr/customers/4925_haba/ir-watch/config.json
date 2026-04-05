@@ -1,0 +1,1 @@
+{"auto_monitor":true,"sources":["edinet","tdnet","company_website","kabutan"],"frequency":"daily","alerts":["決算短信","適時開示","有報","中計"]}

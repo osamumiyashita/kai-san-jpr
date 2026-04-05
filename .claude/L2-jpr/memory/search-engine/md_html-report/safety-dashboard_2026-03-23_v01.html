@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Safety Dashboard - 2026-03-23</title>
+<style>
+  @page {
+    size: A4 landscape;
+    margin: 8mm;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 297mm;
+    height: 210mm;
+    font-family: 'Segoe UI', 'Yu Gothic UI', 'Meiryo', sans-serif;
+    color: #212121;
+    background: #FFFFFF;
+    font-size: 10px;
+    line-height: 1.5;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+    padding: 8mm;
+    height: 210mm;
+    overflow: hidden;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2.5px solid #1565C0;
+    padding-bottom: 5px;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+  }
+  .header-left { display: flex; align-items: baseline; gap: 12px; }
+  .header-logo {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1565C0;
+    letter-spacing: 1px;
+  }
+  .header-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #212121;
+  }
+  .header-date {
+    font-size: 11px;
+    color: #616161;
+    font-weight: 500;
+  }
+
+  /* Footer */
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1.5px solid #BDBDBD;
+    padding-top: 4px;
+    margin-top: auto;
+    flex-shrink: 0;
+    font-size: 8.5px;
+    color: #757575;
+  }
+
+  /* Content */
+  .content {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto 1fr;
+    gap: 8px;
+    min-height: 0;
+  }
+
+  /* Panels */
+  .panel {
+    background: #FAFAFA;
+    border: 1px solid #E0E0E0;
+    border-radius: 6px;
+    padding: 8px 10px;
+    overflow: hidden;
+  }
+  .panel-title {
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .panel-title .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #1565C0;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+  }
+
+  /* Section 1: Gauges */
+  .gauges-panel { grid-column: 1 / 2; }
+  .gauges-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 4px;
+  }
+  .gauge-item { text-align: center; }
+  .gauge-label {
+    font-size: 8.5px;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .gauge-sub {
+    font-size: 7.5px;
+    color: #757575;
+    margin-top: 1px;
+    max-width: 120px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .total-score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed #BDBDBD;
+  }
+  .total-score .big {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1565C0;
+  }
+  .total-score .target {
+    font-size: 9px;
+    color: #757575;
+  }
+  .progress-bar {
+    width: 100px;
+    height: 8px;
+    background: #E0E0E0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #1565C0, #6A1B9A);
+  }
+
+  /* Section 2: Principles Table */
+  .principles-panel { grid-column: 2 / 3; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8.5px;
+  }
+  th {
+    background: #1565C0;
+    color: #fff;
+    padding: 4px 6px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 8px;
+  }
+  td {
+    padding: 3.5px 6px;
+    border-bottom: 1px solid #E0E0E0;
+    vertical-align: middle;
+  }
+  tr:nth-child(even) td { background: #F5F5F5; }
+  .status-active { color: #1B5E20; font-weight: 700; }
+  .status-partial { color: #E65100; font-weight: 700; }
+  .status-documented { color: #1565C0; font-weight: 700; }
+
+  /* Section 3: Flow Diagram */
+  .flow-panel { grid-column: 1 / 2; }
+  .flow-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .flow-label {
+    font-size: 8px;
+    font-weight: 700;
+    width: 60px;
+    flex-shrink: 0;
+    text-align: right;
+    padding-right: 6px;
+  }
+  .flow-label.good { color: #2E7D32; }
+  .flow-label.bad { color: #B71C1C; }
+  .flow-box {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 8.5px;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .flow-arrow {
+    font-size: 12px;
+    color: #9E9E9E;
+    padding: 0 3px;
+  }
+  .fb-green { background: #E8F5E9; color: #2E7D32; border: 1px solid #A5D6A7; }
+  .fb-blue { background: #E3F2FD; color: #1565C0; border: 1px solid #90CAF9; }
+  .fb-purple { background: #F3E5F5; color: #6A1B9A; border: 1px solid #CE93D8; }
+  .fb-gold { background: #FFF8E1; color: #E65100; border: 1px solid #FFE082; }
+  .fb-red { background: #FFEBEE; color: #B71C1C; border: 1px solid #EF9A9A; }
+  .fb-grey { background: #F5F5F5; color: #616161; border: 1px solid #BDBDBD; }
+
+  /* Section 4 & 5 combined right */
+  .right-bottom { grid-column: 2 / 3; display: flex; flex-direction: column; gap: 8px; }
+  .hooks-panel, .pf-panel { flex: 1; }
+
+  .priority-high { color: #B71C1C; font-weight: 700; }
+  .priority-mid { color: #E65100; font-weight: 700; }
+
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <span class="header-logo">JPR</span>
+    <span class="header-title">Safety Dashboard</span>
+  </div>
+  <div class="header-date">2026-03-23</div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- 1. GCC Safety Score Panel -->
+  <div class="panel gauges-panel">
+    <div class="panel-title"><span class="num">1</span> GCC Safety Score</div>
+    <div class="gauges-row">
+      <div class="gauge-item">
+        <svg width="90" height="58" viewBox="0 0 90 58">
+          <path d="M 10 50 A 35 35 0 0 1 80 50" fill="none" stroke="#E0E0E0" stroke-width="7" stroke-linecap="round"/>
+          <path d="M 10 50 A 35 35 0 0 1 80 50" fill="none" stroke="#2E7D32" stroke-width="7" stroke-linecap="round"
+                stroke-dasharray="109.96" stroke-dashoffset="22"/>
+          <text x="45" y="44" text-anchor="middle" font-size="16" font-weight="800" fill="#2E7D32">4/5</text>
+        </svg>
+        <div class="gauge-label" style="color:#2E7D32;">Growth Safety</div>
+        <div class="gauge-sub">Integrity</div>
+        <div class="gauge-sub">Designed, Hook planned</div>
+      </div>
+      <div class="gauge-item">
+        <svg width="90" height="58" viewBox="0 0 90 58">
+          <path d="M 10 50 A 35 35 0 0 1 80 50" fill="none" stroke="#E0E0E0" stroke-width="7" stroke-linecap="round"/>
+          <path d="M 10 50 A 35 35 0 0 1 80 50" fill="none" stroke="#1565C0" stroke-width="7" stroke-linecap="round"
+                stroke-dasharray="109.96" stroke-dashoffset="44"/>
+          <text x="45" y="44" text-anchor="middle" font-size="16" font-weight="800" fill="#1565C0">3/5</text>
+        </svg>
+        <div class="gauge-label" style="color:#1565C0;">Connection Safety</div>
+        <div class="gauge-sub">Confidentiality</div>
+        <div class="gauge-sub">Auto-check not active</div>
+      </div>
+      <div class="gauge-item">
+        <svg width="90" height="58" viewBox="0 0 90 58">
+          <path d="M 10 50 A 35 35 0 0 1 80 50" fill="none" stroke="#E0E0E0" stroke-width="7" stroke-linecap="round"/>
+          <path d="M 10 50 A 35 35 0 0 1 80 50" fill="none" stroke="#6A1B9A" stroke-width="7" stroke-linecap="round"
+                stroke-dasharray="109.96" stroke-dashoffset="22"/>
+          <text x="45" y="44" text-anchor="middle" font-size="16" font-weight="800" fill="#6A1B9A">4/5</text>
+        </svg>
+        <div class="gauge-label" style="color:#6A1B9A;">Confidence Safety</div>
+        <div class="gauge-sub">Availability</div>
+        <div class="gauge-sub">Triple redundancy, RTO TBD</div>
+      </div>
+    </div>
+    <div class="total-score">
+      <div>
+        <div class="big">18<span style="font-size:12px;color:#757575;">/25</span></div>
+        <div class="target">Target: 20/25</div>
+      </div>
+      <div>
+        <div style="font-size:8px;color:#757575;margin-bottom:2px;">Progress 72%</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:72%;"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Anthropic 5 Principles -->
+  <div class="panel principles-panel">
+    <div class="panel-title"><span class="num">2</span> Anthropic 5 Principles Status</div>
+    <table>
+      <thead>
+        <tr><th>Principle</th><th>JPR Implementation</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Empiricism</strong></td>
+          <td>master-file.md gateway</td>
+          <td class="status-active">Active</td>
+        </tr>
+        <tr>
+          <td><strong>Portfolio Approach</strong></td>
+          <td>Triple redundancy</td>
+          <td class="status-active">Designed</td>
+        </tr>
+        <tr>
+          <td><strong>Constitutional AI</strong></td>
+          <td>L5 + Red Team + PF-012</td>
+          <td class="status-partial">Partial</td>
+        </tr>
+        <tr>
+          <td><strong>Responsible Scaling</strong></td>
+          <td>Staging flow (L2 &sect;11-2-2)</td>
+          <td class="status-documented">Documented</td>
+        </tr>
+        <tr>
+          <td><strong>Frontier Research</strong></td>
+          <td>L6 PDCA/OODA</td>
+          <td class="status-active">Active</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3. Risk Control Flow -->
+  <div class="panel flow-panel">
+    <div class="panel-title"><span class="num">3</span> Risk Control &rarr; Bold Challenge Flow</div>
+    <div class="flow-container">
+      <div class="flow-row">
+        <div class="flow-label good">WITH</div>
+        <div class="flow-box fb-green">Safety Design</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box fb-blue">Zero Anxiety</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box fb-purple">Bold Challenge</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box fb-gold">SG100Y</div>
+      </div>
+      <div style="text-align:center;font-size:8px;color:#9E9E9E;">vs</div>
+      <div class="flow-row">
+        <div class="flow-label bad">WITHOUT</div>
+        <div class="flow-box fb-red">No Safety</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box fb-red">Fear</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box fb-grey">Caution</div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-box fb-red">Opportunity Lost</div>
+      </div>
+    </div>
+    <div style="margin-top:8px;padding:5px 8px;background:#E8F5E9;border-radius:4px;border-left:3px solid #2E7D32;">
+      <div style="font-size:8.5px;font-weight:700;color:#2E7D32;">Core Insight</div>
+      <div style="font-size:8px;color:#424242;margin-top:2px;">
+        Safety is NOT a constraint on innovation. Safety ENABLES bold challenges.<br/>
+        When you know the system won't break, you push harder. This is SG100Y-CJ.
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 & 5 Right Bottom -->
+  <div class="right-bottom">
+
+    <!-- 4. Planned Hooks -->
+    <div class="panel hooks-panel">
+      <div class="panel-title"><span class="num">4</span> Planned Hooks Status</div>
+      <table>
+        <thead>
+          <tr><th>Hook</th><th>Event</th><th>Purpose</th><th>Priority</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>secret-scan</td>
+            <td>PreToolUse</td>
+            <td>Detect secrets before commit</td>
+            <td class="priority-high">P1</td>
+            <td class="status-partial">Planned</td>
+          </tr>
+          <tr>
+            <td>boundary-check</td>
+            <td>PreToolUse</td>
+            <td>Validate file access boundaries</td>
+            <td class="priority-high">P1</td>
+            <td class="status-partial">Planned</td>
+          </tr>
+          <tr>
+            <td>backup-verify</td>
+            <td>Stop</td>
+            <td>Verify backup after session</td>
+            <td class="priority-mid">P2</td>
+            <td class="status-documented">Designed</td>
+          </tr>
+          <tr>
+            <td>safety-score-update</td>
+            <td>Stop</td>
+            <td>Recalculate GCC Safety Score</td>
+            <td class="priority-mid">P2</td>
+            <td class="status-documented">Designed</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 5. Pure Function Registry -->
+    <div class="panel pf-panel">
+      <div class="panel-title"><span class="num">5</span> Pure Function Registry</div>
+      <table>
+        <thead>
+          <tr><th>PF ID</th><th>Name</th><th>Purpose</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>PF-011</strong></td>
+            <td>safety_score_calc</td>
+            <td>GCC Safety Score (G+C+Cf) calculation</td>
+            <td class="status-active">Active</td>
+          </tr>
+          <tr>
+            <td><strong>PF-012</strong></td>
+            <td>red_team_safety</td>
+            <td>5-question Red Team for safety review</td>
+            <td class="status-partial">Partial</td>
+          </tr>
+          <tr>
+            <td><strong>PF-013</strong></td>
+            <td>staging_gate</td>
+            <td>Dev &rarr; Staging &rarr; Production gate check</td>
+            <td class="status-documented">Designed</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <span>&copy; JPR &mdash; SG100Y_g&amp;J</span>
+  <span>Page 1</span>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>JPR Agent DOM — 76 Agents (3 Human + 73 AI)</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans JP','Hiragino Sans',Arial,sans-serif;background:#0f172a;color:#e2e8f0;padding:8mm;}
+@page{size:A4 landscape;margin:0;}
+.a4{width:297mm;height:210mm;margin:0 auto;background:#0f172a;padding:5mm 6mm;display:flex;flex-direction:column;overflow:hidden;}
+@media print{.a4{margin:0;width:100%;height:100%;}}
+
+h1{font-size:13pt;color:#2EA7E0;text-align:center;margin-bottom:3mm;letter-spacing:0.05em;}
+.subtitle{font-size:7pt;color:#64748b;text-align:center;margin-bottom:4mm;}
+
+/* Tree layout */
+.tree{flex:1;display:flex;flex-direction:column;gap:1.5mm;min-height:0;}
+.tier{display:flex;gap:1.5mm;align-items:stretch;}
+.tier-label{writing-mode:vertical-rl;text-orientation:mixed;font-size:6.5pt;font-weight:700;padding:1mm 1mm;border-radius:3px;display:flex;align-items:center;justify-content:center;min-width:7mm;letter-spacing:0.05em;}
+
+/* Node styles */
+.node{border-radius:4px;padding:1.5mm 2mm;font-size:6pt;line-height:1.3;display:flex;flex-direction:column;border:1px solid #334155;}
+.node-name{font-weight:700;font-size:7pt;margin-bottom:0.5mm;}
+.node-role{color:#94a3b8;font-size:5.5pt;}
+.node-sub{font-size:5pt;color:#64748b;margin-top:1mm;line-height:1.25;}
+.node-sub span{display:inline-block;background:#1e293b;padding:0.3mm 1.5mm;border-radius:2px;margin:0.3mm;border:0.5px solid #334155;}
+
+/* Colors */
+.human{background:#1a1a2e;border-color:#2EA7E0;}
+.human .node-name{color:#2EA7E0;}
+.kai{background:#1a1a2e;border:2px solid #2EA7E0;min-width:30mm;}
+.kai .node-name{color:#2EA7E0;font-size:9pt;}
+
+.vc{background:#0f2922;border-color:#34d399;}
+.vc .node-name{color:#34d399;}
+.sp{background:#1a1428;border-color:#a78bfa;}
+.sp .node-name{color:#a78bfa;}
+.bond{background:#1a1a0f;border-color:#fbbf24;}
+.bond .node-name{color:#fbbf24;}
+.bond-client{background:#1a1a0f;border-color:#fbbf24;padding:1mm 1.5mm;}
+.bond-client .node-name{color:#fbbf24;font-size:5.5pt;}
+
+/* Connector lines */
+.connector{display:flex;align-items:center;justify-content:center;color:#334155;font-size:8pt;min-width:3mm;}
+
+/* Groups */
+.group{display:flex;flex-direction:column;gap:1mm;flex:1;}
+.group-row{display:flex;gap:1.5mm;flex-wrap:wrap;}
+.group-label{font-size:6pt;font-weight:700;color:#475569;padding:0.5mm 2mm;}
+
+/* Flow arrow */
+.flow{display:flex;align-items:center;justify-content:center;min-width:4mm;color:#2EA7E0;font-size:7pt;}
+
+/* Footer */
+.footer{font-size:5.5pt;color:#475569;text-align:center;margin-top:2mm;border-top:0.5px solid #1e293b;padding-top:1.5mm;}
+</style>
+</head>
+<body>
+<div class="a4">
+
+<h1>JPR Agent DOM — 76 Agents (3 Human + 73 AI)</h1>
+<div class="subtitle">SG100Y Framework | Pure Function f(x)→y+Promise | 80% Promise / 20% Thinking | Porter Value Chain × GCC</div>
+
+<!-- TIER 0: Human + Kai -->
+<div class="tier" style="justify-content:center;margin-bottom:2mm;">
+  <div class="node human" style="text-align:center;min-width:28mm;">
+    <div class="node-name">👨‍💼 OSAMU-san (修)</div>
+    <div class="node-role">CEO / 0→3 Creator</div>
+    <div class="node-sub">Vision, Deals, Trust, Judgment</div>
+  </div>
+  <div class="flow">→</div>
+  <div class="node kai" style="text-align:center;">
+    <div class="node-name">🌊 KAI (海)</div>
+    <div class="node-role">CEO Agent Partner / Orchestrator</div>
+    <div class="node-sub">SG100Y Gatekeeper | Bridges all tiers</div>
+  </div>
+  <div class="flow">→</div>
+  <div class="node human" style="text-align:center;min-width:28mm;">
+    <div class="node-name">👨‍💻 AKIHISA (明久)</div>
+    <div class="node-role">COO / 3→100 Executor</div>
+    <div class="node-sub">Process, Quality, Delivery</div>
+  </div>
+  <div class="flow">→</div>
+  <div class="node human" style="text-align:center;min-width:28mm;">
+    <div class="node-name">👩‍💼 RIN (凛)</div>
+    <div class="node-role">Operations / Support</div>
+    <div class="node-sub">Admin, Docs, Client Comms</div>
+  </div>
+</div>
+
+<!-- TIER 1: GCC Value Chain -->
+<div class="tier">
+  <div class="tier-label" style="background:#064e3b;color:#34d399;">GCC<br>Value<br>Chain</div>
+
+  <div class="node vc" style="flex:1;">
+    <div class="node-name">⚓ HARBOUR (港)</div>
+    <div class="node-role">Inbound — Data Acquisition</div>
+    <div class="node-sub">
+      <span>EDINET-Fetcher</span><span>EDINET-Parser</span><span>EDINET-Freshness</span><span>EDINET-Code</span>
+      <span>DAG-Preflight</span><span>DAG-Runner</span><span>DAG-Drift</span>
+    </div>
+  </div>
+  <div class="flow">→</div>
+
+  <div class="node vc" style="flex:1;">
+    <div class="node-name">⚒ FORGE (鍛)</div>
+    <div class="node-role">Operations — Analysis Engine</div>
+    <div class="node-sub">
+      <span>ROIC-Calculator</span><span>ROIC-Comparator</span><span>GCC9BOX-Modeler</span><span>Owl-Writer</span>
+    </div>
+  </div>
+  <div class="flow">→</div>
+
+  <div class="node vc" style="flex:1;">
+    <div class="node-name">🔨 CRAFT (匠)</div>
+    <div class="node-role">Outbound — Product Creation</div>
+    <div class="node-sub">
+      <span>HTML-Generator</span><span>HTML-Masker</span><span>HTML-Publisher</span><span>Report-Formatter</span>
+    </div>
+  </div>
+  <div class="flow">→</div>
+
+  <div class="node vc" style="flex:1;">
+    <div class="node-name">🦅 EAGLE (鷹)</div>
+    <div class="node-role">Sales — Pipeline to Contract</div>
+    <div class="node-sub">
+      <span>Gmail-Watcher</span><span>Gmail-Classifier</span><span>Gmail-Briefer</span>
+      <span>CRM-Tracker</span><span>CRM-Scorer</span>
+      <span>Outreach-Drafter</span><span>Outreach-Scheduler</span><span>Eagle-Pricing</span>
+    </div>
+  </div>
+  <div class="flow">→</div>
+
+  <div class="node vc" style="flex:1;">
+    <div class="node-name">🌉 BRIDGE (橋)</div>
+    <div class="node-role">Service — Client Delivery</div>
+    <div class="node-sub">
+      <span>Deal-Tracker</span><span>Deal-Valuer</span><span>Falcon-Match</span><span>Falcon-India</span><span>Client-PDCA</span>
+    </div>
+  </div>
+</div>
+
+<!-- TIER 2: BOND - Client Relationship -->
+<div class="tier" style="margin-top:1.5mm;">
+  <div class="tier-label" style="background:#713f12;color:#fbbf24;">BOND<br>絆<br>Client</div>
+
+  <div style="flex:1;display:flex;gap:1mm;flex-wrap:wrap;">
+    <div class="node bond-client"><div class="node-name">🏗 日特建設</div><div class="node-role">1929 | 39% ⚠</div></div>
+    <div class="node bond-client"><div class="node-name">🚚 ラストワンマイル</div><div class="node-role">9252 | IR HTML</div></div>
+    <div class="node bond-client"><div class="node-name">💎 ハピネス&D</div><div class="node-role">3174 | Report</div></div>
+    <div class="node bond-client"><div class="node-name">📰 地域新聞社</div><div class="node-role">2164 | Advisory</div></div>
+    <div class="node bond-client"><div class="node-name">⚡ Z-works</div><div class="node-role">鈴木様 | ¥9M</div></div>
+    <div class="node bond-client"><div class="node-name">🇮🇳 Capwise</div><div class="node-role">India corridor</div></div>
+    <div class="node bond-client"><div class="node-name">🤝 MACP</div><div class="node-role">M&A collab</div></div>
+    <div class="node bond-client"><div class="node-name">🚀 LSS</div><div class="node-role">Distribution</div></div>
+    <div class="node bond-client"><div class="node-name">🖨 宝印刷</div><div class="node-role">Referral 70%</div></div>
+    <div class="node bond-client"><div class="node-name">🌿 ExUrban</div><div class="node-role">ESG partner</div></div>
+  </div>
+</div>
+
+<!-- TIER 3: Support Platform -->
+<div class="tier" style="margin-top:1.5mm;">
+  <div class="tier-label" style="background:#2e1065;color:#a78bfa;">Support<br>Platform</div>
+
+  <div class="node sp" style="flex:1;">
+    <div class="node-name">🛡 SENTINEL (盾)</div>
+    <div class="node-role">Monitor & Governance</div>
+    <div class="node-sub">
+      <span>TDNET</span><span>Price</span><span>IR</span><span>News</span><span>Compliance</span><span>System</span><span>DAG</span>
+    </div>
+  </div>
+
+  <div class="node sp" style="flex:0.8;">
+    <div class="node-name">🔥 PHOENIX (鳳)</div>
+    <div class="node-role">Brand & WACC↓</div>
+    <div class="node-sub">
+      <span>X-Drafter</span><span>X-Scheduler</span><span>Web</span><span>Seminar</span><span>AlphaSense</span>
+    </div>
+  </div>
+
+  <div class="node sp" style="flex:0.6;">
+    <div class="node-name">🔌 NEXUS (結)</div>
+    <div class="node-role">Infrastructure</div>
+    <div class="node-sub">
+      <span>Agent-Bus</span><span>Dashboard</span><span>Memory-Mgr</span>
+    </div>
+  </div>
+
+  <div class="node sp" style="flex:0.6;">
+    <div class="node-name">🌱 ARD (育)</div>
+    <div class="node-role">Agent HR (iCD)</div>
+    <div class="node-sub">
+      <span>Task-Mgr</span><span>Skill-Reg</span><span>Perf-Eval</span>
+    </div>
+  </div>
+
+  <div class="node sp" style="flex:0.8;">
+    <div class="node-name">🔭 SCOUT (探)</div>
+    <div class="node-role">Research & Intel</div>
+    <div class="node-sub">
+      <span>AI</span><span>GitHub</span><span>ESG</span><span>Regulation</span><span>Academic</span>
+    </div>
+  </div>
+
+  <div class="node sp" style="flex:0.6;">
+    <div class="node-name">🧪 LAB (研)</div>
+    <div class="node-role">R&D</div>
+    <div class="node-sub">
+      <span>Prototype</span><span>Experiment</span><span>Patent</span>
+    </div>
+  </div>
+
+  <div class="node sp" style="flex:0.7;">
+    <div class="node-name">🧭 COMPASS (羅針盤)</div>
+    <div class="node-role">Marketing</div>
+    <div class="node-sub">
+      <span>Content</span><span>SEO</span><span>Seminar</span><span>CaseStudy</span>
+    </div>
+  </div>
+</div>
+
+<!-- Communication Layer -->
+<div style="margin-top:2mm;background:#1e293b;border-radius:4px;padding:2mm 4mm;display:flex;justify-content:space-between;align-items:center;">
+  <div style="font-size:6pt;color:#2EA7E0;font-weight:700;">
+    🔌 AGENT BUS: agent_bus.duckdb — 80% Promise (async) / 20% Thinking (sync)
+  </div>
+  <div style="font-size:6pt;color:#94a3b8;">
+    f(x) → y + Promise &nbsp;|&nbsp; Pure Functions &nbsp;|&nbsp; No Mutation &nbsp;|&nbsp; Composable
+  </div>
+  <div style="font-size:6pt;color:#94a3b8;">
+    Memory: ⚡Short (session) → 📋Mid (30d JSONL) → 🧠Long (permanent .md)
+  </div>
+  <div style="font-size:6pt;color:#fbbf24;font-weight:700;">
+    Multi-LLM: Claude + Gemini + Codex
+  </div>
+</div>
+
+<div class="footer">
+  JPR AI Agent System v1.0 — 76 Agents (3 Human + 73 AI) — SG100Y Framework — Porter Value Chain × GCC — iCD Task×Skill — Built by Kai 🌊 for Osamu-san<br>
+  Cardinal Rule: JPR Whole SG100Y > Individual Client SG100Y | Every agent = pure function f(x)→y+Promise
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Kai-san — はじめの設定</title>
+<link rel="stylesheet" href="x-onboard.css">
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header id="header">
+  <div class="logo">海</div>
+  <h1>はじめの設定</h1>
+  <p class="subtitle">あなたのPCの仕事の全体像を、一緒に整理します</p>
+</header>
+
+<!-- ===== PROGRESS BAR ===== -->
+<nav id="progress">
+  <div class="step active" data-step="1"><span class="num">1</span> フォルダ選択</div>
+  <div class="step" data-step="2"><span class="num">2</span> 重要度</div>
+  <div class="step" data-step="3"><span class="num">3</span> 分析の深さ</div>
+  <div class="step" data-step="4"><span class="num">4</span> 分析中...</div>
+  <div class="step" data-step="5"><span class="num">5</span> つながり</div>
+  <div class="step" data-step="6"><span class="num">6</span> 価値の地図</div>
+  <div class="step" data-step="7"><span class="num">7</span> メール分析</div>
+  <div class="step" data-step="8"><span class="num">8</span> おすすめ</div>
+  <div class="step" data-step="9"><span class="num">9</span> 出力の形</div>
+  <div class="step" data-step="10"><span class="num">10</span> マクロ保存</div>
+</nav>
+
+<!-- ===== STEP 1: FOLDER EXPLORER ===== -->
+<section id="step-1" class="wizard-step active">
+  <h2>あなたの仕事で使うフォルダを選んでください</h2>
+  <p class="hint">普段の仕事で開くフォルダをクリックしてください。最大7グループまで選べます。</p>
+
+  <div id="drive-selector">
+    <!-- JS fills: C:, D:, G: etc. -->
+  </div>
+
+  <div id="folder-tree">
+    <div id="folder-path-bar">
+      <button id="folder-up" title="上のフォルダへ">↑</button>
+      <span id="folder-current-path">C:\</span>
+    </div>
+    <div id="folder-list">
+      <!-- JS fills folder rows -->
+    </div>
+  </div>
+
+  <div id="selected-folders">
+    <h3>選んだフォルダ <span id="selected-count">0</span>/7</h3>
+    <ul id="selected-list">
+      <!-- JS fills selected items -->
+    </ul>
+  </div>
+
+  <div class="nav-buttons">
+    <span></span>
+    <button class="btn-next" id="btn-to-step2" disabled>次へ →</button>
+  </div>
+</section>
+
+<!-- ===== STEP 2: IMPORTANCE RATING ===== -->
+<section id="step-2" class="wizard-step">
+  <h2>それぞれのフォルダの重要度を教えてください</h2>
+  <p class="hint">
+    <span class="badge high">高い</span> 売上・利益・投資判断に直結するフォルダ
+    <span class="badge medium">普通</span> 日常の業務で使うフォルダ
+    <span class="badge ref">参考</span> たまに見る・過去の資料
+  </p>
+
+  <div id="importance-list">
+    <!-- JS fills: folder name + 3 radio buttons -->
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn-prev" id="btn-back-to-1">← 戻る</button>
+    <button class="btn-next" id="btn-to-step3">次へ →</button>
+  </div>
+</section>
+
+<!-- ===== STEP 3: ANALYSIS DEPTH ===== -->
+<section id="step-3" class="wizard-step">
+  <h2>フォルダの中をどこまで詳しく調べますか？</h2>
+  <p class="hint">深く調べるほど正確ですが、時間がかかります。</p>
+
+  <div id="depth-settings">
+    <!-- JS fills: per-folder depth selector -->
+  </div>
+
+  <div class="depth-legend">
+    <div><strong>浅い</strong>（Level 1）: 直下のファイルだけ見る。数分で完了</div>
+    <div><strong>標準</strong>（Level 2）: 2階層まで見る。10〜30分</div>
+    <div><strong>詳しく</strong>（Level 3）: 3階層まで見る。1時間以上</div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn-prev" id="btn-back-to-2">← 戻る</button>
+    <button class="btn-next" id="btn-to-step4">分析を開始 ▶</button>
+  </div>
+</section>
+
+<!-- ===== STEP 4: ANALYZING (PROGRESS) ===== -->
+<section id="step-4" class="wizard-step">
+  <h2>フォルダを分析しています...</h2>
+  <p class="hint">各フォルダの中身を調べて、データベースを作成しています。</p>
+
+  <div id="analysis-progress">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+    <div id="progress-text">準備中...</div>
+    <div id="progress-detail"></div>
+  </div>
+
+  <div id="analysis-log">
+    <!-- JS fills: real-time log of analysis -->
+  </div>
+</section>
+
+<!-- ===== STEP 5: FOLDER RELATIONSHIP MATRIX ===== -->
+<section id="step-5" class="wizard-step">
+  <h2>フォルダ同士のつながり</h2>
+  <p class="hint">
+    矢印の上にマウスを置くと、どんな情報がやり取りされているか表示されます。
+  </p>
+
+  <div id="matrix-container">
+    <table id="folder-matrix">
+      <!-- JS fills: N×N matrix with arrows -->
+    </table>
+  </div>
+
+  <div id="matrix-legend">
+    <span class="legend-item"><span class="arrow arrow-right">→</span> 情報を渡している</span>
+    <span class="legend-item"><span class="arrow arrow-both">↔</span> 相互にやり取り</span>
+    <span class="legend-item"><span class="arrow arrow-left">←</span> 情報を受けている</span>
+    <span class="legend-item"><span class="arrow arrow-none">×</span> 直接の関係なし</span>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn-prev" id="btn-back-to-4">← 戻る</button>
+    <button class="btn-next" id="btn-to-step6">次へ →</button>
+  </div>
+</section>
+
+<!-- ===== STEP 6: GCC/MVC VALUE MAP ===== -->
+<section id="step-6" class="wizard-step">
+  <h2>あなたのPCの「価値の地図」</h2>
+  <p class="hint">フォルダの構造から見えた、御社の価値創造の仕組みです。</p>
+
+  <div id="value-map">
+    <div class="gcc-section gcc-growth">
+      <h3>
+        <span class="term" data-term="growth">Growth</span>
+        <span class="term-ja">（成長）</span>
+      </h3>
+      <div id="growth-folders">
+        <!-- JS fills: Growth-related folders and description -->
+      </div>
+    </div>
+
+    <div class="gcc-section gcc-connection">
+      <h3>
+        <span class="term" data-term="connection">Connection</span>
+        <span class="term-ja">（つながり・効率）</span>
+      </h3>
+      <div id="connection-folders">
+        <!-- JS fills -->
+      </div>
+    </div>
+
+    <div class="gcc-section gcc-confidence">
+      <h3>
+        <span class="term" data-term="confidence">Confidence</span>
+        <span class="term-ja">（信頼・安定）</span>
+      </h3>
+      <div id="confidence-folders">
+        <!-- JS fills -->
+      </div>
+    </div>
+  </div>
+
+  <div id="mvc-estimate" class="card">
+    <h3>
+      <span class="term" data-term="mvc">MVC</span>
+      <span class="term-ja">（月次の価値創造）</span>
+      の推定
+    </h3>
+    <div id="mvc-description">
+      <!-- JS fills: natural language MVC assessment -->
+    </div>
+  </div>
+
+  <div id="daily-recommendation" class="card">
+    <h3>毎日の行動おすすめ</h3>
+    <div id="daily-rec-content">
+      <!-- JS fills -->
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn-prev" id="btn-back-to-5">← 戻る</button>
+    <button class="btn-next" id="btn-to-step7">メール分析へ →</button>
+  </div>
+</section>
+
+<!-- ===== STEP 7: GMAIL ANALYSIS ===== -->
+<section id="step-7" class="wizard-step">
+  <h2>メールの相手を分析します</h2>
+  <p class="hint">誰と、どれくらいの頻度で、どんなやり取りをしているかを整理します。</p>
+
+  <div id="gmail-auth">
+    <button class="btn-gmail" id="btn-gmail-connect">Gmailに接続する</button>
+    <p class="hint">接続すると、メールの送受信パターンを分析します。内容は読みません。</p>
+  </div>
+
+  <div id="stakeholder-matrix-container" style="display:none;">
+    <h3>ステークホルダーの関係図</h3>
+    <table id="stakeholder-matrix">
+      <!-- JS fills: stakeholder N×N matrix -->
+    </table>
+
+    <div id="stakeholder-legend">
+      <span class="legend-item"><span class="freq freq-daily">毎日</span></span>
+      <span class="legend-item"><span class="freq freq-weekly">毎週</span></span>
+      <span class="legend-item"><span class="freq freq-monthly">毎月</span></span>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn-prev" id="btn-back-to-6">← 戻る</button>
+    <button class="btn-next" id="btn-to-step8">おすすめを見る →</button>
+  </div>
+</section>
+
+<!-- ===== STEP 8: FINAL RECOMMENDATION ===== -->
+<section id="step-8" class="wizard-step">
+  <h2>あなたへのおすすめ</h2>
+  <p class="hint">PCとメールの分析から、毎日の行動をおすすめします。</p>
+
+  <div id="final-rec">
+    <div class="rec-section">
+      <h3>🌅 毎朝やること</h3>
+      <div id="rec-daily"><!-- JS fills --></div>
+    </div>
+    <div class="rec-section">
+      <h3>📅 毎週やること</h3>
+      <div id="rec-weekly"><!-- JS fills --></div>
+    </div>
+    <div class="rec-section">
+      <h3>📊 毎月やること</h3>
+      <div id="rec-monthly"><!-- JS fills --></div>
+    </div>
+  </div>
+
+  <div id="fp-guidance" class="card">
+    <h3>Kai-san への質問の仕方</h3>
+    <p>上のおすすめに基づいて、こんな質問をしてみてください:</p>
+    <div id="fp-examples">
+      <!-- JS fills: example FPH prompts -->
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn-prev" id="btn-back-to-7">← 戻る</button>
+    <button class="btn-next" id="btn-to-step9">出力の形を選ぶ →</button>
+  </div>
+</section>
+
+<!-- ===== STEP 9: Y OUTPUT CONFIGURATION ===== -->
+<section id="step-9" class="wizard-step">
+  <h2>出力の形を選んでください</h2>
+  <p class="hint">何を、どんな形で、どこに保存するかを決めます。</p>
+
+  <!-- 9-A: 構造（何を作るか）max 7 -->
+  <div class="y-group">
+    <h3>何を作りますか？</h3>
+    <div class="y-options" id="y-structure">
+      <label class="y-chip"><input type="checkbox" value="report"> レポート
+        <span class="chip-hint">分析結果をまとめた文書</span></label>
+      <label class="y-chip"><input type="checkbox" value="table"> 分析表
+        <span class="chip-hint">数値を整理した表</span></label>
+      <label class="y-chip"><input type="checkbox" value="proposal"> 提案書
+        <span class="chip-hint">改善策を提案する文書</span></label>
+      <label class="y-chip"><input type="checkbox" value="minutes"> 議事録
+        <span class="chip-hint">会議の記録</span></label>
+      <label class="y-chip"><input type="checkbox" value="list"> 一覧表
+        <span class="chip-hint">項目を並べた表</span></label>
+      <label class="y-chip"><input type="checkbox" value="chart"> チャート
+        <span class="chip-hint">グラフ・図解</span></label>
+      <label class="y-chip"><input type="checkbox" value="letter"> 手紙・メール
+        <span class="chip-hint">送信用の文面</span></label>
+    </div>
+  </div>
+
+  <!-- 9-B: 意味（何のために）max 7 -->
+  <div class="y-group">
+    <h3>何のためですか？</h3>
+    <div class="y-options" id="y-meaning">
+      <label class="y-chip"><input type="checkbox" value="gcc-eval">
+        <span class="term" data-term="gcc">GCC</span>評価
+        <span class="chip-hint">成長・つながり・信頼の3軸分析</span></label>
+      <label class="y-chip"><input type="checkbox" value="mvc-calc">
+        <span class="term" data-term="mvc">MVC</span>計算
+        <span class="chip-hint">月次の価値創造額を計算</span></label>
+      <label class="y-chip"><input type="checkbox" value="ir-improve"> IR改善
+        <span class="chip-hint">投資家への情報発信を改善</span></label>
+      <label class="y-chip"><input type="checkbox" value="competitor"> 競合比較
+        <span class="chip-hint">同業他社との比較分析</span></label>
+      <label class="y-chip"><input type="checkbox" value="stakeholder"> 関係者向け報告
+        <span class="chip-hint">社内外の関係者への報告</span></label>
+      <label class="y-chip"><input type="checkbox" value="daily-check"> 日次確認
+        <span class="chip-hint">毎日の定期チェック</span></label>
+      <label class="y-chip"><input type="checkbox" value="strategy"> 戦略検討
+        <span class="chip-hint">中長期の方針を考える</span></label>
+    </div>
+  </div>
+
+  <!-- 9-C: メディア（どんな形式で）-->
+  <div class="y-group">
+    <h3>どんなファイル形式で出力しますか？</h3>
+    <p class="hint">変換の流れ: MD → HTML → PDF → PPTX/Word、 MD → CSV → Excel</p>
+
+    <div class="y-pipeline">
+      <div class="pipeline-row">
+        <span class="pipe-label">文書系</span>
+        <div class="pipe-steps">
+          <label class="pipe-step"><input type="checkbox" value="md" checked> MD</label>
+          <span class="pipe-arrow">→</span>
+          <label class="pipe-step"><input type="checkbox" value="html"> HTML</label>
+          <span class="pipe-arrow">→</span>
+          <label class="pipe-step"><input type="checkbox" value="pdf"> PDF</label>
+          <span class="pipe-arrow">→</span>
+          <label class="pipe-step"><input type="checkbox" value="pptx"> PPTX</label>
+          <label class="pipe-step"><input type="checkbox" value="word"> Word</label>
+        </div>
+      </div>
+      <div class="pipeline-row">
+        <span class="pipe-label">データ系</span>
+        <div class="pipe-steps">
+          <label class="pipe-step"><input type="checkbox" value="md-data"> MD</label>
+          <span class="pipe-arrow">→</span>
+          <label class="pipe-step"><input type="checkbox" value="csv"> CSV</label>
+          <span class="pipe-arrow">→</span>
+          <label class="pipe-step"><input type="checkbox" value="excel"> Excel</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9-D: 保存先 -->
+  <div class="y-group">
+    <h3>どこに保存しますか？</h3>
+    <div id="y-save-location">
+      <button class="btn-browse" id="btn-browse-save">フォルダを選ぶ</button>
+      <div id="save-path-display" class="save-path">未選択</div>
+      <p class="hint">選んだフォルダに、日付付きのファイル名で自動保存されます。</p>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn-prev" id="btn-back-to-8">← 戻る</button>
+    <button class="btn-next" id="btn-to-step10">マクロとして保存 →</button>
+  </div>
+</section>
+
+<!-- ===== STEP 10: MACRO SAVE ===== -->
+<section id="step-10" class="wizard-step">
+  <h2>この設定をマクロとして保存</h2>
+  <p class="hint">
+    保存すると、次回からワンクリックで同じ分析・同じ出力ができます。
+    <span class="term" data-term="pf">Pure Function</span> — 毎回同じ品質、コストゼロ。
+  </p>
+
+  <!-- マクロ名 -->
+  <div class="macro-field">
+    <label>マクロの名前</label>
+    <input type="text" id="macro-name" placeholder="例: 月次ROIC報告">
+  </div>
+
+  <!-- マクロ内容プレビュー -->
+  <div id="macro-preview" class="card">
+    <h3>マクロの内容</h3>
+    <table id="macro-summary">
+      <tr>
+        <td class="macro-label">能力（FC）</td>
+        <td id="macro-fc"><!-- JS fills --></td>
+      </tr>
+      <tr>
+        <td class="macro-label">データ（X）</td>
+        <td id="macro-x"><!-- JS fills --></td>
+      </tr>
+      <tr>
+        <td class="macro-label">プロンプト（FPA）</td>
+        <td id="macro-fpa"><!-- JS fills --></td>
+      </tr>
+      <tr>
+        <td class="macro-label">出力（Y）</td>
+        <td id="macro-y"><!-- JS fills --></td>
+      </tr>
+      <tr>
+        <td class="macro-label">保存先</td>
+        <td id="macro-save-path"><!-- JS fills --></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 保存済みマクロ一覧 -->
+  <div id="macro-list-section">
+    <h3>保存済みマクロ</h3>
+    <div id="macro-list">
+      <!-- JS fills: saved macros with one-click execute button -->
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn-prev" id="btn-back-to-9">← 戻る</button>
+    <button class="btn-next btn-save-macro" id="btn-save-macro">マクロを保存</button>
+    <button class="btn-next btn-finish" id="btn-finish">設定完了 ✓</button>
+  </div>
+</section>
+
+<!-- ===== TOOLTIP (101 POPUP) ===== -->
+<div id="tooltip-101" class="tooltip" style="display:none;">
+  <div class="tooltip-title"></div>
+  <div class="tooltip-body"></div>
+  <a class="tooltip-link" href="#" target="_blank">詳しく見る →</a>
+</div>
+
+<script src="x-glossary.js"></script>
+<script src="x-onboard.js"></script>
+</body>
+</html>
